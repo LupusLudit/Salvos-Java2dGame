@@ -1,6 +1,7 @@
 package world;
 
 import entities.Player;
+import entities.Zombie;
 import management.UserInput;
 
 import javax.swing.*;
@@ -17,6 +18,7 @@ public class Panel extends JPanel{
     UserInput userInput= new UserInput();
     TilePainter tilePainter;
     Player player;
+    Zombie zombie;
     Timer timer;
 
 
@@ -27,6 +29,7 @@ public class Panel extends JPanel{
         this.setFocusable(true);
         this.addKeyListener(userInput);
         player = new Player(userInput, this);
+        zombie = new Zombie(this);
         tilePainter = new TilePainter(this);
     }
 
@@ -36,6 +39,7 @@ public class Panel extends JPanel{
         timer = new Timer(15, e -> {
             repaint();
             player.update();
+            zombie.update();
         });
         timer.start();
     }
@@ -44,8 +48,8 @@ public class Panel extends JPanel{
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         tilePainter.draw(g2);
+        zombie.draw(g2);
         player.draw(g2);
-
     }
 
     public int getTileSide() {
@@ -67,4 +71,6 @@ public class Panel extends JPanel{
     public TilePainter getTilePainter() {
         return tilePainter;
     }
+
+
 }
