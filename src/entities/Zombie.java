@@ -13,6 +13,7 @@ public class Zombie extends Entity {
 
     public Zombie(world.Panel panel) {
         defaultImagePath = "zombie/zombie-sprite_";
+        this.panel = panel;
 
         speed = 9;
         canMove = true;
@@ -23,7 +24,6 @@ public class Zombie extends Entity {
 
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
         this.collisionManager = new CollisionManager();
-        this.panel = panel;
     }
 
     public void updateDirection() {
@@ -59,7 +59,7 @@ public class Zombie extends Entity {
         updateDelay++;
         if (updateDelay == 3) {
             updateDirection();
-            canMove = collisionManager.checkTileCollision(this, panel);
+            canMove = collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(panel.getPlayer(), this);
             if (canMove) {
                 switch (direction) {
                     case 0 -> y -= speed;
@@ -73,7 +73,7 @@ public class Zombie extends Entity {
             updateDelay = 0;
         }
         counter++;
-        if (counter >= 20) {
+        if (counter >= 20 && canMove) {
             this.counter = 0;
         }
 

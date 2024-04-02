@@ -28,8 +28,8 @@ public class Panel extends JPanel{
         this.setDoubleBuffered(true);
         this.setFocusable(true);
         this.addKeyListener(userInput);
-        player = new Player(userInput, this);
-        zombie = new Zombie(this);
+        zombie = new Zombie(this); //eventually more entities will be added
+        player = new Player(userInput, this, zombie);
         tilePainter = new TilePainter(this);
     }
 

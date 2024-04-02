@@ -11,10 +11,12 @@ public class Player extends Entity {
     private final int centerX;
     private final int centerY;
 
-    CollisionManager collisionManager = new CollisionManager();
+    CollisionManager collisionManager;
+
+    Zombie testZombie;
 
 
-    public Player(UserInput userInput, world.Panel panel) {
+    public Player(UserInput userInput, world.Panel panel, Zombie zombie) {
         defaultImagePath = "character/sprite_";
         this.userInput = userInput;
         this.panel = panel;
@@ -29,7 +31,9 @@ public class Player extends Entity {
         centerY = (panel.getTileSide() * panel.getRow()) / 2 - (panel.getTileSide() / 2);
 
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
+        this.collisionManager = new CollisionManager();
 
+        testZombie = zombie;
     }
 
     @Override
@@ -41,7 +45,7 @@ public class Player extends Entity {
     public void update() {
         direction = userInput.getDirection();
         if (userInput.isPressed()) {
-            canMove = collisionManager.checkTileCollision(this, panel);
+            canMove = collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(this, testZombie);
             if (canMove) {
                 switch (direction) {
                     case 0 -> y -= speed;

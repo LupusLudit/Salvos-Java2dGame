@@ -55,4 +55,9 @@ public class CollisionManager {
         }
         return true;
     }
+
+    public boolean checkEntityCollision(Entity first, Entity second) {
+        return first.getActualArea().intersects(second.getActualArea());
+    }
 }
+
