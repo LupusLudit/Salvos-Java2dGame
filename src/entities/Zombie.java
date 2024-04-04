@@ -59,7 +59,7 @@ public class Zombie extends Entity {
         updateDelay++;
         if (updateDelay == 3) {
             updateDirection();
-            canMove = collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(panel.getPlayer(), this);
+            canMove = !collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(this, panel.getPlayer()); //temporarily added for testing
             if (canMove) {
                 switch (direction) {
                     case 0 -> y -= speed;

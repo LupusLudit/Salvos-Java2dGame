@@ -33,7 +33,7 @@ public class Player extends Entity {
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
         this.collisionManager = new CollisionManager();
 
-        testZombie = zombie;
+        testZombie = zombie;  //temporarily added for testing
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Player extends Entity {
     public void update() {
         direction = userInput.getDirection();
         if (userInput.isPressed()) {
-            canMove = collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(this, testZombie);
+            canMove = !collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(this, testZombie);
             if (canMove) {
                 switch (direction) {
                     case 0 -> y -= speed;
