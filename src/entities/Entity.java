@@ -14,10 +14,10 @@ public abstract class Entity {
     protected int counter = 0;
     protected int direction;
     protected String defaultImagePath;
-
     Rectangle actualArea;
-
     protected boolean canMove;
+    protected int lives;
+    protected int maxLives;
 
 
     public abstract void draw(Graphics2D g);

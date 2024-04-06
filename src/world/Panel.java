@@ -51,7 +51,12 @@ public class Panel extends JPanel{
         zombie.draw(g2);
         player.draw(g2);
     }
-
+    public int getWidth(){
+       return tileSide * col;
+    }
+    public int getHeight(){
+        return tileSide * row;
+    }
     public int getTileSide() {
         return tileSide;
     }
