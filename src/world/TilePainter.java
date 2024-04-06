@@ -59,14 +59,13 @@ public class TilePainter {
         boolean drawX = false;
         boolean drawY = false;
 
-        if ((j * panel.getTileSide()) + panel.getTileSide() > panel.getPlayer().getX() - panel.getPlayer().getCenterX() &&
-                (j * panel.getTileSide()) - panel.getTileSide() < panel.getPlayer().getX() + panel.getPlayer().getCenterX()) {
+        if(Math.abs(panel.getPlayer().getX() - j*panel.getTileSide()) < panel.getPlayer().getCenterX() + panel.getTileSide()){
             drawX = true;
         }
-        if ((i * panel.getTileSide()) + panel.getTileSide() > panel.getPlayer().getY() - panel.getPlayer().getCenterY() &&
-                (i * panel.getTileSide()) - panel.getTileSide() < panel.getPlayer().getY() + panel.getPlayer().getCenterY()) {
+        if(Math.abs(panel.getPlayer().getY() - i*panel.getTileSide()) < panel.getPlayer().getCenterY() + panel.getTileSide()){
             drawY = true;
         }
+
         return drawX && drawY;
 
     }

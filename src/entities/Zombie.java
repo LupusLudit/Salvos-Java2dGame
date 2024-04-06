@@ -49,9 +49,10 @@ public class Zombie extends Entity {
         int xCor = x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
         int yCor = y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
 
-        //add "if not on screen" control
-
-        g.drawImage(chooseImage(direction, counter), xCor, yCor, null);
+        if (Math.abs(panel.getPlayer().getX() - x) < panel.getPlayer().getCenterX() + panel.getTileSide()
+                && Math.abs(panel.getPlayer().getY() - y) < panel.getPlayer().getCenterY() + panel.getTileSide()) { //is in range control
+            g.drawImage(chooseImage(direction, counter), xCor, yCor, null);
+        }
     }
 
     @Override
