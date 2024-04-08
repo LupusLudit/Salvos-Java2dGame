@@ -40,7 +40,7 @@ public class Player extends Entity {
         g.drawImage(chooseImage(direction, counter), centerX, centerY, null);
         drawHealthBar(g);
     }
-
+    @Override
     public void drawHealthBar(Graphics2D g){
         double scale = (double)(panel.getTileSide()*4)/maxLives;
         double value = scale*lives;

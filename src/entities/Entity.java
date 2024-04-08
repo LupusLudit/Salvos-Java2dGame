@@ -10,6 +10,7 @@ public abstract class Entity {
 
     protected int x;
     protected int y;
+
     protected int speed;
     protected int counter = 0;
     protected int direction;
@@ -68,6 +69,8 @@ public abstract class Entity {
         }
         return image;
     }
+
+    public abstract void drawHealthBar(Graphics2D g);
 
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;

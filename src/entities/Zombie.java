@@ -17,6 +17,8 @@ public class Zombie extends Entity {
 
         speed = 9;
         canMove = true;
+        lives = 5;
+        maxLives = 5;
         direction = 0;
         counter = 0;
         x = 47 * panel.getTileSide();
@@ -46,13 +48,11 @@ public class Zombie extends Entity {
 
     @Override
     public void draw(Graphics2D g) {
-        int xCor = x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
-        int yCor = y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
-
         if (Math.abs(panel.getPlayer().getX() - x) < panel.getPlayer().getCenterX() + panel.getTileSide()
                 && Math.abs(panel.getPlayer().getY() - y) < panel.getPlayer().getCenterY() + panel.getTileSide()) { //is in range control
-            g.drawImage(chooseImage(direction, counter), xCor, yCor, null);
+            g.drawImage(chooseImage(direction, counter), getRelX(), getRelY(), null);
         }
+        drawHealthBar(g);
     }
 
     @Override
@@ -77,10 +77,42 @@ public class Zombie extends Entity {
         if (counter >= 20 && canMove) {
             this.counter = 0;
         }
+        //testing health bar
+        if(collisionManager.checkEntityCollision(this, panel.getPlayer())){
+            if(lives>0){
+                lives--;
+                System.out.println("zombie lives:" + lives);
+            }
+        }
 
+
+    }
+    @Override
+    public void drawHealthBar(Graphics2D g){
+        double scale = (double)(panel.getTileSide())/maxLives;
+        double value = scale*lives;
+
+        int width = panel.getTileSide();
+        int height = 5;
+        int x = getRelX() + panel.getTileSide()/2 - width/2;
+        int y = getRelY() - 15;
+
+        g.setColor(new Color(35,35,35));
+        g.fillRect(x-2, y-2, width+4,height+4);
+        g.setColor(new Color(255, 0, 30));
+        g.fillRect(x, y, (int)value, height);
+        System.out.println("has been drawn");
     }
 
 
     public void chooseSpawnPoint() {
+    }
+
+    public int getRelX(){ // returns relative x coordinate position
+        return x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
+    }
+
+    public int getRelY(){ // returns relative y coordinate position
+        return y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
     }
 }
