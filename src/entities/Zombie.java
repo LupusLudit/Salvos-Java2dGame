@@ -101,7 +101,6 @@ public class Zombie extends Entity {
         g.fillRect(x-2, y-2, width+4,height+4);
         g.setColor(new Color(255, 0, 30));
         g.fillRect(x, y, (int)value, height);
-        System.out.println("has been drawn");
     }
 
 

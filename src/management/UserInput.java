@@ -7,6 +7,7 @@ public class UserInput implements KeyListener {
 
     private int direction = 0;
     private boolean pressed;
+    private boolean shiftPressed;
 
     @Override
     public void keyTyped(KeyEvent e) {
@@ -32,14 +33,24 @@ public class UserInput implements KeyListener {
                 direction = 3;
                 pressed = true;
             }
-            default -> pressed = false;
+            case KeyEvent.VK_SHIFT -> {
+                shiftPressed = true;
+            }
+            default ->{
+                pressed = false;
+                shiftPressed = false;
+            }
         }
 
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        pressed = false;
+        int input = e.getKeyCode();
+        switch (input){
+            case KeyEvent.VK_W, KeyEvent.VK_UP, KeyEvent.VK_D, KeyEvent.VK_RIGHT, KeyEvent.VK_S, KeyEvent.VK_DOWN, KeyEvent.VK_A, KeyEvent.VK_LEFT -> pressed = false;
+            case KeyEvent.VK_SHIFT -> shiftPressed = false;
+        }
     }
 
     public int getDirection() {
@@ -48,5 +59,9 @@ public class UserInput implements KeyListener {
 
     public boolean isPressed() {
         return pressed;
+    }
+
+    public boolean isShiftPressed() {
+        return shiftPressed;
     }
 }
