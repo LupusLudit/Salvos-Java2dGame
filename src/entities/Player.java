@@ -32,12 +32,12 @@ public class Player extends Entity {
         canMove = true;
         lives = 10;
         maxLives = 10;
-        stamina = 10;
-        maxStamina = 10;
-        this.x = 45*panel.getTileSide();
-        this.y = 45*panel.getTileSide();
-        centerX = (panel.getTileSide() * panel.getCol()) / 2 - (panel.getTileSide() / 2);
-        centerY = (panel.getTileSide() * panel.getRow()) / 2 - (panel.getTileSide() / 2);
+        stamina = 30;
+        maxStamina = 30;
+        this.x = 45*panel.getSquareSide();
+        this.y = 45*panel.getSquareSide();
+        centerX = (panel.getSquareSide() * panel.getCol()) / 2 - (panel.getSquareSide() / 2);
+        centerY = (panel.getSquareSide() * panel.getRow()) / 2 - (panel.getSquareSide() / 2);
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
 
         testZombie = zombie;  //temporarily added for testing
@@ -51,10 +51,10 @@ public class Player extends Entity {
     }
     @Override
     public void drawHealthBar(Graphics2D g){
-        double scale = (double)(panel.getTileSide()*4)/maxLives;
+        double scale = (double)(panel.getSquareSide()*4)/maxLives;
         double value = scale*lives;
 
-        int width = panel.getTileSide()*4;
+        int width = panel.getSquareSide()*4;
         int height = 15;
         int x = panel.getWidth()/2 - width/2;
         int y = panel.getHeight() - 100;
@@ -66,10 +66,10 @@ public class Player extends Entity {
     }
 
     public void drawStaminaBar(Graphics2D g){
-        double scale = (double)(panel.getTileSide()*4)/maxStamina;
+        double scale = (double)(panel.getSquareSide()*4)/maxStamina;
         double value = scale*stamina;
 
-        int width = panel.getTileSide()*4;
+        int width = panel.getSquareSide()*4;
         int height = 15;
         int x = panel.getWidth()/2 - width/2;
         int y = panel.getHeight() - 70;
@@ -115,13 +115,13 @@ public class Player extends Entity {
             }
             speed = 6;
             if(stamina > 0){
-                speed = 8;
+                speed = 7;
             }
 
         }else {
             speed = 6;
             staminaCounter++;
-            if(staminaCounter >= 10 && stamina < 10){
+            if(staminaCounter >= 15 && stamina < maxStamina){
                 stamina++;
                 staminaCounter = 0;
             }

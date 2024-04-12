@@ -16,9 +16,11 @@ public abstract class Entity {
     protected int direction;
     protected String defaultImagePath;
     Rectangle actualArea;
+    world.Panel panel;
     protected boolean canMove;
     protected int lives;
     protected int maxLives;
+
 
 
     public abstract void draw(Graphics2D g);
@@ -70,8 +72,29 @@ public abstract class Entity {
         return image;
     }
 
-    public abstract void drawHealthBar(Graphics2D g);
+    public void drawHealthBar(Graphics2D g){
+        double scale = (double)(panel.getSquareSide())/maxLives;
+        double value = scale*lives;
 
+        int width = panel.getSquareSide();
+        int height = 5;
+        int x = getRelX() + panel.getSquareSide()/2 - width/2;
+        int y = getRelY() - 15;
+
+        g.setColor(new Color(35,35,35));
+        g.fillRect(x-2, y-2, width+4,height+4);
+        g.setColor(new Color(255, 0, 30));
+        g.fillRect(x, y, (int)value, height);
+    }
+
+
+    public int getRelX(){ // returns x coordinate relative to player
+        return x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
+    }
+
+    public int getRelY(){ // returns y coordinate relative to player
+        return y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
+    }
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
@@ -98,6 +121,10 @@ public abstract class Entity {
 
     public Rectangle getActualArea() {
         return actualArea;
+    }
+
+    public int getLives() {
+        return lives;
     }
 
     public void setX(int x) {

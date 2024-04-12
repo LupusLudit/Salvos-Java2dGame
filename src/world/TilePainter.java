@@ -25,15 +25,15 @@ public class TilePainter {
             String line;
             String[] arr;
             int i = 0;
-            int j;
+            int j = 0;
             while ((line = br.readLine()) != null) {
-                j = 0;
                 arr = line.split(",");
                 while (j < arr.length) {
                     map.put(j + "," + i, Integer.parseInt(arr[j]));
                     j++;
                 }
                 i++;
+                j = 0;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -45,8 +45,8 @@ public class TilePainter {
             for (int j = 0; j < 90; j++) {
                 int cell = map.get(j + "," + i);
 
-                int x = (j * panel.getTileSide()) - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
-                int y = (i * panel.getTileSide()) - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
+                int x = (j * panel.getSquareSide()) - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
+                int y = (i * panel.getSquareSide()) - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
 
                 if (isInRange(i, j)) {
                     g.drawImage(tiles.get(cell).getImage(), x, y, null);
@@ -59,10 +59,10 @@ public class TilePainter {
         boolean drawX = false;
         boolean drawY = false;
 
-        if(Math.abs(panel.getPlayer().getX() - j*panel.getTileSide()) < panel.getPlayer().getCenterX() + panel.getTileSide()){
+        if(Math.abs(panel.getPlayer().getX() - j*panel.getSquareSide()) < panel.getPlayer().getCenterX() + panel.getSquareSide()){
             drawX = true;
         }
-        if(Math.abs(panel.getPlayer().getY() - i*panel.getTileSide()) < panel.getPlayer().getCenterY() + panel.getTileSide()){
+        if(Math.abs(panel.getPlayer().getY() - i*panel.getSquareSide()) < panel.getPlayer().getCenterY() + panel.getSquareSide()){
             drawY = true;
         }
 
