@@ -87,6 +87,12 @@ public abstract class Entity {
         g.fillRect(x, y, (int)value, height);
     }
 
+    public void decreaseLives(){
+        if(lives -1 >= 0){
+            lives--;
+        }
+    }
+
 
     public int getRelX(){ // returns x coordinate relative to player
         return x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
@@ -95,6 +101,11 @@ public abstract class Entity {
     public int getRelY(){ // returns y coordinate relative to player
         return y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
     }
+
+    public Rectangle getRelativeArea(){
+        return new Rectangle(getRelX(), getRelY(), 32, 32);
+    }
+
     public void setCanMove(boolean canMove) {
         this.canMove = canMove;
     }
@@ -127,6 +138,8 @@ public abstract class Entity {
         return lives;
     }
 
+
+
     public void setX(int x) {
         this.x = x;
     }
@@ -134,4 +147,5 @@ public abstract class Entity {
     public void setY(int y) {
         this.y = y;
     }
+
 }

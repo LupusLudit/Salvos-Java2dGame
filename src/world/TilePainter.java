@@ -16,6 +16,9 @@ public class TilePainter {
 
     world.Panel panel;
 
+    private int mapHeight;
+    private int mapWidth;
+
     public TilePainter(world.Panel panel) {
         this.panel = panel;
         initializeTileImages();
@@ -27,22 +30,27 @@ public class TilePainter {
             int i = 0;
             int j = 0;
             while ((line = br.readLine()) != null) {
+                j = 0;
                 arr = line.split(",");
                 while (j < arr.length) {
                     map.put(j + "," + i, Integer.parseInt(arr[j]));
                     j++;
                 }
                 i++;
-                j = 0;
             }
+            mapWidth = j;
+            mapHeight = i;
+
+            System.out.println("width: " + mapWidth);
+            System.out.println("height: " + mapHeight);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void draw(Graphics2D g) {
-        for (int i = 0; i < 90; i++) {
-            for (int j = 0; j < 90; j++) {
+        for (int i = 0; i < mapHeight; i++) {
+            for (int j = 0; j < mapWidth; j++) {
                 int cell = map.get(j + "," + i);
 
                 int x = (j * panel.getSquareSide()) - panel.getPlayer().getX() + panel.getPlayer().getCenterX();

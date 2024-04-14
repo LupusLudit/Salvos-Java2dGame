@@ -98,7 +98,7 @@ public class Player extends Entity {
                 }
 
                 counter++;
-                if (counter >= 20) {
+                if (counter >= 15) {
                     this.counter = 0;
                 }
 

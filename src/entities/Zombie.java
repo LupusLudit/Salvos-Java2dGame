@@ -13,7 +13,7 @@ public class Zombie extends Entity {
         defaultImagePath = "zombie/zombie-sprite_";
         this.panel = panel;
 
-        speed = 9;
+        speed = 7;
         canMove = true;
         lives = 5;
         maxLives = 5;
@@ -72,15 +72,15 @@ public class Zombie extends Entity {
             updateDelay = 0;
         }
         counter++;
-        if (counter >= 20 && canMove) {
+        if (counter >= 15 && canMove) {
             this.counter = 0;
         }
-        //testing health bar
+        /*//testing health bar
         if(collisionManager.checkEntityCollision(this, panel.getPlayer())){
             if(lives>0){
                 lives--;
             }
-        }
+        }*/
 
 
     }
