@@ -80,7 +80,7 @@ public class Panel extends JPanel {
 
             Point clickPoint = new Point(x, y);
 
-            if (mouseInput.isMouseClicked() && entity.getRelativeArea().contains(clickPoint)) {
+            if (mouseInput.isMouseClicked() && entity.getHitBoxArea().contains(clickPoint)) {
                 entity.decreaseLives();
 
                 lastShootTime = currentTime;

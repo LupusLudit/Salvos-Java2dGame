@@ -15,6 +15,7 @@ public class Player extends Entity {
     private final int maxStamina;
 
     private int staminaCounter = 0;
+    private int hitCounter = 0;
 
     CollisionManager collisionManager;
 
@@ -30,10 +31,12 @@ public class Player extends Entity {
 
         speed = 6;
         canMove = true;
-        lives = 10;
         maxLives = 10;
-        stamina = 30;
         maxStamina = 30;
+
+        lives = maxLives;
+        stamina = maxStamina;
+
         this.x = 45*panel.getSquareSide();
         this.y = 45*panel.getSquareSide();
         centerX = (panel.getSquareSide() * panel.getCol()) / 2 - (panel.getSquareSide() / 2);
@@ -57,7 +60,7 @@ public class Player extends Entity {
         int width = panel.getSquareSide()*4;
         int height = 15;
         int x = panel.getWidth()/2 - width/2;
-        int y = panel.getHeight() - 100;
+        int y = panel.getHeight() - 60;
 
         g.setColor(new Color(35,35,35));
         g.fillRect(x-2, y-2, width+4,height+4);
@@ -72,7 +75,7 @@ public class Player extends Entity {
         int width = panel.getSquareSide()*4;
         int height = 15;
         int x = panel.getWidth()/2 - width/2;
-        int y = panel.getHeight() - 70;
+        int y = panel.getHeight() - 30;
 
         g.setColor(new Color(35,35,35));
         g.fillRect(x-2, y-2, width+4,height+4);
@@ -86,9 +89,6 @@ public class Player extends Entity {
 
         if (userInput.isPressed()) {
             canMove = !collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(this, testZombie);
-            if(collisionManager.checkEntityCollision(this, testZombie) || collisionManager.checkEntityCollision(testZombie, this)){
-                lives--;
-            }
             if (canMove) {
                 switch (direction) {
                     case 0 -> y -= speed;
@@ -103,6 +103,17 @@ public class Player extends Entity {
                 }
 
                 actualArea.setRect(x + 8, y + 16, 32, 32);
+            }
+        }
+
+        //testing health bar
+        if(collisionManager.checkEntityCollision(testZombie, this)){
+            hitCounter++;
+            System.out.println(hitCounter);
+            if(hitCounter == 20){
+                decreaseLives();
+                hitCounter = 0;
+                System.out.println("lives " + lives);
             }
         }
 
@@ -126,14 +137,6 @@ public class Player extends Entity {
                 staminaCounter = 0;
             }
         }
-
-        //testing health bar
-        if(collisionManager.checkEntityCollision(testZombie, this)){
-            if(lives>0){
-                lives--;
-            }
-        }
-
     }
 
     public int getCenterX() {

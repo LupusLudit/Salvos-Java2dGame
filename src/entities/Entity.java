@@ -21,8 +21,6 @@ public abstract class Entity {
     protected int lives;
     protected int maxLives;
 
-
-
     public abstract void draw(Graphics2D g);
     public abstract void update();
     public BufferedImage chooseImage(int direction, int counter) {
@@ -102,8 +100,8 @@ public abstract class Entity {
         return y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
     }
 
-    public Rectangle getRelativeArea(){
-        return new Rectangle(getRelX(), getRelY(), 32, 32);
+    public Rectangle getHitBoxArea(){
+        return new Rectangle(getRelX(), getRelY() - 16, 32, 48);
     }
 
     public void setCanMove(boolean canMove) {

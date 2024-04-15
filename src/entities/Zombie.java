@@ -75,13 +75,6 @@ public class Zombie extends Entity {
         if (counter >= 15 && canMove) {
             this.counter = 0;
         }
-        /*//testing health bar
-        if(collisionManager.checkEntityCollision(this, panel.getPlayer())){
-            if(lives>0){
-                lives--;
-            }
-        }*/
-
 
     }
     public void chooseSpawnPoint() {
