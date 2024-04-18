@@ -1,5 +1,7 @@
 package entities;
 
+import management.CollisionManager;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -17,12 +19,16 @@ public abstract class Entity {
     protected String defaultImagePath;
     Rectangle actualArea;
     world.Panel panel;
+
+    CollisionManager collisionManager;
     protected boolean canMove;
     protected int lives;
     protected int maxLives;
 
     public abstract void draw(Graphics2D g);
+
     public abstract void update();
+
     public BufferedImage chooseImage(int direction, int counter) {
         BufferedImage image;
         switch (direction) {
@@ -70,46 +76,53 @@ public abstract class Entity {
         return image;
     }
 
-    public void drawHealthBar(Graphics2D g){
-        double scale = (double)(panel.getSquareSide())/maxLives;
-        double value = scale*lives;
+    public void drawHealthBar(Graphics2D g) {
+        double scale = (double) (panel.getSquareSide()) / maxLives;
+        double value = scale * lives;
 
         int width = panel.getSquareSide();
         int height = 5;
-        int x = getRelX() + panel.getSquareSide()/2 - width/2;
+        int x = getRelX() + panel.getSquareSide() / 2 - width / 2;
         int y = getRelY() - 15;
 
-        g.setColor(new Color(35,35,35));
-        g.fillRect(x-2, y-2, width+4,height+4);
+        g.setColor(new Color(35, 35, 35));
+        g.fillRect(x - 2, y - 2, width + 4, height + 4);
         g.setColor(new Color(255, 0, 30));
-        g.fillRect(x, y, (int)value, height);
+        g.fillRect(x, y, (int) value, height);
     }
 
-    public void decreaseLives(){
-        if(lives -1 >= 0){
+    public void decreaseLives() {
+        if (lives - 1 >= 0) {
             lives--;
         }
     }
 
+    public boolean allEntitiesCollision() {
+        if (collisionManager.checkEntityCollision(this, panel.getPlayer())) {
+            return true;
+        }
+        for (Entity entity : panel.getEntities()) {
+            if (entity != this) {
+                if (collisionManager.checkEntityCollision(this, entity)) {
+                    return true;
+                }
+            }
 
-    public int getRelX(){ // returns x coordinate relative to player
+        }
+        return false;
+    }
+
+
+    public int getRelX() { // returns x coordinate relative to player
         return x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
     }
 
-    public int getRelY(){ // returns y coordinate relative to player
+    public int getRelY() { // returns y coordinate relative to player
         return y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
     }
 
-    public Rectangle getHitBoxArea(){
+    public Rectangle getHitBoxArea() {
         return new Rectangle(getRelX(), getRelY() - 16, 32, 48);
-    }
-
-    public void setCanMove(boolean canMove) {
-        this.canMove = canMove;
-    }
-
-    public boolean isCanMove() {
-        return canMove;
     }
 
     public int getX() {
@@ -135,15 +148,4 @@ public abstract class Entity {
     public int getLives() {
         return lives;
     }
-
-
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
 }

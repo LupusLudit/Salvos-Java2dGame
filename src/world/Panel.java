@@ -9,6 +9,7 @@ import management.UserInput;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Panel extends JPanel {
 
@@ -22,8 +23,10 @@ public class Panel extends JPanel {
     MouseInput mouseInput = new MouseInput();
     TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
+    ArrayList<Entity> entities = new ArrayList<>();
+
+    Game game = new Game(this);
     Player player;
-    Zombie zombie;
     Timer timer;
 
     public Panel() {
@@ -33,9 +36,9 @@ public class Panel extends JPanel {
         this.setFocusable(true);
         this.addKeyListener(userInput);
         this.addMouseListener(mouseInput);
+        game.setEntities(1); //temporarily
 
-        zombie = new Zombie(this); //eventually more entities will be added, temporarily added for testing
-        player = new Player(userInput, this, zombie);
+        player = new Player(userInput, this);
     }
 
 
@@ -44,8 +47,7 @@ public class Panel extends JPanel {
         timer = new Timer(15, e -> {
             repaint();
             player.update();
-            zombie.update();
-            simulateShooting(zombie);
+            game.updateEntities();
         });
         timer.start();
     }
@@ -56,27 +58,29 @@ public class Panel extends JPanel {
 
         if (player.getLives() > 0) {
             tilePainter.draw(g2);
-            zombie.draw(g2);
+            game.drawEntities(g2);
             player.draw(g2);
         } else {
             ui.drawDeathScreen(g2);
         }
     }
 
-    private final int shootingDelay = 250;
     private long lastShootTime = 0;
     public void simulateShooting(Entity entity) {
         int x;
         int y;
 
         long currentTime = System.currentTimeMillis();
-        if (currentTime - lastShootTime < shootingDelay) {
+        int shootingDelay = 800;
+
+        Point mousePosition = this.getMousePosition();
+        if (mousePosition == null || !this.contains(mousePosition) || currentTime - lastShootTime < shootingDelay ) {
             return;
         }
 
-        if (this.getMousePosition() != null && player.getLives() > 0) {
-            x = this.getMousePosition().x;
-            y = this.getMousePosition().y;
+        if (player.getLives() > 0) {
+            x = mousePosition.x;
+            y = mousePosition.y;
 
             Point clickPoint = new Point(x, y);
 
@@ -87,6 +91,7 @@ public class Panel extends JPanel {
             }
         }
     }
+
 
 
     public int getWidth() {
@@ -116,4 +121,10 @@ public class Panel extends JPanel {
     public TilePainter getTilePainter() {
         return tilePainter;
     }
+
+    public ArrayList<Entity> getEntities() {
+        return entities;
+    }
+
+
 }

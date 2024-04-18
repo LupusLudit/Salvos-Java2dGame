@@ -3,10 +3,9 @@ package entities;
 import management.CollisionManager;
 
 import java.awt.*;
+import java.util.Random;
 
 public class Zombie extends Entity {
-
-    CollisionManager collisionManager;
     private int updateDelay; //so the zombie doesn't update too quickly
 
     public Zombie(world.Panel panel) {
@@ -19,9 +18,8 @@ public class Zombie extends Entity {
         maxLives = 5;
         direction = 0;
         counter = 0;
-        x = 47 * panel.getSquareSide();
-        y = 47 * panel.getSquareSide();
 
+        chooseSpawnPoint();
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
         this.collisionManager = new CollisionManager();
     }
@@ -58,7 +56,7 @@ public class Zombie extends Entity {
         updateDelay++;
         if (updateDelay == 3) {
             updateDirection();
-            canMove = !collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(this, panel.getPlayer()); //temporarily added for testing
+            canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision(); //temporarily added for testing
             if (canMove) {
                 switch (direction) {
                     case 0 -> y -= speed;
@@ -78,6 +76,27 @@ public class Zombie extends Entity {
 
     }
     public void chooseSpawnPoint() {
+        Random rn = new Random();
+        int i = rn.nextInt(4);
+        switch (i){
+            case 0 ->{
+                x = 45*panel.getSquareSide();
+                y = 40*panel.getSquareSide();
+            }
+            case 1 ->{
+                x = 50*panel.getSquareSide();
+                y = 45*panel.getSquareSide();
+            }
+            case 2 ->{
+                x = 45*panel.getSquareSide();
+                y = 50*panel.getSquareSide();
+            }
+            case 3 ->{
+                x = 40*panel.getSquareSide();
+                y = 45*panel.getSquareSide();
+            }
+        }
+
     }
 
 }

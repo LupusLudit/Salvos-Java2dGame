@@ -17,13 +17,7 @@ public class Player extends Entity {
     private int staminaCounter = 0;
     private int hitCounter = 0;
 
-    CollisionManager collisionManager;
-
-    Zombie testZombie;
-
-
-
-    public Player(UserInput userInput, world.Panel panel, Zombie zombie) {
+    public Player(UserInput userInput, world.Panel panel) {
         defaultImagePath = "character/sprite_";
         this.userInput = userInput;
         this.panel = panel;
@@ -42,8 +36,6 @@ public class Player extends Entity {
         centerX = (panel.getSquareSide() * panel.getCol()) / 2 - (panel.getSquareSide() / 2);
         centerY = (panel.getSquareSide() * panel.getRow()) / 2 - (panel.getSquareSide() / 2);
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
-
-        testZombie = zombie;  //temporarily added for testing
     }
 
     @Override
@@ -88,7 +80,7 @@ public class Player extends Entity {
         direction = userInput.getDirection();
 
         if (userInput.isPressed()) {
-            canMove = !collisionManager.checkTileCollision(this, panel) && !collisionManager.checkEntityCollision(this, testZombie);
+            canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
             if (canMove) {
                 switch (direction) {
                     case 0 -> y -= speed;
@@ -107,13 +99,11 @@ public class Player extends Entity {
         }
 
         //testing health bar
-        if(collisionManager.checkEntityCollision(testZombie, this)){
+        if(entityHitPlayer()){
             hitCounter++;
-            System.out.println(hitCounter);
             if(hitCounter == 20){
                 decreaseLives();
                 hitCounter = 0;
-                System.out.println("lives " + lives);
             }
         }
 
@@ -137,6 +127,24 @@ public class Player extends Entity {
                 staminaCounter = 0;
             }
         }
+    }
+    @Override
+    public boolean allEntitiesCollision(){
+        for (Entity entity: panel.getEntities()){
+            if(collisionManager.checkEntityCollision(this, entity)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean entityHitPlayer(){
+        for (Entity entity: panel.getEntities()){
+            if(collisionManager.checkEntityCollision(entity, this)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public int getCenterX() {
