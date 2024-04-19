@@ -22,6 +22,8 @@ public class Zombie extends Entity {
         chooseSpawnPoint();
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
         this.collisionManager = new CollisionManager();
+
+
     }
 
     public void updateDirection() {
@@ -77,26 +79,39 @@ public class Zombie extends Entity {
     }
     public void chooseSpawnPoint() {
         Random rn = new Random();
-        int i = rn.nextInt(4);
-        switch (i){
-            case 0 ->{
-                x = 45*panel.getSquareSide();
-                y = 40*panel.getSquareSide();
+        boolean canSpawn = false;
+        while (!canSpawn){
+            int xBound = rn.nextInt(4);
+            switch (xBound){
+                case 0 ->{
+                    x = (rn.nextInt(6) + 40)*panel.getSquareSide();
+                    y = (rn.nextInt(6) + 35)*panel.getSquareSide();
+                }
+                case 1 ->{
+                    x = (rn.nextInt(6) + 45)*panel.getSquareSide();
+                    y = (rn.nextInt(6) + 40)*panel.getSquareSide();
+                }
+                case 2 ->{
+                    x = (rn.nextInt(6) + 40)*panel.getSquareSide();
+                    y = (rn.nextInt(6) + 45)*panel.getSquareSide();
+                }
+                case 3 ->{
+                    x = (rn.nextInt(6) + 35)*panel.getSquareSide();
+                    y = (rn.nextInt(6) + 40)*panel.getSquareSide();
+                }
             }
-            case 1 ->{
-                x = 50*panel.getSquareSide();
-                y = 45*panel.getSquareSide();
-            }
-            case 2 ->{
-                x = 45*panel.getSquareSide();
-                y = 50*panel.getSquareSide();
-            }
-            case 3 ->{
-                x = 40*panel.getSquareSide();
-                y = 45*panel.getSquareSide();
-            }
-        }
 
+            canSpawn = true;
+            for (Entity entity: panel.getEntities()){
+                if(entity != this){
+                    if(x/panel.getSquareSide() == entity.getX()/panel.getSquareSide() && y/panel.getSquareSide() == entity.getY()/panel.getSquareSide()){
+                        canSpawn = false;
+                        break;
+                    }
+                }
+            }
+            System.out.println("can spawn " + canSpawn);
+        }
     }
 
 }

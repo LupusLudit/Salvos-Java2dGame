@@ -116,7 +116,7 @@ public class Player extends Entity {
             }
             speed = 6;
             if(stamina > 0){
-                speed = 7;
+                speed = 8;
             }
 
         }else {
