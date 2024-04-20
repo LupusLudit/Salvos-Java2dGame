@@ -9,6 +9,10 @@ public class GameUI {
     world.Panel panel;
     Font font = new Font("font", Font.BOLD, 80); //temporarily
 
+    private int staminaCounter = 0;
+    private int healthCounter = 0;
+    private int speedCounter = 0;
+
     public GameUI(Panel panel) {
         this.panel = panel;
     }
@@ -90,23 +94,38 @@ public class GameUI {
         y = panel.getHeight() - 4*panel.getSquareSide();
         g.drawString(text, x, y);
         if(panel.getChosenOption() == 0) drawArrows(g, text, x,y, false);
+        drawIndicators(g,panel.getSquareSide()*5 , y, healthCounter);
 
         text = "STAMINA";
         y += panel.getSquareSide();
         g.drawString(text, x, y);
         if(panel.getChosenOption() == 1) drawArrows(g, text, x,y, false);
+        drawIndicators(g,panel.getSquareSide()*5 , y, staminaCounter);
 
         text = "SPEED";
         y += panel.getSquareSide();
         g.drawString(text, x, y);
         if(panel.getChosenOption() == 2) drawArrows(g, text, x,y, false);
+        drawIndicators(g,panel.getSquareSide()*5 , y, speedCounter);
 
         text = "CONFIRM";
         x = panel.getWidth() - textLength(g, text) - panel.getSquareSide();
         y = panel.getHeight() - panel.getSquareSide();
         g.drawString(text, x, y);
         if(panel.getChosenOption() == 3) drawArrows(g, text, x,y, false);
+    }
 
+    private void drawIndicators(Graphics2D g, int x, int y, int counter){
+        g.setColor(Color.white);
+        for (int i = 0; i < 10; i++){
+            x+= panel.getSquareSide();
+            if(i < counter){
+                g.drawString("▮", x, y);
+            }else {
+                g.drawString("▯", x, y);
+            }
+
+        }
     }
 
 
@@ -129,5 +148,29 @@ public class GameUI {
     public int centerY(Graphics2D g, String text) {
         int height = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
         return panel.getHeight() / 2 + height / 2;
+    }
+
+    public int getStaminaCounter() {
+        return staminaCounter;
+    }
+
+    public void setStaminaCounter(int staminaCounter) {
+        this.staminaCounter = staminaCounter;
+    }
+
+    public int getHealthCounter() {
+        return healthCounter;
+    }
+
+    public void setHealthCounter(int healthCounter) {
+        this.healthCounter = healthCounter;
+    }
+
+    public int getSpeedCounter() {
+        return speedCounter;
+    }
+
+    public void setSpeedCounter(int speedCounter) {
+        this.speedCounter = speedCounter;
     }
 }

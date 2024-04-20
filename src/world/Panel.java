@@ -155,4 +155,8 @@ public class Panel extends JPanel {
     public int getChosenOption() {
         return chosenOption;
     }
+
+    public GameUI getUi() {
+        return ui;
+    }
 }
