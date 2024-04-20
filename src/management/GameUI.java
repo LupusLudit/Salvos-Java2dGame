@@ -19,6 +19,7 @@ public class GameUI {
 
         switch (panel.getStatus()) {
             case SETUP -> drawStartingScreen(g);
+            case CUSTOMIZATION -> drawCustomizationScreen(g);
             case PLAYING -> {
                 panel.getTilePainter().draw(g);
                 panel.getGame().drawEntities(g);
@@ -32,17 +33,15 @@ public class GameUI {
     public void drawDeathScreen(Graphics2D g) {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-        g.setFont(font);
+        g.setFont(new Font("font", Font.BOLD, 80));
 
         String message = "YOU DIED";
-        int x = centerX(g, message);
-        int y = centerY(g, message);
 
         g.setColor(new Color(133, 25, 25));
-        g.drawString(message, x, y);
+        g.drawString(message, centerX(g, message), centerY(g, message));
     }
 
-    private void drawStartingScreen(Graphics2D g) {
+    public void drawStartingScreen(Graphics2D g) {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 
@@ -61,19 +60,59 @@ public class GameUI {
         text = "START";
         x = centerX(g, text);
         y += 5 * panel.getSquareSide();
-        drawOptions(g, text, x, y);
+        g.drawString(text, x, y);
+        if(panel.getChosenOption() == 0) drawArrows(g, text, x,y, true);
 
         text = "QUIT";
         x = centerX(g, text);
         y += panel.getSquareSide();
-        drawOptions(g, text, x, y);
+        g.drawString(text, x, y);
+        if(panel.getChosenOption() == 1) drawArrows(g, text, x,y, true);
+    }
+
+    public void drawCustomizationScreen(Graphics2D g){
+
+        g.setColor(new Color(0, 0, 0));
+        g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
+        g.setColor(Color.white);
+
+        g.setFont(font);
+
+        int x = panel.getWidth() / 2 - panel.getSquareSide()*2;
+        int y = panel.getSquareSide();
+        g.drawImage(panel.getPlayer().getDefaultImage(), x, y, panel.getSquareSide()*4, panel.getSquareSide()*4, null);
+
+        font = new Font("font", Font.BOLD, 36);
+        g.setFont(font);
+
+        String text = "HEALTH";
+        x = panel.getSquareSide();
+        y = panel.getHeight() - 4*panel.getSquareSide();
+        g.drawString(text, x, y);
+        if(panel.getChosenOption() == 0) drawArrows(g, text, x,y, false);
+
+        text = "STAMINA";
+        y += panel.getSquareSide();
+        g.drawString(text, x, y);
+        if(panel.getChosenOption() == 1) drawArrows(g, text, x,y, false);
+
+        text = "SPEED";
+        y += panel.getSquareSide();
+        g.drawString(text, x, y);
+        if(panel.getChosenOption() == 2) drawArrows(g, text, x,y, false);
+
+        text = "CONFIRM";
+        x = panel.getWidth() - textLength(g, text) - panel.getSquareSide();
+        y = panel.getHeight() - panel.getSquareSide();
+        g.drawString(text, x, y);
+        if(panel.getChosenOption() == 3) drawArrows(g, text, x,y, false);
+
     }
 
 
-    public void drawOptions(Graphics2D g, String text, int x, int y) {
-        g.drawString(text, x, y);
-        if ((panel.getChosenOption() == 0 && text.equals("START")) || (panel.getChosenOption() == 1 && text.equals("QUIT"))) {
-            g.drawString(">", x - panel.getSquareSide(), y);
+    public void drawArrows(Graphics2D g, String text, int x, int y, boolean multiple) {
+        g.drawString(">", x - panel.getSquareSide(), y);
+        if(multiple){
             g.drawString("<", x + textLength(g, text) + panel.getSquareSide() - textLength(g, "<"), y);
         }
     }

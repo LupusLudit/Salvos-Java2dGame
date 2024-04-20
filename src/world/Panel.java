@@ -50,7 +50,7 @@ public class Panel extends JPanel {
         tilePainter.setMap();
         timer = new Timer(15, e -> {
             repaint();
-            if(status != Status.SETUP){
+            if(status != Status.SETUP && status!= Status.CUSTOMIZATION){
                 checkStatus();
                 player.update();
                 game.updateEntities();

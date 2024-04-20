@@ -2,7 +2,12 @@ package entities;
 
 import management.CollisionManager;
 import management.UserInput;
+
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class Player extends Entity {
 
@@ -156,4 +161,13 @@ public class Player extends Entity {
     }
 
 
+    public Image getDefaultImage() {
+        BufferedImage image = null;
+        try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + "0.png")));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
 }
