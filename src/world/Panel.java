@@ -2,7 +2,6 @@ package world;
 
 import entities.Entity;
 import entities.Player;
-import entities.Zombie;
 import management.GameUI;
 import management.MouseInput;
 import management.UserInput;
@@ -19,7 +18,7 @@ public class Panel extends JPanel {
     private final int col = 18;
     private final int row = 12;
 
-    UserInput userInput = new UserInput();
+    UserInput userInput = new UserInput(this);
     MouseInput mouseInput = new MouseInput();
     TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
@@ -28,6 +27,10 @@ public class Panel extends JPanel {
     Game game = new Game(this);
     Player player;
     Timer timer;
+
+    private Status status;
+
+    private int chosenOption = 0;
 
     public Panel() {
         this.setPreferredSize(new Dimension(SquareSide * col, SquareSide * row));
@@ -39,6 +42,7 @@ public class Panel extends JPanel {
         game.setEntities(1); //temporarily
 
         player = new Player(userInput, this);
+        status = Status.SETUP;
     }
 
 
@@ -46,8 +50,11 @@ public class Panel extends JPanel {
         tilePainter.setMap();
         timer = new Timer(15, e -> {
             repaint();
-            player.update();
-            game.updateEntities();
+            if(status != Status.SETUP){
+                checkStatus();
+                player.update();
+                game.updateEntities();
+            }
         });
         timer.start();
     }
@@ -56,16 +63,11 @@ public class Panel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        if (player.getLives() > 0) {
-            tilePainter.draw(g2);
-            game.drawEntities(g2);
-            player.draw(g2);
-        } else {
-            ui.drawDeathScreen(g2);
-        }
+        ui.draw(g2);
     }
 
     private long lastShootTime = 0;
+
     public void simulateShooting(Entity entity) {
         int x;
         int y;
@@ -74,7 +76,7 @@ public class Panel extends JPanel {
         int shootingDelay = 800;
 
         Point mousePosition = this.getMousePosition();
-        if (mousePosition == null || !this.contains(mousePosition) || currentTime - lastShootTime < shootingDelay ) {
+        if (mousePosition == null || !this.contains(mousePosition) || currentTime - lastShootTime < shootingDelay) {
             return;
         }
 
@@ -92,7 +94,23 @@ public class Panel extends JPanel {
         }
     }
 
+    public void checkStatus(){
+        if(player.getLives() > 0){
+            status = Status.PLAYING;
+        }
+        else {
+            status = Status.GAMEOVER;
+        }
+    }
 
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public void setChosenOption(int chosenOption) {
+        this.chosenOption = chosenOption;
+    }
 
     public int getWidth() {
         return SquareSide * col;
@@ -126,5 +144,15 @@ public class Panel extends JPanel {
         return entities;
     }
 
+    public Status getStatus() {
+        return status;
+    }
 
+    public Game getGame() {
+        return game;
+    }
+
+    public int getChosenOption() {
+        return chosenOption;
+    }
 }
