@@ -23,6 +23,7 @@ public class TilePainter {
         this.panel = panel;
         initializeTileImages();
     }
+
     public void setMap() {
         try (BufferedReader br = new BufferedReader(new FileReader("gameMap.csv"))) {
             String line;
@@ -40,9 +41,6 @@ public class TilePainter {
             }
             mapWidth = j;
             mapHeight = i;
-
-            System.out.println("width: " + mapWidth);
-            System.out.println("height: " + mapHeight);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -63,20 +61,21 @@ public class TilePainter {
         }
     }
 
-    public boolean isInRange(int i, int j){
+    public boolean isInRange(int i, int j) {
         boolean drawX = false;
         boolean drawY = false;
 
-        if(Math.abs(panel.getPlayer().getX() - j*panel.getSquareSide()) < panel.getPlayer().getCenterX() + panel.getSquareSide()){
+        if (Math.abs(panel.getPlayer().getX() - j * panel.getSquareSide()) < panel.getPlayer().getCenterX() + panel.getSquareSide()) {
             drawX = true;
         }
-        if(Math.abs(panel.getPlayer().getY() - i*panel.getSquareSide()) < panel.getPlayer().getCenterY() + panel.getSquareSide()){
+        if (Math.abs(panel.getPlayer().getY() - i * panel.getSquareSide()) < panel.getPlayer().getCenterY() + panel.getSquareSide()) {
             drawY = true;
         }
 
         return drawX && drawY;
 
     }
+
     private static BufferedImage convertToBufferedImage(Image img) {
 
         if (img instanceof BufferedImage) {
@@ -96,7 +95,7 @@ public class TilePainter {
     private void setTileImage(int fieldIndex, String imageIndex, boolean collision) {
         BufferedImage temp;
         try {
-            temp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(("/background/tiles"+ imageIndex +".png"))));
+            temp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(("/background/tiles" + imageIndex + ".png"))));
             temp = convertToBufferedImage(temp.getScaledInstance(48, 48, temp.getType()));
             tiles.put(fieldIndex, new Tile(temp, collision));
         } catch (IOException e) {
@@ -104,7 +103,7 @@ public class TilePainter {
         }
     }
 
-    private void initializeTileImages(){
+    private void initializeTileImages() {
         setTileImage(0, "09", true);
         setTileImage(1, "04", true);
         setTileImage(2, "10", true);

@@ -50,7 +50,9 @@ public class Panel extends JPanel {
         tilePainter.setMap();
         timer = new Timer(15, e -> {
             repaint();
-            if(status != Status.SETUP && status!= Status.CUSTOMIZATION){
+            if (status == Status.CUSTOMIZATION) {
+                player.setBonuses();
+            } else if (status != Status.SETUP) {
                 checkStatus();
                 player.update();
                 game.updateEntities();
@@ -66,43 +68,13 @@ public class Panel extends JPanel {
         ui.draw(g2);
     }
 
-    private long lastShootTime = 0;
-
-    public void simulateShooting(Entity entity) {
-        int x;
-        int y;
-
-        long currentTime = System.currentTimeMillis();
-        int shootingDelay = 800;
-
-        Point mousePosition = this.getMousePosition();
-        if (mousePosition == null || !this.contains(mousePosition) || currentTime - lastShootTime < shootingDelay) {
-            return;
-        }
-
+    public void checkStatus() {
         if (player.getLives() > 0) {
-            x = mousePosition.x;
-            y = mousePosition.y;
-
-            Point clickPoint = new Point(x, y);
-
-            if (mouseInput.isMouseClicked() && entity.getHitBoxArea().contains(clickPoint)) {
-                entity.decreaseLives();
-
-                lastShootTime = currentTime;
-            }
-        }
-    }
-
-    public void checkStatus(){
-        if(player.getLives() > 0){
             status = Status.PLAYING;
-        }
-        else {
+        } else {
             status = Status.GAMEOVER;
         }
     }
-
 
     public void setStatus(Status status) {
         this.status = status;
@@ -152,6 +124,10 @@ public class Panel extends JPanel {
         return game;
     }
 
+    public MouseInput getMouseInput() {
+        return mouseInput;
+    }
+
     public int getChosenOption() {
         return chosenOption;
     }
@@ -159,4 +135,6 @@ public class Panel extends JPanel {
     public GameUI getUi() {
         return ui;
     }
+
+
 }

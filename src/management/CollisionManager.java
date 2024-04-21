@@ -17,22 +17,22 @@ public class CollisionManager {
 
         switch (entity.getDirection()) {
             case 0 -> {
-                topRow = (entity.getActualArea().y - entity.getSpeed()) / panel.getSquareSide();
+                topRow = (int) (entity.getActualArea().y - entity.getSpeed()) / panel.getSquareSide();
                 firstTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(leftCol + "," + topRow)).isCollision();
                 secondTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(rightCol + "," + topRow)).isCollision();
             }
             case 1 -> {
-                bottomRow = (entity.getActualArea().y + entity.getActualArea().height + entity.getSpeed()) / panel.getSquareSide();
+                bottomRow = (int) (entity.getActualArea().y + entity.getActualArea().height + entity.getSpeed()) / panel.getSquareSide();
                 firstTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(leftCol + "," + bottomRow)).isCollision();
                 secondTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(rightCol + "," + bottomRow)).isCollision();
             }
             case 2 -> {
-                leftCol = (entity.getActualArea().x - entity.getSpeed()) / panel.getSquareSide();
+                leftCol = (int) (entity.getActualArea().x - entity.getSpeed()) / panel.getSquareSide();
                 firstTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(leftCol + "," + topRow)).isCollision();
                 secondTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(leftCol + "," + bottomRow)).isCollision();
             }
             case 3 -> {
-                rightCol = (entity.getActualArea().x + entity.getActualArea().width + entity.getSpeed()) / panel.getSquareSide();
+                rightCol = (int) (entity.getActualArea().x + entity.getActualArea().width + entity.getSpeed()) / panel.getSquareSide();
                 firstTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(rightCol + "," + topRow)).isCollision();
                 secondTile = panel.getTilePainter().getTiles().get(panel.getTilePainter().getMap().get(rightCol + "," + bottomRow)).isCollision();
             }

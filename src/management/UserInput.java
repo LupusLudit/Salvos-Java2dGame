@@ -63,44 +63,9 @@ public class UserInput implements KeyListener {
                             panel.setChosenOption(0);
                         }
                     }
-                    case KeyEvent.VK_D, KeyEvent.VK_LEFT -> {
-                        switch (panel.getChosenOption()) {
-                            case 0 -> {
-                                if (panel.getUi().getHealthCounter() + 1 < 11) {
-                                    panel.getUi().setHealthCounter(panel.getUi().getHealthCounter() + 1);
-                                }
-                            }
-                            case 1 -> {
-                                if (panel.getUi().getStaminaCounter() + 1 < 11) {
-                                    panel.getUi().setStaminaCounter(panel.getUi().getStaminaCounter() + 1);
-                                }
-                            }
-                            case 2 -> {
-                                if (panel.getUi().getSpeedCounter() + 1 < 11) {
-                                    panel.getUi().setSpeedCounter(panel.getUi().getSpeedCounter() + 1);
-                                }
-                            }
-                        }
-                    }
-                    case KeyEvent.VK_A, KeyEvent.VK_RIGHT -> {
-                        switch (panel.getChosenOption()) {
-                            case 0 -> {
-                                if (panel.getUi().getHealthCounter() - 1 >= 0) {
-                                    panel.getUi().setHealthCounter(panel.getUi().getHealthCounter() - 1);
-                                }
-                            }
-                            case 1 -> {
-                                if (panel.getUi().getStaminaCounter() - 1 >= 0) {
-                                    panel.getUi().setStaminaCounter(panel.getUi().getStaminaCounter() - 1);
-                                }
-                            }
-                            case 2 -> {
-                                if (panel.getUi().getSpeedCounter() - 1 >= 0) {
-                                    panel.getUi().setSpeedCounter(panel.getUi().getSpeedCounter() - 1);
-                                }
-                            }
-                        }
-                    }
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getGame().addBonus(panel.getChosenOption());
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getGame().subtractBonus(panel.getChosenOption());
+
                     case KeyEvent.VK_ENTER -> {
                         if (panel.getChosenOption() == 3) {
                             panel.setStatus(Status.PLAYING);

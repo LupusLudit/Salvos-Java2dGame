@@ -17,7 +17,7 @@ public class Player extends Entity {
     private final int centerY;
 
     private int stamina;
-    private final int maxStamina;
+    private int maxStamina;
 
     private int staminaCounter = 0;
     private int hitCounter = 0;
@@ -28,16 +28,11 @@ public class Player extends Entity {
         this.panel = panel;
         this.collisionManager = new CollisionManager();
 
-        speed = 6;
         canMove = true;
-        maxLives = 10;
-        maxStamina = 30;
+        setBonuses();
 
-        lives = maxLives;
-        stamina = maxStamina;
-
-        this.x = 45*panel.getSquareSide();
-        this.y = 45*panel.getSquareSide();
+        this.x = 45 * panel.getSquareSide();
+        this.y = 45 * panel.getSquareSide();
         centerX = (panel.getSquareSide() * panel.getCol()) / 2 - (panel.getSquareSide() / 2);
         centerY = (panel.getSquareSide() * panel.getRow()) / 2 - (panel.getSquareSide() / 2);
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
@@ -49,35 +44,36 @@ public class Player extends Entity {
         drawHealthBar(g);
         drawStaminaBar(g);
     }
-    @Override
-    public void drawHealthBar(Graphics2D g){
-        double scale = (double)(panel.getSquareSide()*4)/maxLives;
-        double value = scale*lives;
 
-        int width = panel.getSquareSide()*4;
+    @Override
+    public void drawHealthBar(Graphics2D g) {
+        double scale = (double) (panel.getSquareSide() * 4) / maxLives;
+        double value = scale * lives;
+
+        int width = panel.getSquareSide() * 4;
         int height = 15;
-        int x = panel.getWidth()/2 - width/2;
+        int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getHeight() - 60;
 
-        g.setColor(new Color(35,35,35));
-        g.fillRect(x-2, y-2, width+4,height+4);
+        g.setColor(new Color(35, 35, 35));
+        g.fillRect(x - 2, y - 2, width + 4, height + 4);
         g.setColor(new Color(255, 0, 30));
-        g.fillRect(x, y, (int)value, height);
+        g.fillRect(x, y, (int) value, height);
     }
 
-    public void drawStaminaBar(Graphics2D g){
-        double scale = (double)(panel.getSquareSide()*4)/maxStamina;
-        double value = scale*stamina;
+    public void drawStaminaBar(Graphics2D g) {
+        double scale = (double) (panel.getSquareSide() * 4) / maxStamina;
+        double value = scale * stamina;
 
-        int width = panel.getSquareSide()*4;
+        int width = panel.getSquareSide() * 4;
         int height = 15;
-        int x = panel.getWidth()/2 - width/2;
+        int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getHeight() - 30;
 
-        g.setColor(new Color(35,35,35));
-        g.fillRect(x-2, y-2, width+4,height+4);
+        g.setColor(new Color(35, 35, 35));
+        g.fillRect(x - 2, y - 2, width + 4, height + 4);
         g.setColor(new Color(60, 0, 255));
-        g.fillRect(x, y, (int)value, height);
+        g.fillRect(x, y, (int) value, height);
     }
 
     @Override
@@ -104,52 +100,66 @@ public class Player extends Entity {
         }
 
         //testing health bar
-        if(entityHitPlayer()){
+        if (entityHitPlayer()) {
             hitCounter++;
-            if(hitCounter == 20){
+            if (hitCounter == 20) {
                 decreaseLives();
                 hitCounter = 0;
             }
         }
 
         //stamina options
-        if(userInput.isShiftPressed()){
+        if (userInput.isShiftPressed()) {
             staminaCounter++;
-            if(staminaCounter >= 5 && stamina > 0) {
+            if (staminaCounter >= 5 && stamina > 0) {
                 stamina--;
                 staminaCounter = 0;
             }
-            speed = 6;
-            if(stamina > 0){
-                speed = 8;
+            setDefaultSpeed();
+            if (stamina > 0) {
+                speed += 2;
             }
 
-        }else {
-            speed = 6;
+        } else {
+            setDefaultSpeed();
             staminaCounter++;
-            if(staminaCounter >= 15 && stamina < maxStamina){
+            if (staminaCounter >= 15 && stamina < maxStamina) {
                 stamina++;
                 staminaCounter = 0;
             }
         }
     }
+
     @Override
-    public boolean allEntitiesCollision(){
-        for (Entity entity: panel.getEntities()){
-            if(collisionManager.checkEntityCollision(this, entity)){
+    public boolean allEntitiesCollision() {
+        for (Entity entity : panel.getEntities()) {
+            if (collisionManager.checkEntityCollision(this, entity)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean entityHitPlayer(){
-        for (Entity entity: panel.getEntities()){
-            if(collisionManager.checkEntityCollision(entity, this)){
+    public boolean entityHitPlayer() {
+        for (Entity entity : panel.getEntities()) {
+            if (collisionManager.checkEntityCollision(entity, this)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void setDefaultSpeed() {
+        speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
+    }
+
+    public void setBonuses() {
+        setDefaultSpeed();
+        maxLives = 10 + panel.getGame().getHealthBonus();
+        maxStamina = 30 + panel.getGame().getStaminaBonus();
+
+        lives = maxLives;
+        stamina = maxStamina;
     }
 
     public int getCenterX() {

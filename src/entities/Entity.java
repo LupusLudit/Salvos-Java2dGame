@@ -13,7 +13,7 @@ public abstract class Entity {
     protected int x;
     protected int y;
 
-    protected int speed;
+    protected double speed;
     protected int counter = 0;
     protected int direction;
     protected String defaultImagePath;
@@ -133,7 +133,7 @@ public abstract class Entity {
         return y;
     }
 
-    public int getSpeed() {
+    public double getSpeed() {
         return speed;
     }
 

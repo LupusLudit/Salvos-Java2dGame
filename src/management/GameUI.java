@@ -9,10 +9,6 @@ public class GameUI {
     world.Panel panel;
     Font font = new Font("font", Font.BOLD, 80); //temporarily
 
-    private int staminaCounter = 0;
-    private int healthCounter = 0;
-    private int speedCounter = 0;
-
     public GameUI(Panel panel) {
         this.panel = panel;
     }
@@ -65,16 +61,16 @@ public class GameUI {
         x = centerX(g, text);
         y += 5 * panel.getSquareSide();
         g.drawString(text, x, y);
-        if(panel.getChosenOption() == 0) drawArrows(g, text, x,y, true);
+        if (panel.getChosenOption() == 0) drawArrows(g, text, x, y, true);
 
         text = "QUIT";
         x = centerX(g, text);
         y += panel.getSquareSide();
         g.drawString(text, x, y);
-        if(panel.getChosenOption() == 1) drawArrows(g, text, x,y, true);
+        if (panel.getChosenOption() == 1) drawArrows(g, text, x, y, true);
     }
 
-    public void drawCustomizationScreen(Graphics2D g){
+    public void drawCustomizationScreen(Graphics2D g) {
 
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
@@ -82,46 +78,46 @@ public class GameUI {
 
         g.setFont(font);
 
-        int x = panel.getWidth() / 2 - panel.getSquareSide()*2;
+        int x = panel.getWidth() / 2 - panel.getSquareSide() * 2;
         int y = panel.getSquareSide();
-        g.drawImage(panel.getPlayer().getDefaultImage(), x, y, panel.getSquareSide()*4, panel.getSquareSide()*4, null);
+        g.drawImage(panel.getPlayer().getDefaultImage(), x, y, panel.getSquareSide() * 4, panel.getSquareSide() * 4, null);
 
         font = new Font("font", Font.BOLD, 36);
         g.setFont(font);
 
         String text = "HEALTH";
         x = panel.getSquareSide();
-        y = panel.getHeight() - 4*panel.getSquareSide();
+        y = panel.getHeight() - 4 * panel.getSquareSide();
         g.drawString(text, x, y);
-        if(panel.getChosenOption() == 0) drawArrows(g, text, x,y, false);
-        drawIndicators(g,panel.getSquareSide()*5 , y, healthCounter);
+        if (panel.getChosenOption() == 0) drawArrows(g, text, x, y, false);
+        drawIndicators(g, panel.getSquareSide() * 5, y, panel.getGame().getHealthBonus());
 
         text = "STAMINA";
         y += panel.getSquareSide();
         g.drawString(text, x, y);
-        if(panel.getChosenOption() == 1) drawArrows(g, text, x,y, false);
-        drawIndicators(g,panel.getSquareSide()*5 , y, staminaCounter);
+        if (panel.getChosenOption() == 1) drawArrows(g, text, x, y, false);
+        drawIndicators(g, panel.getSquareSide() * 5, y, panel.getGame().getStaminaBonus());
 
         text = "SPEED";
         y += panel.getSquareSide();
         g.drawString(text, x, y);
-        if(panel.getChosenOption() == 2) drawArrows(g, text, x,y, false);
-        drawIndicators(g,panel.getSquareSide()*5 , y, speedCounter);
+        if (panel.getChosenOption() == 2) drawArrows(g, text, x, y, false);
+        drawIndicators(g, panel.getSquareSide() * 5, y, panel.getGame().getSpeedBonus());
 
         text = "CONFIRM";
         x = panel.getWidth() - textLength(g, text) - panel.getSquareSide();
         y = panel.getHeight() - panel.getSquareSide();
         g.drawString(text, x, y);
-        if(panel.getChosenOption() == 3) drawArrows(g, text, x,y, false);
+        if (panel.getChosenOption() == 3) drawArrows(g, text, x, y, false);
     }
 
-    private void drawIndicators(Graphics2D g, int x, int y, int counter){
+    private void drawIndicators(Graphics2D g, int x, int y, int counter) {
         g.setColor(Color.white);
-        for (int i = 0; i < 10; i++){
-            x+= panel.getSquareSide();
-            if(i < counter){
+        for (int i = 0; i < 10; i++) {
+            x += panel.getSquareSide();
+            if (i < counter) {
                 g.drawString("▮", x, y);
-            }else {
+            } else {
                 g.drawString("▯", x, y);
             }
 
@@ -131,7 +127,7 @@ public class GameUI {
 
     public void drawArrows(Graphics2D g, String text, int x, int y, boolean multiple) {
         g.drawString(">", x - panel.getSquareSide(), y);
-        if(multiple){
+        if (multiple) {
             g.drawString("<", x + textLength(g, text) + panel.getSquareSide() - textLength(g, "<"), y);
         }
     }
@@ -148,29 +144,5 @@ public class GameUI {
     public int centerY(Graphics2D g, String text) {
         int height = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
         return panel.getHeight() / 2 + height / 2;
-    }
-
-    public int getStaminaCounter() {
-        return staminaCounter;
-    }
-
-    public void setStaminaCounter(int staminaCounter) {
-        this.staminaCounter = staminaCounter;
-    }
-
-    public int getHealthCounter() {
-        return healthCounter;
-    }
-
-    public void setHealthCounter(int healthCounter) {
-        this.healthCounter = healthCounter;
-    }
-
-    public int getSpeedCounter() {
-        return speedCounter;
-    }
-
-    public void setSpeedCounter(int speedCounter) {
-        this.speedCounter = speedCounter;
     }
 }
