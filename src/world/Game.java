@@ -8,13 +8,15 @@ import java.util.Iterator;
 
 public class Game {
 
-    //spaw delay will be added
     world.Panel panel;
     private int staminaBonus = 0;
     private int healthBonus = 0;
     private int speedBonus = 0;
 
     private int bonusCounter = 0;
+
+    private int magazine = 9;
+    private int ammo = 27;
 
     public Game(Panel panel) {
         this.panel = panel;
@@ -31,49 +33,54 @@ public class Game {
         while (iterator.hasNext()) {
             Entity entity = iterator.next();
             entity.update();
-            simulateShooting(entity);
             if (entity.getLives() == 0) {
-                iterator.remove();
+                iterator.remove(); // Odstranit entitu, pokud nemá životy
             }
         }
+
+        // Simulace střelby na všechny entity
+        simulateShooting();
     }
 
     public void drawEntities(Graphics2D g) {
         for (Entity entity : panel.getEntities()) {
             if (entity != null) {
-                entity.draw(g);
+                entity.draw(g); // Kreslit každou entitu
             }
         }
     }
 
     private long lastShootTime = 0;
 
-    public void simulateShooting(Entity entity) {
-        int x;
-        int y;
-
+    public void simulateShooting() {
         long currentTime = System.currentTimeMillis();
-        int shootingDelay = 800;
 
         Point mousePosition = panel.getMousePosition();
-        if (mousePosition == null || !panel.contains(mousePosition) || currentTime - lastShootTime < shootingDelay) {
+        if (mousePosition == null || !panel.contains(mousePosition) || panel.getPlayer().getLives() <= 0) {
             return;
         }
 
-        if (panel.getPlayer().getLives() > 0) {
-            x = mousePosition.x;
-            y = mousePosition.y;
-
-            Point clickPoint = new Point(x, y);
-
-            if (panel.getMouseInput().isMouseClicked() && entity.getHitBoxArea().contains(clickPoint)) {
-                entity.decreaseLives();
-
-                lastShootTime = currentTime;
+        if (magazine > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= 500)) {
+            magazine--;
+            Point clickPoint = new Point(mousePosition.x, mousePosition.y);
+            for (Entity entity : panel.getEntities()) {
+                if (entity.getHitBoxArea().contains(clickPoint)) {
+                    entity.decreaseLives();
+                }
             }
+            lastShootTime = currentTime;
+        }
+        if (magazine == 0) {
+            reload();
         }
     }
 
+    public void reload() {
+        if (ammo >= 9) {
+            ammo -= 9;
+            magazine = 9;
+        }
+    }
 
     public void addBonus(int type) {
         switch (type) {
@@ -131,5 +138,13 @@ public class Game {
 
     public int getSpeedBonus() {
         return speedBonus;
+    }
+
+    public int getAmmo() {
+        return ammo;
+    }
+
+    public int getMagazine() {
+        return magazine;
     }
 }

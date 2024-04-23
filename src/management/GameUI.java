@@ -2,7 +2,11 @@ package management;
 
 import world.Panel;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.Objects;
 
 public class GameUI {
 
@@ -24,6 +28,11 @@ public class GameUI {
                 panel.getTilePainter().draw(g);
                 panel.getGame().drawEntities(g);
                 panel.getPlayer().draw(g);
+                try {
+                    drawAmmoIndicators(g);
+                }catch (IOException e){
+                    return;
+                }
             }
             case GAMEOVER -> drawDeathScreen(g);
         }
@@ -68,6 +77,17 @@ public class GameUI {
         y += panel.getSquareSide();
         g.drawString(text, x, y);
         if (panel.getChosenOption() == 1) drawArrows(g, text, x, y, true);
+    }
+
+    public void drawAmmoIndicators(Graphics2D g) throws IOException {
+        g.setColor(Color.white);
+        int x = panel.getSquareSide()/2;
+        int y = panel.getHeight() - panel.getSquareSide();
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/ammo.png")));
+
+        g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
+        String text = panel.getGame().getMagazine() +  "/" + panel.getGame().getAmmo();
+        g.drawString(text, x + panel.getSquareSide(), panel.getHeight()-6);
     }
 
     public void drawCustomizationScreen(Graphics2D g) {

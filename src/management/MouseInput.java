@@ -14,6 +14,9 @@ public class MouseInput implements MouseListener {
         if(e.getButton() == MouseEvent.BUTTON1){
             mouseClicked = true;
         }
+        else {
+            mouseClicked = false;
+        }
     }
 
     @Override
