@@ -30,8 +30,9 @@ public class GameUI {
                 panel.getPlayer().draw(g);
                 try {
                     drawAmmoIndicators(g);
+                    drawWeaponIndicators(g);
                 }catch (IOException e){
-                    return;
+                    e.printStackTrace();
                 }
             }
             case GAMEOVER -> drawDeathScreen(g);
@@ -82,12 +83,25 @@ public class GameUI {
     public void drawAmmoIndicators(Graphics2D g) throws IOException {
         g.setColor(Color.white);
         int x = panel.getSquareSide()/2;
-        int y = panel.getHeight() - panel.getSquareSide();
+        int y = panel.getHeight() - panel.getSquareSide() - 10;
         BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/ammo.png")));
 
         g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
         String text = panel.getGame().getMagazine() +  "/" + panel.getGame().getAmmo();
-        g.drawString(text, x + panel.getSquareSide(), panel.getHeight()-6);
+        g.drawString(text, x + panel.getSquareSide(), panel.getHeight()-16);
+    }
+
+    public void drawWeaponIndicators(Graphics2D g)throws IOException{
+        int x = panel.getSquareSide()/2;
+        int y = panel.getHeight() - 3* panel.getSquareSide();
+        BufferedImage image = null;
+        switch (panel.getGame().getWeapon()){
+            case PISTOL -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
+            case SEMIAUTO -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
+            case ASSAULTRIFLE -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
+        }
+        g.drawImage(image, x, y, panel.getSquareSide()*2, panel.getSquareSide()*2,null);
+
     }
 
     public void drawCustomizationScreen(Graphics2D g) {

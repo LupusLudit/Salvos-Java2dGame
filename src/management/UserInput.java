@@ -2,6 +2,7 @@ package management;
 
 import world.Panel;
 import world.Status;
+import world.Weapons;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -91,9 +92,11 @@ public class UserInput implements KeyListener {
                         direction = 3;
                         pressed = true;
                     }
-                    case KeyEvent.VK_SHIFT -> {
-                        shiftPressed = true;
-                    }
+                    case KeyEvent.VK_SHIFT -> shiftPressed = true;
+
+                    case KeyEvent.VK_1 -> panel.getGame().setWeapon(Weapons.PISTOL);
+                    case KeyEvent.VK_2 -> panel.getGame().setWeapon(Weapons.SEMIAUTO);
+                    case KeyEvent.VK_3 -> panel.getGame().setWeapon(Weapons.ASSAULTRIFLE);
                     default -> {
                         pressed = false;
                         shiftPressed = false;

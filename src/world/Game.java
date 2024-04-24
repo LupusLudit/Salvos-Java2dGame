@@ -16,10 +16,13 @@ public class Game {
     private int bonusCounter = 0;
 
     private int magazine = 9;
-    private int ammo = 27;
+    private int ammo = 100;
+
+    private Weapons weapon;
 
     public Game(Panel panel) {
         this.panel = panel;
+        weapon = Weapons.PISTOL;
     }
 
     public void setEntities(int wave) {
@@ -34,24 +37,22 @@ public class Game {
             Entity entity = iterator.next();
             entity.update();
             if (entity.getLives() == 0) {
-                iterator.remove(); // Odstranit entitu, pokud nemá životy
+                iterator.remove();
             }
         }
-
-        // Simulace střelby na všechny entity
         simulateShooting();
     }
 
     public void drawEntities(Graphics2D g) {
         for (Entity entity : panel.getEntities()) {
             if (entity != null) {
-                entity.draw(g); // Kreslit každou entitu
+                entity.draw(g);
             }
         }
     }
 
     private long lastShootTime = 0;
-
+    private int reloadCounter = 0;
     public void simulateShooting() {
         long currentTime = System.currentTimeMillis();
 
@@ -60,7 +61,9 @@ public class Game {
             return;
         }
 
-        if (magazine > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= 500)) {
+        int delay = shootingDelay();
+
+        if (magazine > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= delay)) {
             magazine--;
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
             for (Entity entity : panel.getEntities()) {
@@ -71,16 +74,60 @@ public class Game {
             lastShootTime = currentTime;
         }
         if (magazine == 0) {
-            reload();
+            reloadCounter++;
+            if(reloadCounter == 100){
+                reload();
+                reloadCounter = 0;
+            }
         }
+    }
+    public int shootingDelay(){
+        int delay = 0;
+        switch (weapon){
+            case PISTOL -> delay = 500;
+            case SEMIAUTO -> delay = 200;
+            case ASSAULTRIFLE -> delay = 50;
+        }
+        return delay;
     }
 
+
     public void reload() {
-        if (ammo >= 9) {
-            ammo -= 9;
-            magazine = 9;
+        switch (weapon){
+            case PISTOL -> {
+                if (ammo >= 9) {
+                    ammo -= 9;
+                    magazine = 9;
+                }
+                else {
+                    magazine = ammo;
+                    ammo = 0;
+                }
+            }
+            case SEMIAUTO -> {
+                if (ammo >= 8) {
+                    ammo -= 8;
+                    magazine = 8;
+                }
+                else {
+                    magazine = ammo;
+                    ammo = 0;
+                }
+            }
+            case ASSAULTRIFLE -> {
+                if (ammo >= 30) {
+                    ammo -= 30;
+                    magazine = 30;
+                }
+                else {
+                    magazine = ammo;
+                    ammo = 0;
+                }
+            }
         }
+
     }
+
 
     public void addBonus(int type) {
         switch (type) {
@@ -128,6 +175,10 @@ public class Game {
         }
     }
 
+    public void setWeapon(Weapons weapon) {
+        this.weapon = weapon;
+    }
+
     public int getStaminaBonus() {
         return staminaBonus;
     }
@@ -146,5 +197,9 @@ public class Game {
 
     public int getMagazine() {
         return magazine;
+    }
+
+    public Weapons getWeapon() {
+        return weapon;
     }
 }
