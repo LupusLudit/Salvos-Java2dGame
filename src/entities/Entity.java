@@ -70,8 +70,6 @@ public abstract class Entity {
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + index + ".png")));
         } catch (IOException e) {
-            System.out.println("current index = " + index);
-            e.printStackTrace();
         }
         return image;
     }

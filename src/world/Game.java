@@ -4,25 +4,37 @@ import entities.Entity;
 import entities.Zombie;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Game {
+
+
 
     world.Panel panel;
     private int staminaBonus = 0;
     private int healthBonus = 0;
     private int speedBonus = 0;
-
     private int bonusCounter = 0;
-
-    private int magazine = 9;
-    private int ammo = 100;
-
-    private Weapons weapon;
+    private Weapons currentWeapon;
+    HashMap<Weapons, String> weaponAmmoMap = new HashMap<>();
+    HashMap<Integer, Integer> bonusMap = new HashMap<>();
 
     public Game(Panel panel) {
         this.panel = panel;
-        weapon = Weapons.PISTOL;
+        currentWeapon = Weapons.PISTOL;
+        initializeMaps();
+    }
+
+
+    private void initializeMaps(){
+        weaponAmmoMap.put(Weapons.PISTOL, "9,27,9");
+        weaponAmmoMap.put(Weapons.SEMIAUTO, "8,32,8");
+        weaponAmmoMap.put(Weapons.ASSAULTRIFLE, "30,90,30");
+
+        bonusMap.put(0, 0);
+        bonusMap.put(1, 0);
+        bonusMap.put(2, 0);
     }
 
     public void setEntities(int wave) {
@@ -55,35 +67,44 @@ public class Game {
     private int reloadCounter = 0;
     public void simulateShooting() {
         long currentTime = System.currentTimeMillis();
-
         Point mousePosition = panel.getMousePosition();
-        if (mousePosition == null || !panel.contains(mousePosition) || panel.getPlayer().getLives() <= 0) {
-            return;
-        }
 
-        int delay = shootingDelay();
+        if(canShoot(mousePosition)){
+            int delay = shootingDelay();
+            String[] values = weaponAmmoMap.get(currentWeapon).split(",");
+            int mag = Integer.parseInt(values[0]);
+            int ammo = Integer.parseInt(values[1]);
+            int maxCapacity = Integer.parseInt(values[2]);
 
-        if (magazine > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= delay)) {
-            magazine--;
-            Point clickPoint = new Point(mousePosition.x, mousePosition.y);
-            for (Entity entity : panel.getEntities()) {
-                if (entity.getHitBoxArea().contains(clickPoint)) {
-                    entity.decreaseLives();
+            if (mag > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= delay)) {
+                mag--;
+                Point clickPoint = new Point(mousePosition.x, mousePosition.y);
+                for (Entity entity : panel.getEntities()) {
+                    if (entity.getHitBoxArea().contains(clickPoint)) {
+                        entity.decreaseLives();
+                    }
                 }
+                lastShootTime = currentTime;
+                String text = mag + "," + ammo + "," + maxCapacity;
+                weaponAmmoMap.put(currentWeapon, text);
             }
-            lastShootTime = currentTime;
-        }
-        if (magazine == 0) {
-            reloadCounter++;
-            if(reloadCounter == 100){
-                reload();
-                reloadCounter = 0;
+            if (mag == 0) {
+                reloadCounter++;
+                if(reloadCounter == 100){
+                    reload(ammo, maxCapacity);
+                    reloadCounter = 0;
+                }
             }
         }
     }
+
+    private boolean canShoot(Point mousePosition) {
+        return mousePosition != null && panel.contains(mousePosition) && panel.getPlayer().getLives() > 0;
+    }
+
     public int shootingDelay(){
         int delay = 0;
-        switch (weapon){
+        switch (currentWeapon){
             case PISTOL -> delay = 500;
             case SEMIAUTO -> delay = 200;
             case ASSAULTRIFLE -> delay = 50;
@@ -92,114 +113,61 @@ public class Game {
     }
 
 
-    public void reload() {
-        switch (weapon){
-            case PISTOL -> {
-                if (ammo >= 9) {
-                    ammo -= 9;
-                    magazine = 9;
-                }
-                else {
-                    magazine = ammo;
-                    ammo = 0;
-                }
-            }
-            case SEMIAUTO -> {
-                if (ammo >= 8) {
-                    ammo -= 8;
-                    magazine = 8;
-                }
-                else {
-                    magazine = ammo;
-                    ammo = 0;
-                }
-            }
-            case ASSAULTRIFLE -> {
-                if (ammo >= 30) {
-                    ammo -= 30;
-                    magazine = 30;
-                }
-                else {
-                    magazine = ammo;
-                    ammo = 0;
-                }
-            }
+    public void reload(int ammo, int maxCapacity) {
+        int mag;
+        if(ammo >= maxCapacity){
+            ammo -= maxCapacity;
+            mag = maxCapacity;
         }
-
+        else {
+            mag = ammo;
+            ammo = 0;
+        }
+        String text = mag + "," + ammo + "," + maxCapacity;
+        weaponAmmoMap.put(currentWeapon, text);
     }
 
-
     public void addBonus(int type) {
-        switch (type) {
-            case 0 -> {
-                if (healthBonus + 1 < 11 && bonusCounter < 10) {
-                    healthBonus++;
-                    bonusCounter++;
-                }
-            }
-            case 1 -> {
-                if (staminaBonus + 1 < 11 && bonusCounter < 10) {
-                    staminaBonus++;
-                    bonusCounter++;
-                }
-            }
-            case 2 -> {
-                if (speedBonus + 1 < 11 && bonusCounter < 10) {
-                    speedBonus++;
-                    bonusCounter++;
-                }
+        if (bonusCounter < 10) {
+            int currentBonus = bonusMap.get(type);
+            if (currentBonus < 10) {
+                bonusMap.put(type, currentBonus + 1);
+                bonusCounter++;
             }
         }
     }
 
     public void subtractBonus(int type) {
-        switch (type) {
-            case 0 -> {
-                if (healthBonus - 1 >= 0) {
-                    healthBonus--;
-                    bonusCounter--;
-                }
+            int currentBonus = bonusMap.get(type);
+            if (currentBonus > 0) {
+                bonusMap.put(type, currentBonus - 1);
+                bonusCounter--;
             }
-            case 1 -> {
-                if (staminaBonus - 1 >= 0) {
-                    staminaBonus--;
-                    bonusCounter--;
-                }
-            }
-            case 2 -> {
-                if (speedBonus - 1 >= 0) {
-                    speedBonus--;
-                    bonusCounter--;
-                }
-            }
-        }
     }
 
-    public void setWeapon(Weapons weapon) {
-        this.weapon = weapon;
+    public void setCurrentWeapon(Weapons currentWeapon) {
+        this.currentWeapon = currentWeapon;
+    }public int getHealthBonus() {
+        return bonusMap.get(0);
     }
 
     public int getStaminaBonus() {
-        return staminaBonus;
-    }
-
-    public int getHealthBonus() {
-        return healthBonus;
+        return bonusMap.get(1);
     }
 
     public int getSpeedBonus() {
-        return speedBonus;
+        return bonusMap.get(2);
     }
 
-    public int getAmmo() {
-        return ammo;
+    public String getAmmo() {
+        return weaponAmmoMap.get(currentWeapon).split(",")[1];
     }
 
-    public int getMagazine() {
-        return magazine;
+    public String getMagazine() {
+        return weaponAmmoMap.get(currentWeapon).split(",")[0];
     }
 
-    public Weapons getWeapon() {
-        return weapon;
+    public Weapons getCurrentWeapon() {
+        return currentWeapon;
     }
 }

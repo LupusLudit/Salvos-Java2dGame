@@ -94,9 +94,9 @@ public class UserInput implements KeyListener {
                     }
                     case KeyEvent.VK_SHIFT -> shiftPressed = true;
 
-                    case KeyEvent.VK_1 -> panel.getGame().setWeapon(Weapons.PISTOL);
-                    case KeyEvent.VK_2 -> panel.getGame().setWeapon(Weapons.SEMIAUTO);
-                    case KeyEvent.VK_3 -> panel.getGame().setWeapon(Weapons.ASSAULTRIFLE);
+                    case KeyEvent.VK_1 -> panel.getGame().setCurrentWeapon(Weapons.PISTOL);
+                    case KeyEvent.VK_2 -> panel.getGame().setCurrentWeapon(Weapons.SEMIAUTO);
+                    case KeyEvent.VK_3 -> panel.getGame().setCurrentWeapon(Weapons.ASSAULTRIFLE);
                     default -> {
                         pressed = false;
                         shiftPressed = false;

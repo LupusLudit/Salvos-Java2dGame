@@ -93,14 +93,14 @@ public class GameUI {
 
     public void drawWeaponIndicators(Graphics2D g)throws IOException{
         int x = panel.getSquareSide()/2;
-        int y = panel.getHeight() - 3* panel.getSquareSide();
+        int y = panel.getHeight() - 4* panel.getSquareSide();
         BufferedImage image = null;
-        switch (panel.getGame().getWeapon()){
+        switch (panel.getGame().getCurrentWeapon()){
             case PISTOL -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
             case SEMIAUTO -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
             case ASSAULTRIFLE -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
         }
-        g.drawImage(image, x, y, panel.getSquareSide()*2, panel.getSquareSide()*2,null);
+        g.drawImage(image, x, y, panel.getSquareSide()*3, panel.getSquareSide()*3,null);
 
     }
 
