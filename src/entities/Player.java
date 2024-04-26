@@ -2,12 +2,16 @@ package entities;
 
 import management.CollisionManager;
 import management.UserInput;
+import world.Item;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player extends Entity {
 
@@ -21,6 +25,8 @@ public class Player extends Entity {
 
     private int staminaCounter = 0;
     private int hitCounter = 0;
+
+    ArrayList<Item> inventory = new ArrayList<>();
 
     public Player(UserInput userInput, world.Panel panel) {
         defaultImagePath = "character/sprite_";
@@ -36,6 +42,19 @@ public class Player extends Entity {
         centerX = (panel.getSquareSide() * panel.getCol()) / 2 - (panel.getSquareSide() / 2);
         centerY = (panel.getSquareSide() * panel.getRow()) / 2 - (panel.getSquareSide() / 2);
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
+
+        addToInventory(Item.BANDAGE);
+        addToInventory(Item.ENERGYDRINK);
+        addToInventory(Item.BANDAGE);
+        addToInventory(Item.ENERGYDRINK);
+        addToInventory(Item.BANDAGE);
+        addToInventory(Item.ENERGYDRINK);
+    }
+
+    public void addToInventory(Item item){
+        if(item != null){
+            inventory.add(item);
+        }
     }
 
     @Override
@@ -56,9 +75,9 @@ public class Player extends Entity {
         int y = panel.getHeight() - 60;
 
         g.setColor(new Color(35, 35, 35));
-        g.fillRect(x - 2, y - 2, width + 4, height + 4);
+        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 10,10);
         g.setColor(new Color(255, 0, 30));
-        g.fillRect(x, y, (int) value, height);
+        g.fillRoundRect(x, y, (int) value, height, 10, 10);
     }
 
     public void drawStaminaBar(Graphics2D g) {
@@ -71,9 +90,9 @@ public class Player extends Entity {
         int y = panel.getHeight() - 30;
 
         g.setColor(new Color(35, 35, 35));
-        g.fillRect(x - 2, y - 2, width + 4, height + 4);
+        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 15,15);
         g.setColor(new Color(60, 0, 255));
-        g.fillRect(x, y, (int) value, height);
+        g.fillRoundRect(x, y, (int) value, height, 15,15);
     }
 
     @Override
@@ -162,6 +181,26 @@ public class Player extends Entity {
         stamina = maxStamina;
     }
 
+    public void increaseLives(){
+        if(lives + 1 <= maxLives){
+            lives++;
+        }
+    }
+
+
+    public void addStamina(int extraStamina, int durationInSeconds) {
+        int originalStamina = stamina;
+        stamina += extraStamina;
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                stamina = originalStamina;
+            }
+        }, durationInSeconds * 1000);
+    }
+
     public int getCenterX() {
         return centerX;
     }
@@ -179,5 +218,9 @@ public class Player extends Entity {
             e.printStackTrace();
         }
         return image;
+    }
+
+    public ArrayList<Item> getInventory() {
+        return inventory;
     }
 }

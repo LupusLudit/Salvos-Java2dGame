@@ -84,9 +84,9 @@ public abstract class Entity {
         int y = getRelY() - 15;
 
         g.setColor(new Color(35, 35, 35));
-        g.fillRect(x - 2, y - 2, width + 4, height + 4);
+        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 2, 2);
         g.setColor(new Color(255, 0, 30));
-        g.fillRect(x, y, (int) value, height);
+        g.fillRoundRect(x, y, (int) value, height, 2, 2);
     }
 
     public void decreaseLives() {

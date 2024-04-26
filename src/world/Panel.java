@@ -52,7 +52,7 @@ public class Panel extends JPanel {
             repaint();
             if (status == Status.CUSTOMIZATION) {
                 player.setBonuses();
-            } else if (status != Status.SETUP) {
+            } else if (status != Status.SETUP && status != Status.GAMEOVER) {
                 checkStatus();
                 player.update();
                 game.updateEntities();
@@ -69,9 +69,8 @@ public class Panel extends JPanel {
     }
 
     public void checkStatus() {
-        if (player.getLives() > 0) {
-            status = Status.PLAYING;
-        } else {
+
+        if (player.getLives() <= 0) {
             status = Status.GAMEOVER;
         }
     }

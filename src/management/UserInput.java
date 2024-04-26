@@ -97,10 +97,22 @@ public class UserInput implements KeyListener {
                     case KeyEvent.VK_1 -> panel.getGame().setCurrentWeapon(Weapons.PISTOL);
                     case KeyEvent.VK_2 -> panel.getGame().setCurrentWeapon(Weapons.SEMIAUTO);
                     case KeyEvent.VK_3 -> panel.getGame().setCurrentWeapon(Weapons.ASSAULTRIFLE);
+
+                    case KeyEvent.VK_I -> panel.setStatus(Status.INVENTORY);
                     default -> {
                         pressed = false;
                         shiftPressed = false;
                     }
+                }
+            }
+
+            case INVENTORY -> {
+                switch (input){
+                    case KeyEvent.VK_W, KeyEvent.VK_UP -> panel.getUi().subtractRow();
+                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> panel.getUi().addRow();
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getUi().subtractCol();
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getUi().addCol();
+                    case KeyEvent.VK_I -> panel.setStatus(Status.PLAYING);
                 }
             }
 

@@ -13,8 +13,12 @@ public class GameUI {
     world.Panel panel;
     Font font = new Font("font", Font.BOLD, 80); //temporarily
 
+    ItemManager itemManager;
+
+
     public GameUI(Panel panel) {
         this.panel = panel;
+        itemManager = new ItemManager(panel);
     }
 
     public void draw(Graphics2D g) {
@@ -24,7 +28,7 @@ public class GameUI {
         switch (panel.getStatus()) {
             case SETUP -> drawStartingScreen(g);
             case CUSTOMIZATION -> drawCustomizationScreen(g);
-            case PLAYING -> {
+            case PLAYING-> {
                 panel.getTilePainter().draw(g);
                 panel.getGame().drawEntities(g);
                 panel.getPlayer().draw(g);
@@ -36,6 +40,18 @@ public class GameUI {
                 }
             }
             case GAMEOVER -> drawDeathScreen(g);
+            case INVENTORY -> {
+                panel.getTilePainter().draw(g);
+                panel.getGame().drawEntities(g);
+                panel.getPlayer().draw(g);
+                try {
+                    drawAmmoIndicators(g);
+                    drawWeaponIndicators(g);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+                drawInventoryWindow(g);
+            }
         }
     }
 
@@ -81,6 +97,7 @@ public class GameUI {
     }
 
     public void drawAmmoIndicators(Graphics2D g) throws IOException {
+        g.setFont(new Font("font", Font.BOLD, 36));
         g.setColor(Color.white);
         int x = panel.getSquareSide()/2;
         int y = panel.getHeight() - panel.getSquareSide() - 10;
@@ -157,8 +174,6 @@ public class GameUI {
 
         }
     }
-
-
     public void drawArrows(Graphics2D g, String text, int x, int y, boolean multiple) {
         g.drawString(">", x - panel.getSquareSide(), y);
         if (multiple) {
@@ -166,10 +181,54 @@ public class GameUI {
         }
     }
 
+    private int selectedRow = 0;
+    private int selectedCol = 0;
+
+    public void drawInventoryWindow(Graphics2D g) {
+        int width = panel.getSquareSide()*3 +12;
+        int height = panel.getSquareSide() * 3;
+        int x = panel.getWidth()/2 - width/2;
+        int y = panel.getSquareSide();
+
+        Color color = new Color(0, 0, 0, 230);
+        g.setColor(color);
+        g.fillRoundRect(x, y, width, height, 50, 50);
+
+        color = new Color(255, 255, 255);
+        g.setColor(color);
+        g.setStroke(new BasicStroke(3));
+        g.drawRoundRect(x, y, width, height, 50, 50);
+
+        int counter = 0;
+
+       for(int i = 0; i < panel.getPlayer().getInventory().size(); i++){
+            x = panel.getWidth()/2 - width/2 + counter*panel.getSquareSide() + 12;
+            if(i == 3){
+               x = panel.getWidth()/2 - width/2;
+               y += (panel.getSquareSide()) + 16;
+               counter = 0;
+           }
+            try {
+                g.drawImage(itemManager.getImage(panel.getPlayer().getInventory().get(i)), x, y, panel.getSquareSide(), panel.getSquareSide(), null);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            counter++;
+
+        }
+        font = new Font("font", Font.BOLD, 16);
+        g.setFont(font);
+
+        String text = "^";
+        x = panel.getWidth()/2 - width/2 + (selectedCol)*panel.getSquareSide() + 12 + panel.getSquareSide()/2 - textLength(g, text);
+        y = panel.getSquareSide() + (selectedRow+1)*(panel.getSquareSide() + 16);
+        g.drawString(text,x,y);
+    }
+
+
     public int textLength(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
     }
-
     public int centerX(Graphics2D g, String text) {
         int length = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
         return panel.getWidth() / 2 - length / 2;
@@ -178,5 +237,31 @@ public class GameUI {
     public int centerY(Graphics2D g, String text) {
         int height = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
         return panel.getHeight() / 2 + height / 2;
+    }
+
+    public void addRow(){
+        if(selectedRow < 1){
+            selectedRow++;
+        }
+        System.out.println("row" +selectedRow);
+    }
+    public void subtractRow(){
+        if(selectedRow > 0){
+            selectedRow--;
+        }
+        System.out.println("row" + selectedRow);
+    }
+
+    public void addCol(){
+        if(selectedCol < 2){
+            selectedCol++;
+        }
+        System.out.println("col:" + selectedCol);
+    }
+    public void subtractCol(){
+        if(selectedCol > 0){
+            selectedCol--;
+        }
+        System.out.println("col:" + selectedCol);
     }
 }
