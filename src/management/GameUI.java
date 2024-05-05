@@ -1,5 +1,6 @@
 package management;
 
+import world.Item;
 import world.Panel;
 
 import javax.imageio.ImageIO;
@@ -7,18 +8,19 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameUI {
 
     world.Panel panel;
     Font font = new Font("font", Font.BOLD, 80); //temporarily
+    private int selectedRow = 0;
+    private int selectedCol = 0;
 
-    ItemManager itemManager;
-
+    Item[][] itemsByPosition = new Item[2][1];
 
     public GameUI(Panel panel) {
         this.panel = panel;
-        itemManager = new ItemManager(panel);
     }
 
     public void draw(Graphics2D g) {
@@ -28,14 +30,14 @@ public class GameUI {
         switch (panel.getStatus()) {
             case SETUP -> drawStartingScreen(g);
             case CUSTOMIZATION -> drawCustomizationScreen(g);
-            case PLAYING-> {
+            case PLAYING -> {
                 panel.getTilePainter().draw(g);
                 panel.getGame().drawEntities(g);
                 panel.getPlayer().draw(g);
                 try {
                     drawAmmoIndicators(g);
                     drawWeaponIndicators(g);
-                }catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -47,7 +49,7 @@ public class GameUI {
                 try {
                     drawAmmoIndicators(g);
                     drawWeaponIndicators(g);
-                }catch (IOException e){
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
                 drawInventoryWindow(g);
@@ -99,25 +101,28 @@ public class GameUI {
     public void drawAmmoIndicators(Graphics2D g) throws IOException {
         g.setFont(new Font("font", Font.BOLD, 36));
         g.setColor(Color.white);
-        int x = panel.getSquareSide()/2;
+        int x = panel.getSquareSide() / 2;
         int y = panel.getHeight() - panel.getSquareSide() - 10;
         BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/ammo.png")));
 
         g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
-        String text = panel.getGame().getMagazine() +  "/" + panel.getGame().getAmmo();
-        g.drawString(text, x + panel.getSquareSide(), panel.getHeight()-16);
+        String text = panel.getGame().getMagazine() + "/" + panel.getGame().getAmmo();
+        g.drawString(text, x + panel.getSquareSide(), panel.getHeight() - 16);
     }
 
-    public void drawWeaponIndicators(Graphics2D g)throws IOException{
-        int x = panel.getSquareSide()/2;
-        int y = panel.getHeight() - 4* panel.getSquareSide();
+    public void drawWeaponIndicators(Graphics2D g) throws IOException {
+        int x = panel.getSquareSide() / 2;
+        int y = panel.getHeight() - 4 * panel.getSquareSide();
         BufferedImage image = null;
-        switch (panel.getGame().getCurrentWeapon()){
-            case PISTOL -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
-            case SEMIAUTO -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
-            case ASSAULTRIFLE -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
+        switch (panel.getGame().getCurrentWeapon()) {
+            case PISTOL ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
+            case SEMIAUTO ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
+            case ASSAULTRIFLE ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
         }
-        g.drawImage(image, x, y, panel.getSquareSide()*3, panel.getSquareSide()*3,null);
+        g.drawImage(image, x, y, panel.getSquareSide() * 3, panel.getSquareSide() * 3, null);
 
     }
 
@@ -174,6 +179,7 @@ public class GameUI {
 
         }
     }
+
     public void drawArrows(Graphics2D g, String text, int x, int y, boolean multiple) {
         g.drawString(">", x - panel.getSquareSide(), y);
         if (multiple) {
@@ -181,13 +187,10 @@ public class GameUI {
         }
     }
 
-    private int selectedRow = 0;
-    private int selectedCol = 0;
-
     public void drawInventoryWindow(Graphics2D g) {
-        int width = panel.getSquareSide()*3 +12;
+        int width = panel.getSquareSide() * 3 + 12;
         int height = panel.getSquareSide() * 3;
-        int x = panel.getWidth()/2 - width/2;
+        int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getSquareSide();
 
         Color color = new Color(0, 0, 0, 230);
@@ -199,36 +202,52 @@ public class GameUI {
         g.setStroke(new BasicStroke(3));
         g.drawRoundRect(x, y, width, height, 50, 50);
 
-        int counter = 0;
+        AtomicInteger i = new AtomicInteger();
+        AtomicInteger j = new AtomicInteger();
+        panel.getPlayer().getInventory().forEach((key, value) -> {
+            if (value != 0) {
+                int imageX = panel.getWidth() / 2 - width / 2 + i.get() * panel.getSquareSide() + 12;
+                int imageY = panel.getSquareSide();
 
-       for(int i = 0; i < panel.getPlayer().getInventory().size(); i++){
-            x = panel.getWidth()/2 - width/2 + counter*panel.getSquareSide() + 12;
-            if(i == 3){
-               x = panel.getWidth()/2 - width/2;
-               y += (panel.getSquareSide()) + 16;
-               counter = 0;
-           }
-            try {
-                g.drawImage(itemManager.getImage(panel.getPlayer().getInventory().get(i)), x, y, panel.getSquareSide(), panel.getSquareSide(), null);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+                if (i.get() == 3) {
+                    imageX = panel.getWidth() / 2 - width / 2 + 12;
+                    imageY += (panel.getSquareSide()) + 16;
+                    i.set(0);
+                    j.set(j.get() + 1);
+                }
+
+                itemsByPosition[i.get()][j.get()] = key;
+
+                g.setFont(new Font("font", Font.BOLD, 10));
+                try {
+                    g.drawImage(panel.getItemManager().getImage(key), imageX, imageY, panel.getSquareSide(), panel.getSquareSide(), null);
+                    g.drawString(String.valueOf(value), imageX + panel.getSquareSide() - 10, imageY + panel.getSquareSide() + textHeight(g, String.valueOf(value)) - 5);
+                } catch (IOException e) {
+                    System.out.println("key: " + key);
+                    System.out.println("value: " + value);
+                    throw new RuntimeException(e);
+                }
+                i.set(i.get() + 1);
             }
-            counter++;
+        });
 
-        }
-        font = new Font("font", Font.BOLD, 16);
-        g.setFont(font);
+        g.setFont(new Font("font", Font.BOLD, 16));
 
         String text = "^";
-        x = panel.getWidth()/2 - width/2 + (selectedCol)*panel.getSquareSide() + 12 + panel.getSquareSide()/2 - textLength(g, text);
-        y = panel.getSquareSide() + (selectedRow+1)*(panel.getSquareSide() + 16);
-        g.drawString(text,x,y);
+        x = panel.getWidth() / 2 - width / 2 + (selectedCol) * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
+        y = panel.getSquareSide() + (selectedRow + 1) * (panel.getSquareSide() + 16);
+        g.drawString(text, x, y);
     }
 
+
+    public int textHeight(Graphics2D g, String text) {
+        return (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
+    }
 
     public int textLength(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
     }
+
     public int centerX(Graphics2D g, String text) {
         int length = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
         return panel.getWidth() / 2 - length / 2;
@@ -239,29 +258,41 @@ public class GameUI {
         return panel.getHeight() / 2 + height / 2;
     }
 
-    public void addRow(){
-        if(selectedRow < 1){
+    public void addRow() {
+        if (selectedRow < 1) {
             selectedRow++;
+        } else {
+            selectedRow = 0;
         }
-        System.out.println("row" +selectedRow);
-    }
-    public void subtractRow(){
-        if(selectedRow > 0){
-            selectedRow--;
-        }
-        System.out.println("row" + selectedRow);
     }
 
-    public void addCol(){
-        if(selectedCol < 2){
-            selectedCol++;
+    public void subtractRow() {
+        if (selectedRow > 0) {
+            selectedRow--;
+        } else {
+            selectedRow = 1;
         }
-        System.out.println("col:" + selectedCol);
     }
-    public void subtractCol(){
-        if(selectedCol > 0){
-            selectedCol--;
+
+    public void addCol() {
+        if (selectedCol < 2) {
+            selectedCol++;
+        } else {
+            selectedCol = 0;
+            addRow();
         }
-        System.out.println("col:" + selectedCol);
+    }
+
+    public void subtractCol() {
+        if (selectedCol > 0) {
+            selectedCol--;
+        } else {
+            selectedCol = 2;
+            subtractRow();
+        }
+    }
+
+    public Item getSelectedItem() {
+        return itemsByPosition[selectedCol][selectedRow];
     }
 }

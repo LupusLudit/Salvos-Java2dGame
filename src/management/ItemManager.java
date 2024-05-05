@@ -27,7 +27,9 @@ public class ItemManager {
     public void useItem(Item item){
         switch (item){
             case BANDAGE -> panel.getPlayer().increaseLives();
-            case ENERGYDRINK -> panel.getPlayer().addStamina(1, 30);
+            case ENERGYDRINK -> panel.getPlayer().addStamina(30);
         }
+        int counter = panel.getPlayer().getInventory().get(item);
+        panel.getPlayer().getInventory().put(item, counter - 1);
     }
 }

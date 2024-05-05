@@ -8,10 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class Player extends Entity {
 
@@ -26,7 +23,7 @@ public class Player extends Entity {
     private int staminaCounter = 0;
     private int hitCounter = 0;
 
-    ArrayList<Item> inventory = new ArrayList<>();
+    HashMap<Item, Integer> inventory = new HashMap<>();
 
     public Player(UserInput userInput, world.Panel panel) {
         defaultImagePath = "character/sprite_";
@@ -44,16 +41,20 @@ public class Player extends Entity {
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
 
         addToInventory(Item.BANDAGE);
-        addToInventory(Item.ENERGYDRINK);
         addToInventory(Item.BANDAGE);
         addToInventory(Item.ENERGYDRINK);
         addToInventory(Item.BANDAGE);
         addToInventory(Item.ENERGYDRINK);
     }
 
-    public void addToInventory(Item item){
-        if(item != null){
-            inventory.add(item);
+    public void addToInventory(Item item) {
+        if (item != null) {
+            if (inventory.get(item) == null) {
+                inventory.put(item, 1);
+            } else {
+                int count = inventory.get(item);
+                inventory.put(item, count + 1);
+            }
         }
     }
 
@@ -75,7 +76,7 @@ public class Player extends Entity {
         int y = panel.getHeight() - 60;
 
         g.setColor(new Color(35, 35, 35));
-        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 10,10);
+        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 10, 10);
         g.setColor(new Color(255, 0, 30));
         g.fillRoundRect(x, y, (int) value, height, 10, 10);
     }
@@ -90,9 +91,9 @@ public class Player extends Entity {
         int y = panel.getHeight() - 30;
 
         g.setColor(new Color(35, 35, 35));
-        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 15,15);
+        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 15, 15);
         g.setColor(new Color(60, 0, 255));
-        g.fillRoundRect(x, y, (int) value, height, 15,15);
+        g.fillRoundRect(x, y, (int) value, height, 15, 15);
     }
 
     @Override
@@ -134,13 +135,13 @@ public class Player extends Entity {
                 stamina--;
                 staminaCounter = 0;
             }
-            setDefaultSpeed();
+            setSpeed();
             if (stamina > 0) {
                 speed += 2;
             }
 
         } else {
-            setDefaultSpeed();
+            setSpeed();
             staminaCounter++;
             if (staminaCounter >= 15 && stamina < maxStamina) {
                 stamina++;
@@ -168,12 +169,15 @@ public class Player extends Entity {
         return false;
     }
 
-    public void setDefaultSpeed() {
+    public void setSpeed() {
         speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
+        if (isASRunning) {
+            speed = (6 + (panel.getGame().getSpeedBonus() * 0.25));
+        }
     }
 
     public void setBonuses() {
-        setDefaultSpeed();
+        setSpeed();
         maxLives = 10 + panel.getGame().getHealthBonus();
         maxStamina = 30 + panel.getGame().getStaminaBonus();
 
@@ -181,22 +185,21 @@ public class Player extends Entity {
         stamina = maxStamina;
     }
 
-    public void increaseLives(){
-        if(lives + 1 <= maxLives){
+    public void increaseLives() {
+        if (lives + 1 <= maxLives) {
             lives++;
         }
     }
+    boolean isASRunning = false;
 
-
-    public void addStamina(int extraStamina, int durationInSeconds) {
-        int originalStamina = stamina;
-        stamina += extraStamina;
+    public void addStamina(int durationInSeconds) {
+        isASRunning = true;
 
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                stamina = originalStamina;
+                isASRunning = false;
             }
         }, durationInSeconds * 1000);
     }
@@ -204,12 +207,9 @@ public class Player extends Entity {
     public int getCenterX() {
         return centerX;
     }
-
     public int getCenterY() {
         return centerY;
     }
-
-
     public Image getDefaultImage() {
         BufferedImage image = null;
         try {
@@ -219,8 +219,7 @@ public class Player extends Entity {
         }
         return image;
     }
-
-    public ArrayList<Item> getInventory() {
+    public HashMap<Item, Integer> getInventory() {
         return inventory;
     }
 }

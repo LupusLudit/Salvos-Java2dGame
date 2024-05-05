@@ -3,6 +3,7 @@ package world;
 import entities.Entity;
 import entities.Player;
 import management.GameUI;
+import management.ItemManager;
 import management.MouseInput;
 import management.UserInput;
 
@@ -23,6 +24,7 @@ public class Panel extends JPanel {
     TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
     ArrayList<Entity> entities = new ArrayList<>();
+    ItemManager itemManager = new ItemManager(this);
 
     Game game = new Game(this);
     Player player;
@@ -135,5 +137,7 @@ public class Panel extends JPanel {
         return ui;
     }
 
-
+    public ItemManager getItemManager() {
+        return itemManager;
+    }
 }

@@ -1,5 +1,6 @@
 package management;
 
+import world.Item;
 import world.Panel;
 import world.Status;
 import world.Weapons;
@@ -107,12 +108,18 @@ public class UserInput implements KeyListener {
             }
 
             case INVENTORY -> {
-                switch (input){
+                switch (input) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> panel.getUi().subtractRow();
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> panel.getUi().addRow();
                     case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getUi().subtractCol();
                     case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getUi().addCol();
                     case KeyEvent.VK_I -> panel.setStatus(Status.PLAYING);
+                    case KeyEvent.VK_E -> {
+                        Item item = panel.getUi().getSelectedItem();
+                        if (item != null && panel.getPlayer().getInventory().get(item) > 0) {
+                            panel.getItemManager().useItem(item);
+                        }
+                    }
                 }
             }
 
