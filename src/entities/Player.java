@@ -1,5 +1,6 @@
 package entities;
 
+import management.Clock;
 import management.CollisionManager;
 import management.UserInput;
 import world.Item;
@@ -8,7 +9,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class Player extends Entity {
 
@@ -22,7 +24,7 @@ public class Player extends Entity {
 
     private int staminaCounter = 0;
     private int hitCounter = 0;
-
+    boolean isASRunning = false;
     HashMap<Item, Integer> inventory = new HashMap<>();
 
     public Player(UserInput userInput, world.Panel panel) {
@@ -99,7 +101,6 @@ public class Player extends Entity {
     @Override
     public void update() {
         direction = userInput.getDirection();
-
         if (userInput.isPressed()) {
             canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
             if (canMove) {
@@ -190,18 +191,12 @@ public class Player extends Entity {
             lives++;
         }
     }
-    boolean isASRunning = false;
 
+    private int time = 0;
     public void addStamina(int durationInSeconds) {
-        isASRunning = true;
-
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                isASRunning = false;
-            }
-        }, durationInSeconds * 1000);
+        Clock clock = new Clock(panel);
+        clock.start(durationInSeconds);
+        setASRunning(true);
     }
 
     public int getCenterX() {
@@ -221,5 +216,21 @@ public class Player extends Entity {
     }
     public HashMap<Item, Integer> getInventory() {
         return inventory;
+    }
+
+    public boolean isASRunning() {
+        return isASRunning;
+    }
+
+    public void setASRunning(boolean ASRunning) {
+        isASRunning = ASRunning;
+    }
+
+    public int getTime() {
+        return time;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
     }
 }

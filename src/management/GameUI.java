@@ -23,6 +23,7 @@ public class GameUI {
         this.panel = panel;
     }
 
+
     public void draw(Graphics2D g) {
         g.setFont(font);
         g.setColor(Color.white);
@@ -54,6 +55,9 @@ public class GameUI {
                 }
                 drawInventoryWindow(g);
             }
+        }
+        if(panel.getPlayer().isASRunning()){
+            drawTimer(g);
         }
     }
 
@@ -237,6 +241,14 @@ public class GameUI {
         x = panel.getWidth() / 2 - width / 2 + (selectedCol) * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
         y = panel.getSquareSide() + (selectedRow + 1) * (panel.getSquareSide() + 16);
         g.drawString(text, x, y);
+    }
+
+    public void drawTimer(Graphics2D g){
+        g.setFont(new Font("font", Font.BOLD, 48));
+        g.setColor(Color.WHITE);
+        String text = "0:" + panel.getPlayer().getTime();
+        System.out.println(text);
+        g.drawString(text, panel.getWidth() - textLength(g,text) -10, panel.getSquareSide());
     }
 
 
