@@ -21,7 +21,6 @@ public class Panel extends JPanel {
     TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
     ArrayList<Entity> entities = new ArrayList<>();
-    ItemManager itemManager = new ItemManager(this);
 
     Game game = new Game(this);
     Player player;
@@ -148,10 +147,6 @@ public class Panel extends JPanel {
 
     public GameUI getUi() {
         return ui;
-    }
-
-    public ItemManager getItemManager() {
-        return itemManager;
     }
 
     public int getWaveTimer() {

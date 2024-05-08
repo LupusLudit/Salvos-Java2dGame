@@ -1,9 +1,7 @@
 package management;
 
-import world.Item;
 import world.Panel;
 import world.Status;
-import world.Weapons;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -95,10 +93,6 @@ public class UserInput implements KeyListener {
                     }
                     case KeyEvent.VK_SHIFT -> shiftPressed = true;
 
-                    case KeyEvent.VK_1 -> panel.getGame().setCurrentWeapon(Weapons.PISTOL);
-                    case KeyEvent.VK_2 -> panel.getGame().setCurrentWeapon(Weapons.SEMIAUTO);
-                    case KeyEvent.VK_3 -> panel.getGame().setCurrentWeapon(Weapons.ASSAULTRIFLE);
-
                     case KeyEvent.VK_I -> panel.setStatus(Status.INVENTORY);
                     default -> {
                         pressed = false;
@@ -115,9 +109,9 @@ public class UserInput implements KeyListener {
                     case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getUi().addCol();
                     case KeyEvent.VK_I -> panel.setStatus(Status.PLAYING);
                     case KeyEvent.VK_E -> {
-                        Item item = panel.getUi().getSelectedItem();
+                        items.Item item = panel.getUi().getSelectedItem();
                         if (item != null && panel.getPlayer().getInventory().get(item) > 0) {
-                            panel.getItemManager().useItem(item);
+                            item.use();
                         }
                     }
                 }

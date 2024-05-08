@@ -22,7 +22,7 @@ public class Game {
 
     public Game(Panel panel) {
         this.panel = panel;
-        currentWeapon = Weapons.PISTOL;
+        currentWeapon = Weapons.SEMIAUTO;
         initializeMaps();
     }
 

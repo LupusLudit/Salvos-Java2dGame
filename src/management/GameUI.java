@@ -1,6 +1,6 @@
 package management;
 
-import world.Item;
+import items.Item;
 import world.Panel;
 
 import javax.imageio.ImageIO;
@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class GameUI {
 
@@ -17,7 +18,7 @@ public class GameUI {
     private int selectedRow = 0;
     private int selectedCol = 0;
 
-    Item[][] itemsByPosition = new Item[3][2];
+    items.Item[][] itemsByPosition = new items.Item[3][2];
 
     public GameUI(Panel panel) {
         this.panel = panel;
@@ -57,10 +58,10 @@ public class GameUI {
                 drawInventoryWindow(g);
             }
         }
-        if(panel.getPlayer().getClock().isRunning()){
+        if (panel.getPlayer().getClock().isRunning()) {
             drawTimer(g);
         }
-        if(panel.getEntities().isEmpty()){
+        if (panel.getEntities().isEmpty()) {
             drawWaveMessage(g);
         }
     }
@@ -212,30 +213,32 @@ public class GameUI {
 
         AtomicInteger i = new AtomicInteger();
         AtomicInteger j = new AtomicInteger();
+        AtomicReference<Item> previousItem = new AtomicReference<>();
         panel.getPlayer().getInventory().forEach((key, value) -> {
             if (value != 0) {
-                int imageX = panel.getWidth() / 2 - width / 2 + i.get() * panel.getSquareSide() + 12;
-                int imageY = panel.getSquareSide();
-
+                int imageX;
+                int imageY;
                 if (i.get() == 3) {
-                    imageX = panel.getWidth() / 2 - width / 2 + 12;
-                    imageY += (panel.getSquareSide()) + 16;
                     i.set(0);
                     j.set(j.get() + 1);
                 }
 
-                itemsByPosition[i.get()][j.get()] = key;
+                imageX = panel.getWidth() / 2 - width / 2 + i.get() * panel.getSquareSide() + 12;
+                imageY = (j.get()+1)*panel.getSquareSide() + 16;
+
+
+                if (previousItem.get() != key) {
+                    itemsByPosition[i.get()][j.get()] = key;
+                    i.set(i.get() + 1);
+                }
 
                 g.setFont(new Font("font", Font.BOLD, 10));
-                try {
-                    g.drawImage(panel.getItemManager().getImage(key), imageX, imageY, panel.getSquareSide(), panel.getSquareSide(), null);
-                    g.drawString(String.valueOf(value), imageX + panel.getSquareSide() - 10, imageY + panel.getSquareSide() + textHeight(g, String.valueOf(value)) - 5);
-                } catch (IOException e) {
-                    System.out.println("key: " + key);
-                    System.out.println("value: " + value);
-                    throw new RuntimeException(e);
-                }
-                i.set(i.get() + 1);
+
+                g.drawImage(key.getImage(), imageX, imageY, panel.getSquareSide(), panel.getSquareSide(), null);
+                g.drawString(String.valueOf(value), imageX + panel.getSquareSide() - 10, imageY + panel.getSquareSide() + textHeight(g, String.valueOf(value)) - 5);
+
+
+                previousItem.set(key);
             }
         });
 
@@ -247,28 +250,28 @@ public class GameUI {
         g.drawString(text, x, y);
     }
 
-    public void drawTimer(Graphics2D g){
+    public void drawTimer(Graphics2D g) {
         g.setFont(new Font("font", Font.BOLD, 48));
         g.setColor(Color.WHITE);
         String text = "0:" + panel.getPlayer().getTime();
-        g.drawString(text, panel.getWidth() - textLength(g,text) -10, panel.getSquareSide());
+        g.drawString(text, panel.getWidth() - textLength(g, text) - 10, panel.getSquareSide());
     }
 
-    public void drawWaveMessage(Graphics2D g){
+    public void drawWaveMessage(Graphics2D g) {
         g.setFont(new Font("font", Font.BOLD, 48));
         g.setColor(Color.WHITE);
         String text = "NEXT WAVE IN: " + panel.getWaveTimer();
-        g.drawString(text, panel.getWidth()/2 - textLength(g,text)/2, panel.getSquareSide()*3);
+        g.drawString(text, panel.getWidth() / 2 - textLength(g, text) / 2, panel.getSquareSide() * 3);
     }
 
-    public void drawScore(Graphics2D g){
+    public void drawScore(Graphics2D g) {
         g.setColor(Color.WHITE);
         g.setFont(new Font("font", Font.BOLD, 36));
         String text = String.valueOf(panel.getGame().getScore());
         try {
             Image image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/star.png")));
             g.drawImage(image, 5, 5, panel.getSquareSide(), panel.getSquareSide(), null);
-            g.drawString(text, panel.getSquareSide() + 15, textHeight(g,text));
+            g.drawString(text, panel.getSquareSide() + 15, textHeight(g, text));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -327,7 +330,7 @@ public class GameUI {
         }
     }
 
-    public Item getSelectedItem() {
+    public items.Item getSelectedItem() {
         return itemsByPosition[selectedCol][selectedRow];
     }
 }
