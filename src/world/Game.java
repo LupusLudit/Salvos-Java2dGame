@@ -65,6 +65,8 @@ public class Game {
 
     private long lastShootTime = 0;
     private int reloadCounter = 0;
+
+    private int score = 0;
     public void simulateShooting() {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();
@@ -82,6 +84,7 @@ public class Game {
                 for (Entity entity : panel.getEntities()) {
                     if (entity.getHitBoxArea().contains(clickPoint)) {
                         entity.decreaseLives();
+                        score += 5;
                     }
                 }
                 lastShootTime = currentTime;
@@ -171,5 +174,9 @@ public class Game {
 
     public Weapons getCurrentWeapon() {
         return currentWeapon;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

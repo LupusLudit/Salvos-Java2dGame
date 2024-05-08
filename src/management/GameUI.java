@@ -38,6 +38,7 @@ public class GameUI {
                 try {
                     drawAmmoIndicators(g);
                     drawWeaponIndicators(g);
+                    drawScore(g);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -258,6 +259,19 @@ public class GameUI {
         g.setColor(Color.WHITE);
         String text = "NEXT WAVE IN: " + panel.getWaveTimer();
         g.drawString(text, panel.getWidth()/2 - textLength(g,text)/2, panel.getSquareSide()*3);
+    }
+
+    public void drawScore(Graphics2D g){
+        g.setColor(Color.WHITE);
+        g.setFont(new Font("font", Font.BOLD, 36));
+        String text = String.valueOf(panel.getGame().getScore());
+        try {
+            Image image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/star.png")));
+            g.drawImage(image, 5, 5, panel.getSquareSide(), panel.getSquareSide(), null);
+            g.drawString(text, panel.getSquareSide() + 15, textHeight(g,text));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
