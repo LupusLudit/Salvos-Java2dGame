@@ -17,7 +17,7 @@ public class GameUI {
     private int selectedRow = 0;
     private int selectedCol = 0;
 
-    Item[][] itemsByPosition = new Item[2][1];
+    Item[][] itemsByPosition = new Item[3][2];
 
     public GameUI(Panel panel) {
         this.panel = panel;
@@ -56,8 +56,11 @@ public class GameUI {
                 drawInventoryWindow(g);
             }
         }
-        if(panel.getPlayer().isASRunning()){
+        if(panel.getPlayer().getClock().isRunning()){
             drawTimer(g);
+        }
+        if(panel.getEntities().isEmpty()){
+            drawWaveMessage(g);
         }
     }
 
@@ -247,8 +250,14 @@ public class GameUI {
         g.setFont(new Font("font", Font.BOLD, 48));
         g.setColor(Color.WHITE);
         String text = "0:" + panel.getPlayer().getTime();
-        System.out.println(text);
         g.drawString(text, panel.getWidth() - textLength(g,text) -10, panel.getSquareSide());
+    }
+
+    public void drawWaveMessage(Graphics2D g){
+        g.setFont(new Font("font", Font.BOLD, 48));
+        g.setColor(Color.WHITE);
+        String text = "NEXT WAVE IN: " + panel.getWaveTimer();
+        g.drawString(text, panel.getWidth()/2 - textLength(g,text)/2, panel.getSquareSide()*3);
     }
 
 

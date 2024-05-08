@@ -2,10 +2,7 @@ package world;
 
 import entities.Entity;
 import entities.Player;
-import management.GameUI;
-import management.ItemManager;
-import management.MouseInput;
-import management.UserInput;
+import management.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,6 +30,9 @@ public class Panel extends JPanel {
     private Status status;
 
     private int chosenOption = 0;
+    private int wave = 1;
+    private int waveTimer = 10;
+    Clock clock;
 
     public Panel() {
         this.setPreferredSize(new Dimension(SquareSide * col, SquareSide * row));
@@ -41,10 +41,11 @@ public class Panel extends JPanel {
         this.setFocusable(true);
         this.addKeyListener(userInput);
         this.addMouseListener(mouseInput);
-        game.setEntities(1); //temporarily
+        game.setEntities(wave);
 
         player = new Player(userInput, this);
         status = Status.SETUP;
+        clock = new Clock();
     }
 
 
@@ -55,6 +56,7 @@ public class Panel extends JPanel {
             if (status == Status.CUSTOMIZATION) {
                 player.setBonuses();
             } else if (status != Status.SETUP && status != Status.GAMEOVER) {
+                newWave();
                 checkStatus();
                 player.update();
                 game.updateEntities();
@@ -74,6 +76,17 @@ public class Panel extends JPanel {
 
         if (player.getLives() <= 0) {
             status = Status.GAMEOVER;
+        }
+    }
+    public void newWave() {
+        if (waveTimer == 0 && entities.isEmpty() && !clock.isRunning()) {
+            wave++;
+            game.setEntities(wave);
+            waveTimer = 10;
+        }
+        else if (entities.isEmpty() && !clock.isRunning()) {
+            clock = new Clock();
+            clock.start(10, this, Mode.WAVE_COUNTER);
         }
     }
 
@@ -139,5 +152,13 @@ public class Panel extends JPanel {
 
     public ItemManager getItemManager() {
         return itemManager;
+    }
+
+    public int getWaveTimer() {
+        return waveTimer;
+    }
+
+    public void setWaveTimer(int waveTimer) {
+        this.waveTimer = waveTimer;
     }
 }

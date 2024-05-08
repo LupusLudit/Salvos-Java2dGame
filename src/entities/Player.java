@@ -2,6 +2,7 @@ package entities;
 
 import management.Clock;
 import management.CollisionManager;
+import management.Mode;
 import management.UserInput;
 import world.Item;
 
@@ -24,8 +25,8 @@ public class Player extends Entity {
 
     private int staminaCounter = 0;
     private int hitCounter = 0;
-    boolean isASRunning = false;
     HashMap<Item, Integer> inventory = new HashMap<>();
+    Clock clock = new Clock();
 
     public Player(UserInput userInput, world.Panel panel) {
         defaultImagePath = "character/sprite_";
@@ -172,7 +173,7 @@ public class Player extends Entity {
 
     public void setSpeed() {
         speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
-        if (isASRunning) {
+        if (clock.isRunning()) {
             speed = (6 + (panel.getGame().getSpeedBonus() * 0.25));
         }
     }
@@ -192,11 +193,10 @@ public class Player extends Entity {
         }
     }
 
-    private int time = 0;
+    private int time = 30;
     public void addStamina(int durationInSeconds) {
-        Clock clock = new Clock(panel);
-        clock.start(durationInSeconds);
-        setASRunning(true);
+        clock = new Clock();
+        clock.start(durationInSeconds, panel, Mode.STAMINA_COUNTER);
     }
 
     public int getCenterX() {
@@ -218,13 +218,6 @@ public class Player extends Entity {
         return inventory;
     }
 
-    public boolean isASRunning() {
-        return isASRunning;
-    }
-
-    public void setASRunning(boolean ASRunning) {
-        isASRunning = ASRunning;
-    }
 
     public int getTime() {
         return time;
@@ -232,5 +225,9 @@ public class Player extends Entity {
 
     public void setTime(int time) {
         this.time = time;
+    }
+
+    public Clock getClock() {
+        return clock;
     }
 }

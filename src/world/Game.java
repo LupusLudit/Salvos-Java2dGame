@@ -127,6 +127,7 @@ public class Game {
         weaponAmmoMap.put(currentWeapon, text);
     }
 
+
     public void addBonus(int type) {
         if (bonusCounter < 10) {
             int currentBonus = bonusMap.get(type);
@@ -150,6 +151,7 @@ public class Game {
     }public int getHealthBonus() {
         return bonusMap.get(0);
     }
+
 
     public int getStaminaBonus() {
         return bonusMap.get(1);
