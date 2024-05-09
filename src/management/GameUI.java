@@ -36,6 +36,7 @@ public class GameUI {
                 panel.getTilePainter().draw(g);
                 panel.getGame().drawEntities(g);
                 panel.getPlayer().draw(g);
+                panel.getCollectableManager().drawCollectables(g);
                 try {
                     drawAmmoIndicators(g);
                     drawWeaponIndicators(g);
@@ -123,7 +124,7 @@ public class GameUI {
         int x = panel.getSquareSide() / 2;
         int y = panel.getHeight() - 4 * panel.getSquareSide();
         BufferedImage image = null;
-        switch (panel.getGame().getCurrentWeapon()) {
+        switch (panel.getGame().getSelectedAmmo()) {
             case PISTOL ->
                     image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
             case SEMIAUTO ->

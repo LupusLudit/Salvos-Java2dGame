@@ -1,7 +1,7 @@
 package items;
 
+import world.AmmoType;
 import world.Panel;
-import world.Weapons;
 
 public class Pistol extends Item{
 
@@ -12,6 +12,11 @@ public class Pistol extends Item{
 
     @Override
     public void use() {
-        panel.getGame().setCurrentWeapon(Weapons.PISTOL);
+        panel.getGame().setSelectedAmmo(AmmoType.PISTOL);
+    }
+
+    @Override
+    public void collect() {
+        panel.getPlayer().addToInventory(this);
     }
 }

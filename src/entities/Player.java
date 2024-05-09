@@ -49,11 +49,11 @@ public class Player extends Entity {
         SemiAutoRifle semiAutoRifle = new SemiAutoRifle(panel);
         AssaultRifle assaultRifle = new AssaultRifle(panel);
 
-        addToInventory(bandage);
+        /*addToInventory(bandage);
         addToInventory(bandage);
         addToInventory(bandage);
         addToInventory(energyDrink);
-        addToInventory(energyDrink);
+        addToInventory(energyDrink);*/
         addToInventory(pistol);
         addToInventory(assaultRifle);
         addToInventory(semiAutoRifle);

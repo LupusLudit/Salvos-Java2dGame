@@ -1,5 +1,6 @@
 package world;
 
+import collectables.CollectableManager;
 import entities.Entity;
 import entities.Player;
 import management.*;
@@ -21,7 +22,6 @@ public class Panel extends JPanel {
     TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
     ArrayList<Entity> entities = new ArrayList<>();
-
     Game game = new Game(this);
     Player player;
     Timer timer;
@@ -32,6 +32,7 @@ public class Panel extends JPanel {
     private int wave = 1;
     private int waveTimer = 10;
     Clock clock;
+    CollectableManager collectableManager = new CollectableManager(this);
 
     public Panel() {
         this.setPreferredSize(new Dimension(SquareSide * col, SquareSide * row));
@@ -59,6 +60,7 @@ public class Panel extends JPanel {
                 checkStatus();
                 player.update();
                 game.updateEntities();
+                collectableManager.checkCollectables();
             }
         });
         timer.start();
@@ -155,5 +157,9 @@ public class Panel extends JPanel {
 
     public void setWaveTimer(int waveTimer) {
         this.waveTimer = waveTimer;
+    }
+
+    public CollectableManager getCollectableManager() {
+        return collectableManager;
     }
 }

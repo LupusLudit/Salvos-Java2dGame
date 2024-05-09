@@ -13,12 +13,11 @@ public abstract class Item {
 
     protected world.Panel panel;
 
-    protected ItemType itemType;
-
     public Item(Panel panel) {
         this.panel = panel;
     }
     public abstract void use();
+    public abstract void collect();
 
     public void setImage(String imagePath){
         try {
@@ -31,7 +30,4 @@ public abstract class Item {
         return image;
     }
 
-    public ItemType getItemType() {
-        return itemType;
-    }
 }
