@@ -50,7 +50,7 @@ public class Zombie extends Entity {
                 && Math.abs(panel.getPlayer().getY() - y) < panel.getPlayer().getCenterY() + panel.getSquareSide()) { //is in range control
             g.drawImage(chooseImage(direction, counter), getRelX(), getRelY(), null);
         }
-        drawHealthBar(g);
+        drawBar(g, maxLives, lives, getRelY() - 15, new Color(255, 0, 30));
     }
 
     @Override
@@ -76,6 +76,21 @@ public class Zombie extends Entity {
             this.counter = 0;
         }
 
+    }
+
+    @Override
+    public void drawBar(Graphics2D g, int max, int current, int y, Color color) {
+        double scale = (double) (panel.getSquareSide()) / max;
+        double value = scale * current;
+
+        int width = panel.getSquareSide();
+        int height = 5;
+        int x = getRelX() + panel.getSquareSide() / 2 - width / 2;
+
+        g.setColor(new Color(35, 35, 35));
+        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 2, 2);
+        g.setColor(color);
+        g.fillRoundRect(x, y, (int) value, height, 2, 2);
     }
 
     public void chooseSpawnPoint() {

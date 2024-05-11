@@ -197,13 +197,23 @@ public class GameUI {
         int width = panel.getSquareSide() * 3 + 12;
         int height = panel.getSquareSide() * 3;
         int x = panel.getWidth() / 2 - width / 2;
-        int y = panel.getSquareSide();
+        int y = panel.getSquareSide() *3;
 
         drawBackgroundRect(g, x, y, width, height);
+
+        g.setFont(new Font("font", Font.BOLD, 36));
+
+        String text = "INVENTORY";
+        drawBackgroundRect(g,panel.getWidth()/2 - textLength(g,text)/2 - 12, y - panel.getSquareSide() - textHeight(g,text), textLength(g,text) +24, textHeight(g, text) +12);
+        g.drawString(text, panel.getWidth()/2 - textLength(g,text)/2, y - panel.getSquareSide() - 6);
+
 
         AtomicInteger i = new AtomicInteger();
         AtomicInteger j = new AtomicInteger();
         AtomicReference<Item> previousItem = new AtomicReference<>();
+
+
+        g.setFont(new Font("font", Font.BOLD, 10));
         panel.getPlayer().getInventory().forEach((key, value) -> {
             if (value != 0) {
                 int imageX;
@@ -214,7 +224,7 @@ public class GameUI {
                 }
 
                 imageX = panel.getWidth() / 2 - width / 2 + i.get() * panel.getSquareSide() + 12;
-                imageY = (j.get() + 1) * panel.getSquareSide() + 16;
+                imageY = (j.get() + 1) * panel.getSquareSide()*3 + 16;
 
 
                 if (previousItem.get() != key) {
@@ -222,7 +232,6 @@ public class GameUI {
                     i.set(i.get() + 1);
                 }
 
-                g.setFont(new Font("font", Font.BOLD, 10));
 
                 g.drawImage(key.getImage(), imageX, imageY, panel.getSquareSide(), panel.getSquareSide(), null);
                 g.drawString(String.valueOf(value), imageX + panel.getSquareSide() - 10, imageY + panel.getSquareSide() + textHeight(g, String.valueOf(value)) - 5);
@@ -234,9 +243,9 @@ public class GameUI {
 
         g.setFont(new Font("font", Font.BOLD, 16));
 
-        String text = "^";
+        text = "^";
         x = panel.getWidth() / 2 - width / 2 + (selectedCol) * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
-        y = panel.getSquareSide() + (selectedRow + 1) * (panel.getSquareSide() + 16);
+        y = panel.getSquareSide()*3 + (selectedRow + 1) * (panel.getSquareSide() + 16);
         g.drawString(text, x, y);
     }
 
@@ -248,18 +257,27 @@ public class GameUI {
 
         drawBackgroundRect(g, x, y, width, height);
 
+        g.setFont(new Font("font", Font.BOLD, 36));
+
+        String text = "SHOP";
+        drawBackgroundRect(g,panel.getWidth()/2 - textLength(g,text)/2 - 12, y - panel.getSquareSide() - textHeight(g,text), textLength(g,text) +24, textHeight(g, text) +12);
+        g.drawString(text, panel.getWidth()/2 - textLength(g,text)/2, y - panel.getSquareSide() - 6);
+
+        g.setFont(new Font("font", Font.BOLD, 10));
         for (int i = 0; i < 2; i++){
             for(int j = 0; j < 3; j++){
                 x = panel.getWidth() / 2 - width / 2 + (j+1)*panel.getSquareSide() + 12;
                 y = panel.getHeight() / 2 - height / 2 + (i*panel.getSquareSide()) + 16;
                 g.drawImage(panel.getShop().getItem(j,i).getImage(), x, y, panel.getSquareSide(), panel.getSquareSide(), null);
-                //to be continued;
+
+                text = String.valueOf(panel.getShop().getItem(j,i).getPrice());
+                g.drawString(text, x + panel.getSquareSide() - 10, y + panel.getSquareSide() + textHeight(g, text) - 5);
             }
         }
 
         g.setFont(new Font("font", Font.BOLD, 16));
 
-        String text = "^";
+        text = "^";
         x = panel.getWidth() / 2 - width / 2 + (panel.getShop().getSelectedCol() + 1) * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
         y = panel.getHeight() / 2 - height / 2 + (panel.getShop().getSelectedRow() + 1) * (panel.getSquareSide() + 16);
         g.drawString(text, x, y);

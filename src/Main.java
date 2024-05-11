@@ -21,7 +21,6 @@ public class Main {
         window.setVisible(true);
         panel.start();
 
-
         //cursors
         BufferedImage cursorImg = null;
         try {

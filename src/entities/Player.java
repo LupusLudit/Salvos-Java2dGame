@@ -57,73 +57,62 @@ public class Player extends Entity {
     @Override
     public void draw(Graphics2D g) {
         g.drawImage(chooseImage(direction, counter), centerX, centerY, null);
-        drawHealthBar(g);
-        drawStaminaBar(g);
-    }
 
-    @Override
-    public void drawHealthBar(Graphics2D g) {
-        double scale = (double) (panel.getSquareSide() * 4) / maxLives;
-        double value = scale * lives;
+        drawBar(g, maxLives, lives,panel.getHeight() - 60, new Color(255, 0, 30));
+        drawBar(g, maxStamina, stamina,panel.getHeight() - 30, new Color(60, 0, 255));
+    }
+    public void drawBar(Graphics2D g, int max, int current, int y, Color color) {
+        double scale = (double) (panel.getSquareSide() * 4) / max;
+        double value = scale * current;
 
         int width = panel.getSquareSide() * 4;
         int height = 15;
         int x = panel.getWidth() / 2 - width / 2;
-        int y = panel.getHeight() - 60;
 
         g.setColor(new Color(35, 35, 35));
         g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 10, 10);
-        g.setColor(new Color(255, 0, 30));
+        g.setColor(color);
         g.fillRoundRect(x, y, (int) value, height, 10, 10);
     }
-
-    public void drawStaminaBar(Graphics2D g) {
-        double scale = (double) (panel.getSquareSide() * 4) / maxStamina;
-        double value = scale * stamina;
-
-        int width = panel.getSquareSide() * 4;
-        int height = 15;
-        int x = panel.getWidth() / 2 - width / 2;
-        int y = panel.getHeight() - 30;
-
-        g.setColor(new Color(35, 35, 35));
-        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 15, 15);
-        g.setColor(new Color(60, 0, 255));
-        g.fillRoundRect(x, y, (int) value, height, 15, 15);
-    }
-
     @Override
     public void update() {
         direction = userInput.getDirection();
         if (userInput.isPressed()) {
             canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
             if (canMove) {
-                switch (direction) {
-                    case 0 -> y -= speed;
-                    case 1 -> y += speed;
-                    case 2 -> x -= speed;
-                    case 3 -> x += speed;
-                }
+                move();
+                actualArea.setRect(x + 8, y + 16, 32, 32);
 
                 counter++;
-                if (counter >= 15) {
-                    this.counter = 0;
+                if (counter == 15) {
+                    counter = 0;
                 }
-
-                actualArea.setRect(x + 8, y + 16, 32, 32);
             }
         }
+        handleHealth();
+        handleStamina();
+    }
 
-        //testing health bar
+    private void move() {
+        switch (direction) {
+            case 0 -> y -= speed;
+            case 1 -> y += speed;
+            case 2 -> x -= speed;
+            case 3 -> x += speed;
+        }
+    }
+
+    private void handleHealth() {
         if (entityHitPlayer()) {
             hitCounter++;
-            if (hitCounter == 20) {
+            if (hitCounter == 15) {
                 decreaseLives();
                 hitCounter = 0;
             }
         }
+    }
 
-        //stamina options
+    private void handleStamina() {
         if (userInput.isShiftPressed()) {
             staminaCounter++;
             if (staminaCounter >= 5 && stamina > 0) {
@@ -134,7 +123,6 @@ public class Player extends Entity {
             if (stamina > 0) {
                 speed += 2;
             }
-
         } else {
             setSpeed();
             staminaCounter++;
@@ -173,7 +161,7 @@ public class Player extends Entity {
 
     public void setBonuses() {
         setSpeed();
-        maxLives = 10 + panel.getGame().getHealthBonus();
+        maxLives = 30 + panel.getGame().getHealthBonus();
         maxStamina = 30 + panel.getGame().getStaminaBonus();
 
         lives = maxLives;

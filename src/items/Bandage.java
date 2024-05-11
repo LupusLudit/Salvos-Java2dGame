@@ -11,7 +11,10 @@ public class Bandage extends Item{
 
     @Override
     public void use() {
-        panel.getPlayer().increaseLives();
+        for (int i = 0; i < 5; i++){
+            panel.getPlayer().increaseLives();
+        }
+
         int counter = panel.getPlayer().getInventory().get(this);
         panel.getPlayer().getInventory().put(this, counter - 1);
     }

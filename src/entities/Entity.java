@@ -74,20 +74,7 @@ public abstract class Entity {
         return image;
     }
 
-    public void drawHealthBar(Graphics2D g) {
-        double scale = (double) (panel.getSquareSide()) / maxLives;
-        double value = scale * lives;
-
-        int width = panel.getSquareSide();
-        int height = 5;
-        int x = getRelX() + panel.getSquareSide() / 2 - width / 2;
-        int y = getRelY() - 15;
-
-        g.setColor(new Color(35, 35, 35));
-        g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 2, 2);
-        g.setColor(new Color(255, 0, 30));
-        g.fillRoundRect(x, y, (int) value, height, 2, 2);
-    }
+    public abstract void drawBar(Graphics2D g, int max, int current, int y, Color color);
 
     public void decreaseLives() {
         if (lives - 1 >= 0) {
