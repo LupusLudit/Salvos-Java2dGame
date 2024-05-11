@@ -22,15 +22,16 @@ public class Game {
 
     public Game(Panel panel) {
         this.panel = panel;
-        selectedAmmo = AmmoType.SEMIAUTO;
+        selectedAmmo = AmmoType.FIST;
         initializeMaps();
     }
 
 
     private void initializeMaps(){
         ammoMap.put(AmmoType.PISTOL, "9,27,9");
-        ammoMap.put(AmmoType.SEMIAUTO, "8,32,8");
-        ammoMap.put(AmmoType.ASSAULTRIFLE, "30,90,30");
+        ammoMap.put(AmmoType.SEMIAUTO, "0,0,8");
+        ammoMap.put(AmmoType.ASSAULTRIFLE, "0,0,30");
+        ammoMap.put(AmmoType.FIST, "0,0,0");
 
         bonusMap.put(0, 0);
         bonusMap.put(1, 0);
@@ -151,7 +152,13 @@ public class Game {
 
     public void setSelectedAmmo(AmmoType selectedAmmo) {
         this.selectedAmmo = selectedAmmo;
-    }public int getHealthBonus() {
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getHealthBonus() {
         return bonusMap.get(0);
     }
 

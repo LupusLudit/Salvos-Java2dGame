@@ -123,12 +123,10 @@ public class GameUI {
         int y = panel.getHeight() - 4 * panel.getSquareSide();
         BufferedImage image = null;
         switch (panel.getGame().getSelectedAmmo()) {
-            case PISTOL ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
-            case SEMIAUTO ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
-            case ASSAULTRIFLE ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
+            case PISTOL -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
+            case SEMIAUTO -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
+            case ASSAULTRIFLE -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
+            case FIST -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/character/sprite_0.png")));
         }
         g.drawImage(image, x, y, panel.getSquareSide() * 3, panel.getSquareSide() * 3, null);
 

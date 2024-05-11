@@ -5,4 +5,5 @@ public enum AmmoType {
     PISTOL,
     SEMIAUTO,
     ASSAULTRIFLE,
+    FIST
 }

@@ -1,6 +1,5 @@
 package entities;
 
-import items.*;
 import management.Clock;
 import management.CollisionManager;
 import management.Mode;
@@ -42,21 +41,6 @@ public class Player extends Entity {
         centerX = (panel.getSquareSide() * panel.getCol()) / 2 - (panel.getSquareSide() / 2);
         centerY = (panel.getSquareSide() * panel.getRow()) / 2 - (panel.getSquareSide() / 2);
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
-
-        Bandage bandage = new Bandage(panel);
-        EnergyDrink energyDrink = new EnergyDrink(panel);
-        Pistol pistol = new Pistol(panel);
-        SemiAutoRifle semiAutoRifle = new SemiAutoRifle(panel);
-        AssaultRifle assaultRifle = new AssaultRifle(panel);
-
-        /*addToInventory(bandage);
-        addToInventory(bandage);
-        addToInventory(bandage);
-        addToInventory(energyDrink);
-        addToInventory(energyDrink);*/
-        addToInventory(pistol);
-        addToInventory(assaultRifle);
-        addToInventory(semiAutoRifle);
     }
 
     public void addToInventory(items.Item item) {

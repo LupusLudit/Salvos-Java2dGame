@@ -8,6 +8,7 @@ public class AssaultRifle extends Item{
     public AssaultRifle(Panel panel) {
         super(panel);
         setImage("/ui/assault-rifle.png");
+        setPrice(500);
     }
 
     @Override

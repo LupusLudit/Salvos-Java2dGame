@@ -12,6 +12,7 @@ public abstract class Item {
     protected Image image;
 
     protected world.Panel panel;
+    private int price;
 
     public Item(Panel panel) {
         this.panel = panel;
@@ -26,8 +27,16 @@ public abstract class Item {
             System.out.println("image path problem.");
         }
     }
+
+    public void setPrice(int price) {
+        this.price = price;
+    }
+
     public Image getImage() {
         return image;
     }
 
+    public int getPrice() {
+        return price;
+    }
 }

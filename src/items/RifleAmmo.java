@@ -8,6 +8,7 @@ public class RifleAmmo extends Item{
     public RifleAmmo(Panel panel) {
         super(panel);
         setImage("/ui/ak_ammo.png");
+        setPrice(75);
     }
 
     @Override

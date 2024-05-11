@@ -8,6 +8,7 @@ public class SemiAutoAmmo extends Item{
     public SemiAutoAmmo(Panel panel) {
         super(panel);
         setImage("/ui/grant_ammo.png");
+        setPrice(10);
     }
 
     @Override

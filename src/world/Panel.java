@@ -3,6 +3,7 @@ package world;
 import collectables.CollectableManager;
 import entities.Entity;
 import entities.Player;
+import items.Pistol;
 import management.*;
 
 import javax.swing.*;
@@ -48,6 +49,9 @@ public class Panel extends JPanel {
         player = new Player(userInput, this);
         status = Status.SETUP;
         clock = new Clock();
+
+        Pistol pistol = new Pistol(this);
+        pistol.collect();
     }
 
 

@@ -125,6 +125,13 @@ public class UserInput implements KeyListener {
                     case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getShop().subtractCol();
                     case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getShop().addCol();
                     case KeyEvent.VK_B -> panel.setStatus(Status.PLAYING);
+                    case KeyEvent.VK_E -> {
+                        if(panel.getGame().getScore() >= panel.getShop().getSelectedItem().getPrice()){
+                            int newScore = panel.getGame().getScore() - panel.getShop().getSelectedItem().getPrice();
+                            panel.getGame().setScore(newScore);
+                            panel.getShop().getSelectedItem().collect();
+                        }
+                    }
                 }
             }
 
