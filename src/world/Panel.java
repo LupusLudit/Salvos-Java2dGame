@@ -34,6 +34,8 @@ public class Panel extends JPanel {
     Clock clock;
     CollectableManager collectableManager = new CollectableManager(this);
 
+    Shop shop = new Shop(this);
+
     public Panel() {
         this.setPreferredSize(new Dimension(SquareSide * col, SquareSide * row));
         this.setBackground(Color.BLACK);
@@ -161,5 +163,9 @@ public class Panel extends JPanel {
 
     public CollectableManager getCollectableManager() {
         return collectableManager;
+    }
+
+    public Shop getShop() {
+        return shop;
     }
 }

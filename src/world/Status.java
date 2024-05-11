@@ -5,5 +5,6 @@ public enum Status {
     GAMEOVER,
     SETUP,
     CUSTOMIZATION,
-    INVENTORY
+    INVENTORY,
+    SHOP
 }

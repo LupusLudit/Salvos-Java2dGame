@@ -22,7 +22,7 @@ public class Main {
         panel.start();
 
 
-        //cursord
+        //cursors
         BufferedImage cursorImg = null;
         try {
             cursorImg = ImageIO.read(new File("images/cursor/circle_cursor.png"));

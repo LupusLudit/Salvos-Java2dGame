@@ -92,6 +92,7 @@ public class UserInput implements KeyListener {
                         pressed = true;
                     }
                     case KeyEvent.VK_SHIFT -> shiftPressed = true;
+                    case KeyEvent.VK_B -> panel.setStatus(Status.SHOP);
 
                     case KeyEvent.VK_I -> panel.setStatus(Status.INVENTORY);
                     default -> {
@@ -114,6 +115,16 @@ public class UserInput implements KeyListener {
                             item.use();
                         }
                     }
+                }
+            }
+
+            case SHOP -> {
+                switch (input) {
+                    case KeyEvent.VK_W, KeyEvent.VK_UP -> panel.getShop().subtractRow();
+                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> panel.getShop().addRow();
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getShop().subtractCol();
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getShop().addCol();
+                    case KeyEvent.VK_B -> panel.setStatus(Status.PLAYING);
                 }
             }
 

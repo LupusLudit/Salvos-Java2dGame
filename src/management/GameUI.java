@@ -32,30 +32,14 @@ public class GameUI {
         switch (panel.getStatus()) {
             case SETUP -> drawStartingScreen(g);
             case CUSTOMIZATION -> drawCustomizationScreen(g);
-            case PLAYING -> {
-                panel.getTilePainter().draw(g);
-                panel.getGame().drawEntities(g);
-                panel.getPlayer().draw(g);
-                panel.getCollectableManager().drawCollectables(g);
-                try {
-                    drawAmmoIndicators(g);
-                    drawWeaponIndicators(g);
-                    drawScore(g);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            case PLAYING -> drawBackground(g);
             case GAMEOVER -> drawDeathScreen(g);
-            case INVENTORY -> {
-                panel.getTilePainter().draw(g);
-                panel.getGame().drawEntities(g);
-                panel.getPlayer().draw(g);
-                try {
-                    drawAmmoIndicators(g);
-                    drawWeaponIndicators(g);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            case SHOP -> { //will be edited later
+                drawBackground(g);
+                drawShop(g);
+            }
+            case INVENTORY -> { //will be edited later
+                drawBackground(g);
                 drawInventoryWindow(g);
             }
         }
@@ -64,6 +48,20 @@ public class GameUI {
         }
         if (panel.getEntities().isEmpty()) {
             drawWaveMessage(g);
+        }
+    }
+
+    public void drawBackground(Graphics2D g) {
+        panel.getTilePainter().draw(g);
+        panel.getGame().drawEntities(g);
+        panel.getPlayer().draw(g);
+        panel.getCollectableManager().drawCollectables(g);
+        try {
+            drawAmmoIndicators(g);
+            drawWeaponIndicators(g);
+            drawScore(g);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -203,14 +201,7 @@ public class GameUI {
         int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getSquareSide();
 
-        Color color = new Color(0, 0, 0, 230);
-        g.setColor(color);
-        g.fillRoundRect(x, y, width, height, 50, 50);
-
-        color = new Color(255, 255, 255);
-        g.setColor(color);
-        g.setStroke(new BasicStroke(3));
-        g.drawRoundRect(x, y, width, height, 50, 50);
+        drawBackgroundRect(g, x, y, width, height);
 
         AtomicInteger i = new AtomicInteger();
         AtomicInteger j = new AtomicInteger();
@@ -225,7 +216,7 @@ public class GameUI {
                 }
 
                 imageX = panel.getWidth() / 2 - width / 2 + i.get() * panel.getSquareSide() + 12;
-                imageY = (j.get()+1)*panel.getSquareSide() + 16;
+                imageY = (j.get() + 1) * panel.getSquareSide() + 16;
 
 
                 if (previousItem.get() != key) {
@@ -248,6 +239,31 @@ public class GameUI {
         String text = "^";
         x = panel.getWidth() / 2 - width / 2 + (selectedCol) * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
         y = panel.getSquareSide() + (selectedRow + 1) * (panel.getSquareSide() + 16);
+        g.drawString(text, x, y);
+    }
+
+    public void drawShop(Graphics2D g) {
+        int width = panel.getSquareSide() * 5 + 12;
+        int height = panel.getSquareSide() * 3;
+        int x = panel.getWidth() / 2 - width / 2;
+        int y = panel.getHeight() / 2 - height / 2;
+
+        drawBackgroundRect(g, x, y, width, height);
+
+        for (int i = 0; i < 2; i++){
+            for(int j = 0; j < 3; j++){
+                x = panel.getWidth() / 2 - width / 2 + (j+1)*panel.getSquareSide() + 12;
+                y = panel.getHeight() / 2 - height / 2 + (i*panel.getSquareSide()) + 16;
+                g.drawImage(panel.getShop().getItem(j,i).getImage(), x, y, panel.getSquareSide(), panel.getSquareSide(), null);
+                //to be continued;
+            }
+        }
+
+        g.setFont(new Font("font", Font.BOLD, 16));
+
+        String text = "^";
+        x = panel.getWidth() / 2 - width / 2 + (panel.getShop().getSelectedCol() + 1) * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
+        y = panel.getHeight() / 2 - height / 2 + (panel.getShop().getSelectedRow() + 1) * (panel.getSquareSide() + 16);
         g.drawString(text, x, y);
     }
 
@@ -276,6 +292,17 @@ public class GameUI {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void drawBackgroundRect(Graphics2D g, int x, int y, int width, int height){
+        Color color = new Color(0, 0, 0, 230);
+        g.setColor(color);
+        g.fillRoundRect(x, y, width, height, 50, 50);
+
+        color = new Color(255, 255, 255);
+        g.setColor(color);
+        g.setStroke(new BasicStroke(3));
+        g.drawRoundRect(x, y, width, height, 50, 50);
     }
 
 
