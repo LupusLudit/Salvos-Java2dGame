@@ -58,8 +58,8 @@ public class Player extends Entity {
     public void draw(Graphics2D g) {
         g.drawImage(chooseImage(direction, counter), centerX, centerY, null);
 
-        drawBar(g, maxLives, lives,panel.getHeight() - 60, new Color(255, 0, 30));
-        drawBar(g, maxStamina, stamina,panel.getHeight() - 30, new Color(60, 0, 255));
+        drawBar(g, maxLives, lives,panel.getHeight() - 80, new Color(255, 0, 30));
+        drawBar(g, maxStamina, stamina,panel.getHeight() - 50, new Color(60, 0, 255));
     }
     public void drawBar(Graphics2D g, int max, int current, int y, Color color) {
         double scale = (double) (panel.getSquareSide() * 4) / max;

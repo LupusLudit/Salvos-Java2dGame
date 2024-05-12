@@ -110,17 +110,17 @@ public class GameUI {
         g.setFont(new Font("font", Font.BOLD, 36));
         g.setColor(Color.white);
         int x = panel.getSquareSide() / 2;
-        int y = panel.getHeight() - panel.getSquareSide() - 10;
+        int y = panel.getHeight() - panel.getSquareSide() - 30;
         BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/ammo.png")));
 
         g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
         String text = panel.getGame().getMagazine() + "/" + panel.getGame().getAmmo();
-        g.drawString(text, x + panel.getSquareSide(), panel.getHeight() - 16);
+        g.drawString(text, x + panel.getSquareSide()*2, panel.getHeight() - 36);
     }
 
     public void drawWeaponIndicators(Graphics2D g) throws IOException {
         int x = panel.getSquareSide() / 2;
-        int y = panel.getHeight() - 4 * panel.getSquareSide();
+        int y = panel.getHeight() - 4 * panel.getSquareSide() - 10;
         BufferedImage image = null;
         switch (panel.getGame().getSelectedAmmo()) {
             case REVOLVER -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/revolver.png")));

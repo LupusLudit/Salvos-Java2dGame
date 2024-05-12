@@ -10,7 +10,6 @@ import java.util.Iterator;
 public class Game {
 
 
-
     world.Panel panel;
     private int staminaBonus = 0;
     private int healthBonus = 0;
@@ -27,7 +26,7 @@ public class Game {
     }
 
 
-    private void initializeMaps(){
+    private void initializeMaps() {
         ammoMap.put(AmmoType.FIST, "0,0,0");
         ammoMap.put(AmmoType.REVOLVER, "6,36,6");
         ammoMap.put(AmmoType.PISTOL, "0,0,9");
@@ -70,11 +69,15 @@ public class Game {
     private int reloadCounter = 0;
 
     private int score = 0;
+
     public void simulateShooting() {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();
 
-        if(canShoot(mousePosition)){
+        if (cursorOnScreen(mousePosition) && panel.getPlayer().getLives() > 0) {
+            if (panel.getMouseInput().isMouseClicked()){
+                changeDirection();
+            }
             int delay = shootingDelay();
             String[] values = ammoMap.get(selectedAmmo).split(",");
             int mag = Integer.parseInt(values[0]);
@@ -82,6 +85,7 @@ public class Game {
             int maxCapacity = Integer.parseInt(values[2]);
 
             if (mag > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= delay)) {
+
                 mag--;
                 Point clickPoint = new Point(mousePosition.x, mousePosition.y);
                 for (Entity entity : panel.getEntities()) {
@@ -94,23 +98,45 @@ public class Game {
                 String text = mag + "," + ammo + "," + maxCapacity;
                 ammoMap.put(selectedAmmo, text);
             }
-            if (mag == 0) {
+            if (mag == 0 || panel.getUserInput().isReloadTriggered()) {
                 reloadCounter++;
-                if(reloadCounter == 100){
-                    reload(ammo, maxCapacity);
+                if (reloadCounter == 100) {
+                    reload(mag, ammo, maxCapacity);
                     reloadCounter = 0;
                 }
             }
         }
     }
 
-    private boolean canShoot(Point mousePosition) {
-        return mousePosition != null && panel.contains(mousePosition) && panel.getPlayer().getLives() > 0;
+    private boolean cursorOnScreen(Point mousePosition) {
+        return mousePosition != null && panel.contains(mousePosition);
     }
 
-    public int shootingDelay(){
+    public void changeDirection() {
+        Point mousePosition = panel.getMousePosition();
+        double xLeft = mousePosition.getX() * ((double) panel.getRow() / panel.getCol());
+        double xRight = (panel.getWidth() - mousePosition.getX()) * ((double) panel.getRow() / panel.getCol());
+
+        if (mousePosition.getY() <= panel.getPlayer().getCenterY()) {
+            panel.getPlayer().setDirection(0);
+            if (xLeft <= mousePosition.getY()) {
+                panel.getPlayer().setDirection(2);
+            } else if (xRight <= mousePosition.getY()) {
+                panel.getPlayer().setDirection(3);
+            }
+        } else {
+            panel.getPlayer().setDirection(1);
+            if (xLeft <= (panel.getHeight() - mousePosition.getY())) {
+                panel.getPlayer().setDirection(2);
+            } else if (xRight <= (panel.getHeight() - mousePosition.getY())) {
+                panel.getPlayer().setDirection(3);
+            }
+        }
+    }
+
+    public int shootingDelay() {
         int delay = 0;
-        switch (selectedAmmo){
+        switch (selectedAmmo) {
             case REVOLVER -> delay = 1000;
             case PISTOL -> delay = 300;
             case SEMIAUTO -> delay = 150;
@@ -121,13 +147,15 @@ public class Game {
     }
 
 
-    public void reload(int ammo, int maxCapacity) {
-        int mag;
-        if(ammo >= maxCapacity){
-            ammo -= maxCapacity;
+    public void reload(int mag, int ammo, int maxCapacity) {
+        if (ammo >= maxCapacity) {
+            if (panel.getUserInput().isReloadTriggered()) {
+                ammo += mag;
+                panel.getUserInput().setReloadTriggered(false);
+            }
             mag = maxCapacity;
-        }
-        else {
+            ammo -= maxCapacity;
+        } else {
             mag = ammo;
             ammo = 0;
         }
@@ -147,11 +175,11 @@ public class Game {
     }
 
     public void subtractBonus(int type) {
-            int currentBonus = bonusMap.get(type);
-            if (currentBonus > 0) {
-                bonusMap.put(type, currentBonus - 1);
-                bonusCounter--;
-            }
+        int currentBonus = bonusMap.get(type);
+        if (currentBonus > 0) {
+            bonusMap.put(type, currentBonus - 1);
+            bonusCounter--;
+        }
     }
 
     public void setSelectedAmmo(AmmoType selectedAmmo) {

@@ -97,7 +97,9 @@ public abstract class Entity {
         return false;
     }
 
-
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
     public int getRelX() { // returns x coordinate relative to player
         return x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
     }

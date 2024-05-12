@@ -1,5 +1,4 @@
 import world.Panel;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -14,14 +13,19 @@ public class Main {
         window.setResizable(false);
         window.setTitle("Salvos");
 
-        Panel panel = new Panel();
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        gd.setFullScreenWindow(window);
+
+        Panel panel = new Panel(window.getWidth(), window.getHeight());
         window.add(panel);
-        window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
+        panel.requestFocus();
+
         panel.start();
 
-        //cursors
+        //cursor
         BufferedImage cursorImg = null;
         try {
             cursorImg = ImageIO.read(new File("images/cursor/circle_cursor.png"));
@@ -30,8 +34,6 @@ public class Main {
         }
 
         Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "Custom Cursor");
-
         panel.setCursor(customCursor);
-
     }
 }

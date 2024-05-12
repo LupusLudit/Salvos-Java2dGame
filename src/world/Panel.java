@@ -14,9 +14,9 @@ public class Panel extends JPanel {
 
     // one tile = 48
     //width, height  = 18, 12 x tile
-    private final int SquareSide = 48;
-    private final int col = 18;
-    private final int row = 12;
+    private final int squareSide = 48;
+    private int col;
+    private int row;
 
     UserInput userInput = new UserInput(this);
     MouseInput mouseInput = new MouseInput();
@@ -37,8 +37,13 @@ public class Panel extends JPanel {
 
     Shop shop = new Shop(this);
 
-    public Panel() {
-        this.setPreferredSize(new Dimension(SquareSide * col, SquareSide * row));
+    public Panel(int col, int row) {
+
+        this.col = col/ squareSide;
+        this.row = row/ squareSide;
+
+        this.setPreferredSize(new Dimension(squareSide * this.col, squareSide * this.row));
+
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
         this.setFocusable(true);
@@ -106,15 +111,15 @@ public class Panel extends JPanel {
     }
 
     public int getWidth() {
-        return SquareSide * col;
+        return squareSide * col;
     }
 
     public int getHeight() {
-        return SquareSide * row;
+        return squareSide * row;
     }
 
     public int getSquareSide() {
-        return SquareSide;
+        return squareSide;
     }
 
     public int getCol() {
@@ -171,5 +176,9 @@ public class Panel extends JPanel {
 
     public Shop getShop() {
         return shop;
+    }
+
+    public UserInput getUserInput() {
+        return userInput;
     }
 }

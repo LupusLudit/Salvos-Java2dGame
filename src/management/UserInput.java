@@ -6,11 +6,13 @@ import world.Status;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class UserInput implements KeyListener {
+public class UserInput implements KeyListener{
 
     private int direction = 0;
     private boolean pressed;
     private boolean shiftPressed;
+
+    private boolean reloadTriggered;
 
     Panel panel;
 
@@ -93,11 +95,13 @@ public class UserInput implements KeyListener {
                     }
                     case KeyEvent.VK_SHIFT -> shiftPressed = true;
                     case KeyEvent.VK_B -> panel.setStatus(Status.SHOP);
+                    case KeyEvent.VK_R -> reloadTriggered = true;
 
                     case KeyEvent.VK_I -> panel.setStatus(Status.INVENTORY);
                     default -> {
                         pressed = false;
                         shiftPressed = false;
+                        reloadTriggered = false;
                     }
                 }
             }
@@ -148,6 +152,10 @@ public class UserInput implements KeyListener {
         }
     }
 
+    public void setReloadTriggered(boolean reloadTriggered) {
+        this.reloadTriggered = reloadTriggered;
+    }
+
     public int getDirection() {
         return direction;
     }
@@ -158,5 +166,9 @@ public class UserInput implements KeyListener {
 
     public boolean isShiftPressed() {
         return shiftPressed;
+    }
+
+    public boolean isReloadTriggered() {
+        return reloadTriggered;
     }
 }
