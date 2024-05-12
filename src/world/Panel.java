@@ -42,6 +42,9 @@ public class Panel extends JPanel {
         this.col = col/ squareSide;
         this.row = row/ squareSide;
 
+        System.out.println(col);
+        System.out.println(row);
+
         this.setPreferredSize(new Dimension(squareSide * this.col, squareSide * this.row));
 
         this.setBackground(Color.BLACK);

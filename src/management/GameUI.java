@@ -30,7 +30,13 @@ public class GameUI {
         g.setColor(Color.white);
 
         switch (panel.getStatus()) {
-            case SETUP -> drawStartingScreen(g);
+            case SETUP ->{
+                try {
+                    drawStartingScreen(g);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
             case CUSTOMIZATION -> drawCustomizationScreen(g);
             case PLAYING -> drawBackground(g);
             case GAMEOVER -> drawDeathScreen(g);
@@ -77,31 +83,28 @@ public class GameUI {
         g.drawString(message, centerX(g, message), centerY(g, message));
     }
 
-    public void drawStartingScreen(Graphics2D g) {
+    public void drawStartingScreen(Graphics2D g) throws IOException {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
 
         g.setColor(Color.white);
 
-        String text = "Salvos!";
-        int x = centerX(g, text);
-        int y = panel.getSquareSide() * 2;
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/startingScreen.png")));
 
-        g.setFont(font);
-        g.drawString(text, x, y);
+        g.drawImage(image, 0, 0, panel.getWidth(), panel.getHeight(), null);
 
         font = new Font("font", Font.BOLD, 36);
         g.setFont(font);
 
-        text = "START";
-        x = centerX(g, text);
-        y += 5 * panel.getSquareSide();
+        String text = "START";
+        int x = centerX(g, text);
+        int y = centerY(g, text) - panel.getSquareSide();
         g.drawString(text, x, y);
         if (panel.getChosenOption() == 0) drawArrows(g, text, x, y, true);
 
         text = "QUIT";
         x = centerX(g, text);
-        y += panel.getSquareSide();
+        y = centerY(g, text) + panel.getSquareSide();
         g.drawString(text, x, y);
         if (panel.getChosenOption() == 1) drawArrows(g, text, x, y, true);
     }
