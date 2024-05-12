@@ -123,10 +123,12 @@ public class GameUI {
         int y = panel.getHeight() - 4 * panel.getSquareSide();
         BufferedImage image = null;
         switch (panel.getGame().getSelectedAmmo()) {
+            case REVOLVER -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/revolver.png")));
             case PISTOL -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
             case SEMIAUTO -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
             case ASSAULTRIFLE -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
-            case FIST -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/character/sprite_0.png")));
+            case SUBMACHINE_GUN -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/tommyGun.png")));
+            case FIST -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/fist.png")));
         }
         g.drawImage(image, x, y, panel.getSquareSide() * 3, panel.getSquareSide() * 3, null);
 
@@ -224,7 +226,7 @@ public class GameUI {
                 }
 
                 imageX = panel.getWidth() / 2 - width / 2 + i.get() * panel.getSquareSide() + 12;
-                imageY = (j.get() + 1) * panel.getSquareSide()*3 + 16;
+                imageY = 3* panel.getSquareSide() + (j.get())*panel.getSquareSide() + 16;
 
 
                 if (previousItem.get() != key) {
@@ -255,7 +257,7 @@ public class GameUI {
         int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getHeight() / 2 - height / 2;
 
-        drawBackgroundRect(g, x, y, width, height);
+        drawBackgroundRect(g, x - 24, y, width + 48, height);
 
         g.setFont(new Font("font", Font.BOLD, 36));
 
@@ -265,8 +267,8 @@ public class GameUI {
 
         g.setFont(new Font("font", Font.BOLD, 10));
         for (int i = 0; i < 2; i++){
-            for(int j = 0; j < 3; j++){
-                x = panel.getWidth() / 2 - width / 2 + (j+1)*panel.getSquareSide() + 12;
+            for(int j = 0; j < 5; j++){
+                x = panel.getWidth() / 2 - width / 2 + j*panel.getSquareSide() + 12;
                 y = panel.getHeight() / 2 - height / 2 + (i*panel.getSquareSide()) + 16;
                 g.drawImage(panel.getShop().getItem(j,i).getImage(), x, y, panel.getSquareSide(), panel.getSquareSide(), null);
 
@@ -278,7 +280,7 @@ public class GameUI {
         g.setFont(new Font("font", Font.BOLD, 16));
 
         text = "^";
-        x = panel.getWidth() / 2 - width / 2 + (panel.getShop().getSelectedCol() + 1) * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
+        x = panel.getWidth() / 2 - width / 2 + panel.getShop().getSelectedCol() * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
         y = panel.getHeight() / 2 - height / 2 + (panel.getShop().getSelectedRow() + 1) * (panel.getSquareSide() + 16);
         g.drawString(text, x, y);
     }

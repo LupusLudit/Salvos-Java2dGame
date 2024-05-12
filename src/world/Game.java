@@ -28,10 +28,12 @@ public class Game {
 
 
     private void initializeMaps(){
-        ammoMap.put(AmmoType.PISTOL, "9,27,9");
-        ammoMap.put(AmmoType.SEMIAUTO, "0,0,8");
-        ammoMap.put(AmmoType.ASSAULTRIFLE, "0,0,30");
         ammoMap.put(AmmoType.FIST, "0,0,0");
+        ammoMap.put(AmmoType.REVOLVER, "6,36,6");
+        ammoMap.put(AmmoType.PISTOL, "0,0,9");
+        ammoMap.put(AmmoType.SEMIAUTO, "0,0,10");
+        ammoMap.put(AmmoType.ASSAULTRIFLE, "0,0,30");
+        ammoMap.put(AmmoType.SUBMACHINE_GUN, "0,0,50");
 
         bonusMap.put(0, 0);
         bonusMap.put(1, 0);
@@ -109,9 +111,11 @@ public class Game {
     public int shootingDelay(){
         int delay = 0;
         switch (selectedAmmo){
-            case PISTOL -> delay = 500;
-            case SEMIAUTO -> delay = 200;
-            case ASSAULTRIFLE -> delay = 50;
+            case REVOLVER -> delay = 1000;
+            case PISTOL -> delay = 300;
+            case SEMIAUTO -> delay = 150;
+            case ASSAULTRIFLE -> delay = 100;
+            case SUBMACHINE_GUN -> delay = 75;
         }
         return delay;
     }

@@ -3,17 +3,16 @@ package items;
 import world.AmmoType;
 import world.Panel;
 
-public class AssaultRifle extends Item{
+public class Revolver extends Item {
 
-    public AssaultRifle(Panel panel) {
+    public Revolver(Panel panel) {
         super(panel);
-        setImage("/ui/assault-rifle.png");
+        setImage("/ui/revolver.png");
         setPrice(1);
     }
-
     @Override
     public void use() {
-        panel.getGame().setSelectedAmmo(AmmoType.ASSAULTRIFLE);
+        panel.getGame().setSelectedAmmo(AmmoType.REVOLVER);
     }
 
     @Override
