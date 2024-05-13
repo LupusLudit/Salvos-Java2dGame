@@ -21,6 +21,11 @@ public class Game {
 
     private boolean shooting = false;
 
+    private long lastShootTime = 0;
+    private int reloadCounter = 0;
+
+    private int score = 0;
+
     public Game(Panel panel) {
         this.panel = panel;
         selectedAmmo = AmmoType.FIST;
@@ -56,7 +61,23 @@ public class Game {
                 iterator.remove();
             }
         }
-        simulateShooting();
+
+        String[] values = ammoMap.get(selectedAmmo).split(",");
+        int mag = Integer.parseInt(values[0]);
+        int ammo = Integer.parseInt(values[1]);
+        int maxCapacity = Integer.parseInt(values[2]);
+
+        if (cursorOnScreen(panel.getMousePosition()) && panel.getMouseInput().isMouseClicked()) {
+            simulateShooting(mag, ammo, maxCapacity);
+        }
+
+        if (mag == 0 || panel.getUserInput().isReloadTriggered()) {
+            reloadCounter++;
+            if (reloadCounter == 100) {
+                reload(mag, ammo, maxCapacity);
+                reloadCounter = 0;
+            }
+        }
     }
 
     public void drawEntities(Graphics2D g) {
@@ -66,48 +87,26 @@ public class Game {
             }
         }
     }
-
-    private long lastShootTime = 0;
-    private int reloadCounter = 0;
-
-    private int score = 0;
-
-    public void simulateShooting() {
+    public void simulateShooting(int mag, int ammo, int maxCapacity) {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();
         shooting = false;
 
-        if (cursorOnScreen(mousePosition) && panel.getPlayer().getLives() > 0) {
-            int delay = shootingDelay();
-            String[] values = ammoMap.get(selectedAmmo).split(",");
-            int mag = Integer.parseInt(values[0]);
-            int ammo = Integer.parseInt(values[1]);
-            int maxCapacity = Integer.parseInt(values[2]);
-
-            if (panel.getMouseInput().isMouseClicked()){
-                changeDirection();
-            }
-            if (mag > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= delay)) {
-                shooting = true;
-                mag--;
-                Point clickPoint = new Point(mousePosition.x, mousePosition.y);
-                for (Entity entity : panel.getEntities()) {
-                    if (entity.getHitBoxArea().contains(clickPoint)) {
-                        entity.decreaseLives();
-                        score += 5;
-                    }
-                }
-                lastShootTime = currentTime;
-                String text = mag + "," + ammo + "," + maxCapacity;
-                ammoMap.put(selectedAmmo, text);
-            }
-            if (mag == 0 || panel.getUserInput().isReloadTriggered()) {
-                reloadCounter++;
-                if (reloadCounter == 100) {
-                    reload(mag, ammo, maxCapacity);
-                    reloadCounter = 0;
+        int delay = shootingDelay();
+        changeDirection();
+        if (mag > 0 && currentTime - lastShootTime >= delay){
+            shooting = true;
+            mag--;
+            Point clickPoint = new Point(mousePosition.x, mousePosition.y);
+            for (Entity entity : panel.getEntities()) {
+                if (entity.getHitBoxArea().contains(clickPoint)) {
+                    entity.decreaseLives();
+                    score += 5;
                 }
             }
+            lastShootTime = currentTime;
+            String text = mag + "," + ammo + "," + maxCapacity;
+            ammoMap.put(selectedAmmo, text);
         }
     }
 

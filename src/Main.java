@@ -11,17 +11,15 @@ public class Main {
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         window.setResizable(false);
-        window.setTitle("Salvos");
+        window.setUndecorated(true);
 
-        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        GraphicsDevice gd = ge.getDefaultScreenDevice();
-        gd.setFullScreenWindow(window);
-
-        Panel panel = new Panel(window.getWidth(), window.getHeight());
+        Panel panel = new Panel();
         window.add(panel);
+        panel.requestFocus();
+
+        window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
-        panel.requestFocus();
 
         panel.start();
 

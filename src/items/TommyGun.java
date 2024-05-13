@@ -17,6 +17,6 @@ public class TommyGun extends Item{
 
     @Override
     public void collect() {
-        panel.getPlayer().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

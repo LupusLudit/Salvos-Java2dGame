@@ -1,9 +1,11 @@
 package entities;
 
+import items.Item;
 import management.Clock;
 import management.CollisionManager;
 import management.Mode;
 import management.UserInput;
+import world.Inventory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -24,8 +26,9 @@ public class Player extends Entity {
 
     private int staminaCounter = 0;
     private int hitCounter = 0;
-    HashMap<items.Item, Integer> inventory = new HashMap<>();
     Clock clock = new Clock();
+
+    Inventory inventory = new Inventory();
 
     public Player(UserInput userInput, world.Panel panel) {
         defaultImagePath = "character/sprite_";
@@ -43,16 +46,6 @@ public class Player extends Entity {
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
     }
 
-    public void addToInventory(items.Item item) {
-        if (item != null) {
-            if (inventory.get(item) == null) {
-                inventory.put(item, 1);
-            } else {
-                int count = inventory.get(item);
-                inventory.put(item, count + 1);
-            }
-        }
-    }
 
     @Override
     public void draw(Graphics2D g) {
@@ -195,10 +188,6 @@ public class Player extends Entity {
         }
         return image;
     }
-    public HashMap<items.Item, Integer> getInventory() {
-        return inventory;
-    }
-
 
     public int getTime() {
         return time;
@@ -210,5 +199,9 @@ public class Player extends Entity {
 
     public Clock getClock() {
         return clock;
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 }

@@ -108,14 +108,14 @@ public class UserInput implements KeyListener{
 
             case INVENTORY -> {
                 switch (input) {
-                    case KeyEvent.VK_W, KeyEvent.VK_UP -> panel.getUi().subtractRow();
-                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> panel.getUi().addRow();
-                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getUi().subtractCol();
-                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getUi().addCol();
+                    case KeyEvent.VK_W, KeyEvent.VK_UP -> panel.getPlayer().getInventory().subtractRow();
+                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> panel.getPlayer().getInventory().addRow();
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getPlayer().getInventory().subtractCol();
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getPlayer().getInventory().addCol();
                     case KeyEvent.VK_I -> panel.setStatus(Status.PLAYING);
                     case KeyEvent.VK_E -> {
                         items.Item item = panel.getUi().getSelectedItem();
-                        if (item != null && panel.getPlayer().getInventory().get(item) > 0) {
+                        if (item != null && panel.getPlayer().getInventory().getItems().get(item) > 0) {
                             item.use();
                         }
                     }
@@ -130,7 +130,7 @@ public class UserInput implements KeyListener{
                     case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getShop().addCol();
                     case KeyEvent.VK_B -> panel.setStatus(Status.PLAYING);
                     case KeyEvent.VK_E -> {
-                        if(panel.getGame().getScore() >= panel.getShop().getSelectedItem().getPrice() && panel.getPlayer().getInventory().size() < 10){
+                        if(panel.getGame().getScore() >= panel.getShop().getSelectedItem().getPrice() && panel.getPlayer().getInventory().getItems().size() < 10){
                             int newScore = panel.getGame().getScore() - panel.getShop().getSelectedItem().getPrice();
                             panel.getGame().setScore(newScore);
                             panel.getShop().getSelectedItem().collect();

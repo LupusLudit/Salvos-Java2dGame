@@ -32,11 +32,6 @@ public class Clock {
             }
         };
         timer.schedule(stopTask, durationInSeconds * 1000 );
-
-        if(counter <= 0){
-            running = false;
-        }
-
     }
 
     public boolean isRunning() {

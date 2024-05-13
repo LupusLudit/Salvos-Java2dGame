@@ -10,13 +10,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Panel extends JPanel {
-
-    // one tile = 48
-    //width, height  = 18, 12 x tile
+public class Panel extends JPanel implements Runnable{
     private final int squareSide = 48;
-    private int col;
-    private int row;
+    private final int col = 24;
+    private final int row = 14;
 
     UserInput userInput = new UserInput(this);
     MouseInput mouseInput = new MouseInput();
@@ -37,15 +34,14 @@ public class Panel extends JPanel {
 
     Shop shop = new Shop(this);
 
-    public Panel(int col, int row) {
+    Thread gameThread;
 
-        this.col = col/ squareSide;
-        this.row = row/ squareSide;
+    public Panel() {
 
         System.out.println(col);
         System.out.println(row);
 
-        this.setPreferredSize(new Dimension(squareSide * this.col, squareSide * this.row));
+        this.setPreferredSize(new Dimension(squareSide * col, squareSide * row));
 
         this.setBackground(Color.BLACK);
         this.setDoubleBuffered(true);
@@ -62,22 +58,45 @@ public class Panel extends JPanel {
         revolver.collect();
     }
 
-
     public void start() {
-        tilePainter.setMap();
-        timer = new Timer(15, e -> {
-            repaint();
-            if (status == Status.CUSTOMIZATION) {
-                player.setBonuses();
-            } else if (status != Status.SETUP && status != Status.GAMEOVER) {
-                newWave();
-                checkStatus();
-                player.update();
-                game.updateEntities();
-                collectableManager.checkCollectables();
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+
+
+    @Override
+    public void run() {
+        long desiredFrameTime = 16_666_666; // 60 FPS
+        long lastFrameTime = System.nanoTime();
+        while (gameThread != null) {
+            long currentTime = System.nanoTime();
+            long deltaTime = currentTime - lastFrameTime;
+            if (deltaTime >= desiredFrameTime) {
+                lastFrameTime = currentTime;
+                repaint();
+                update();
+            } else {
+                try {
+                    Thread.sleep((desiredFrameTime - deltaTime) / 1_000_000); //sleep for the remaining time left
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        });
-        timer.start();
+        }
+    }
+
+    public void update() {
+        if (status == Status.CUSTOMIZATION) {
+            player.setBonuses();
+        } else if (status != Status.SETUP && status != Status.GAMEOVER) {
+            if (entities.isEmpty() && !clock.isRunning()){
+                newWave();
+            }
+            checkStatus();
+            player.update();
+            game.updateEntities();
+            collectableManager.checkCollectables();
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -94,12 +113,12 @@ public class Panel extends JPanel {
         }
     }
     public void newWave() {
-        if (waveTimer == 0 && entities.isEmpty() && !clock.isRunning()) {
+        if (waveTimer == 0) {
             wave++;
             game.setEntities(wave);
             waveTimer = 10;
         }
-        else if (entities.isEmpty() && !clock.isRunning()) {
+        else {
             clock = new Clock();
             clock.start(10, this, Mode.WAVE_COUNTER);
         }

@@ -17,6 +17,6 @@ public class Revolver extends Item {
 
     @Override
     public void collect() {
-        panel.getPlayer().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

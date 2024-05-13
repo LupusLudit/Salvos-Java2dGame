@@ -59,4 +59,3 @@ public class CollisionManager {
         return collision;
     }
 }
-

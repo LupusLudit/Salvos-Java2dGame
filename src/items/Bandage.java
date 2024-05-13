@@ -15,12 +15,12 @@ public class Bandage extends Item{
             panel.getPlayer().increaseLives();
         }
 
-        int counter = panel.getPlayer().getInventory().get(this);
-        panel.getPlayer().getInventory().put(this, counter - 1);
+        int counter = panel.getPlayer().getInventory().getItems().get(this);
+        panel.getPlayer().getInventory().getItems().put(this, counter - 1);
     }
 
     @Override
     public void collect() {
-        panel.getPlayer().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

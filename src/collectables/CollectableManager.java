@@ -39,7 +39,7 @@ public class CollectableManager {
         Iterator<Collectable> iterator = collectables.iterator();
         while (iterator.hasNext()) {
             Collectable collectable = iterator.next();
-            if (collectable.intersectsPlayer() && panel.getPlayer().getInventory().size() < 6) {
+            if (collectable.intersectsPlayer() && panel.getPlayer().getInventory().getItems().size() < 6) {
                 collectable.getItem().collect();
                 iterator.remove();
             }

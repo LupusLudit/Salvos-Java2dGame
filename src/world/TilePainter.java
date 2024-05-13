@@ -22,9 +22,10 @@ public class TilePainter {
     public TilePainter(world.Panel panel) {
         this.panel = panel;
         initializeTileImages();
+        setMap();
     }
 
-    public void setMap() {
+    private void setMap() {
         try (BufferedReader br = new BufferedReader(new FileReader("gameMap.csv"))) {
             String line;
             String[] arr;
