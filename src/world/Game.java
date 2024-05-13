@@ -19,6 +19,8 @@ public class Game {
     HashMap<AmmoType, String> ammoMap = new HashMap<>();
     HashMap<Integer, Integer> bonusMap = new HashMap<>();
 
+    private boolean shooting = false;
+
     public Game(Panel panel) {
         this.panel = panel;
         selectedAmmo = AmmoType.FIST;
@@ -73,19 +75,20 @@ public class Game {
     public void simulateShooting() {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();
+        shooting = false;
 
         if (cursorOnScreen(mousePosition) && panel.getPlayer().getLives() > 0) {
-            if (panel.getMouseInput().isMouseClicked()){
-                changeDirection();
-            }
             int delay = shootingDelay();
             String[] values = ammoMap.get(selectedAmmo).split(",");
             int mag = Integer.parseInt(values[0]);
             int ammo = Integer.parseInt(values[1]);
             int maxCapacity = Integer.parseInt(values[2]);
 
+            if (panel.getMouseInput().isMouseClicked()){
+                changeDirection();
+            }
             if (mag > 0 && panel.getMouseInput().isMouseClicked() && (currentTime - lastShootTime >= delay)) {
-
+                shooting = true;
                 mag--;
                 Point clickPoint = new Point(mousePosition.x, mousePosition.y);
                 for (Entity entity : panel.getEntities()) {
@@ -221,5 +224,9 @@ public class Game {
 
     public HashMap<AmmoType, String> getAmmoMap() {
         return ammoMap;
+    }
+
+    public boolean isShooting() {
+        return shooting;
     }
 }

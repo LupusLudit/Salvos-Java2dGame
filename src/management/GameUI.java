@@ -18,17 +18,17 @@ public class GameUI {
     private int selectedRow = 0;
     private int selectedCol = 0;
 
-    items.Item[][] itemsByPosition = new items.Item[3][2];
+    items.Item[][] itemsByPosition = new items.Item[5][2];
 
     public GameUI(Panel panel) {
         this.panel = panel;
     }
 
 
+
     public void draw(Graphics2D g) {
         g.setFont(font);
         g.setColor(Color.white);
-
         switch (panel.getStatus()) {
             case SETUP ->{
                 try {
@@ -38,7 +38,16 @@ public class GameUI {
                 }
             }
             case CUSTOMIZATION -> drawCustomizationScreen(g);
-            case PLAYING -> drawBackground(g);
+            case PLAYING ->{
+                drawBackground(g);
+                if (panel.getGame().isShooting()){
+                    try {
+                        drawFireBlast(g);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
             case GAMEOVER -> drawDeathScreen(g);
             case SHOP -> { //will be edited later
                 drawBackground(g);
@@ -199,7 +208,7 @@ public class GameUI {
     }
 
     public void drawInventoryWindow(Graphics2D g) {
-        int width = panel.getSquareSide() * 3 + 12;
+        int width = panel.getSquareSide() * 5 + 12;
         int height = panel.getSquareSide() * 3;
         int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getSquareSide() *3;
@@ -217,13 +226,12 @@ public class GameUI {
         AtomicInteger j = new AtomicInteger();
         AtomicReference<Item> previousItem = new AtomicReference<>();
 
-
         g.setFont(new Font("font", Font.BOLD, 10));
         panel.getPlayer().getInventory().forEach((key, value) -> {
             if (value != 0) {
                 int imageX;
                 int imageY;
-                if (i.get() == 3) {
+                if ((i.get() + 1)%5 == 0) {
                     i.set(0);
                     j.set(j.get() + 1);
                 }
@@ -237,10 +245,8 @@ public class GameUI {
                     i.set(i.get() + 1);
                 }
 
-
                 g.drawImage(key.getImage(), imageX, imageY, panel.getSquareSide(), panel.getSquareSide(), null);
                 g.drawString(String.valueOf(value), imageX + panel.getSquareSide() - 10, imageY + panel.getSquareSide() + textHeight(g, String.valueOf(value)) - 5);
-
 
                 previousItem.set(key);
             }
@@ -326,6 +332,34 @@ public class GameUI {
         g.drawRoundRect(x, y, width, height, 50, 50);
     }
 
+    public void drawFireBlast(Graphics2D g) throws IOException {
+        BufferedImage image = null;
+        int x = 0;
+        int y = 0;
+        switch (panel.getPlayer().getDirection()){
+            case 0 ->{
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_1.png")));
+                x = panel.getPlayer().getCenterX();
+                y = panel.getPlayer().getCenterY() - panel.getSquareSide()/2;
+            }
+            case 1 ->{
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_0.png")));
+                x = panel.getPlayer().getCenterX();
+                y = panel.getPlayer().getCenterY() +panel.getSquareSide()/2;
+            }
+            case 2 ->{
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_2.png")));
+                x = panel.getPlayer().getCenterX() - panel.getSquareSide()/2;
+                y = panel.getPlayer().getCenterY();
+            }
+            case 3 ->{
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_3.png")));
+                x = panel.getPlayer().getCenterX() + panel.getSquareSide()/2;
+                y = panel.getPlayer().getCenterY();
+            }
+        }
+        g.drawImage(image, x,y, panel.getSquareSide(), panel.getSquareSide(), null);
+    }
 
     public int textHeight(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
@@ -362,7 +396,7 @@ public class GameUI {
     }
 
     public void addCol() {
-        if (selectedCol < 2) {
+        if (selectedCol < 4) {
             selectedCol++;
         } else {
             selectedCol = 0;
@@ -374,7 +408,7 @@ public class GameUI {
         if (selectedCol > 0) {
             selectedCol--;
         } else {
-            selectedCol = 2;
+            selectedCol = 4;
             subtractRow();
         }
     }
