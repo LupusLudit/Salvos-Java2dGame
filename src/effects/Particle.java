@@ -30,11 +30,12 @@ public class Particle {
     }
 
     public void update(){
+        duration--;
         x += deltaX*speed;
-        y += deltaY*speed;
+        y += deltaY*speed + 1.5;
         System.out.println("x: " + x);
         System.out.println("y: " + y);
-        duration--;
+
     }
     public void draw(Graphics2D g){
         g.setColor(color);

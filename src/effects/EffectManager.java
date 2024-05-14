@@ -17,17 +17,22 @@ public class EffectManager {
     }
 
 
-    public void draw() {
+    public void update() {
         Iterator<Particle> iterator = particles.iterator();
         while (iterator.hasNext()) {
             Particle particle = iterator.next();
             if (particle != null) {
                 if (particle.getDuration() > 0) {
                     particle.update();
-                    particle.draw(panel.getG2());
-                } else {
-                    iterator.remove();
-                }
+                }else iterator.remove();
+            }
+        }
+    }
+
+    public void drawParticles(Graphics2D g){
+        for (Particle particle: particles){
+            if (particle != null){
+                particle.draw(g);
             }
         }
     }
@@ -36,9 +41,13 @@ public class EffectManager {
     public void addHitParticles(double x, double y) {
         Color color = new Color(255, 0, 30);
         particles.add(new Particle(panel, x, y, -1,-1,1,20, color));
-        particles.add(new Particle(panel, x, y, -1,1,1,20, color));
-        particles.add(new Particle(panel, x, y, 1,-1,1,20, color));
-        particles.add(new Particle(panel, x, y, 1,1,1,20, color));
+        particles.add(new Particle(panel, x, y, -2,1,1,20, color));
+        particles.add(new Particle(panel, x, y, 2,-1,1,20, color));
+        particles.add(new Particle(panel, x, y, 1,2,1,20, color));
+        particles.add(new Particle(panel, x, y, -2,-2,1,20, color));
+        particles.add(new Particle(panel, x, y, -2,2,1,20, color));
+        particles.add(new Particle(panel, x, y, 2,-2,1,20, color));
+
     }
 
     public void addWaterParticles(int x, int y) {
@@ -47,5 +56,9 @@ public class EffectManager {
 
     public void addGroundParticles(int x, int y) {
 
+    }
+
+    public ArrayList<Particle> getParticles() {
+        return particles;
     }
 }

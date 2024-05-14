@@ -23,16 +23,5 @@ public class Main {
         window.setVisible(true);
 
         applicationPanel.start();
-
-        //cursor
-        BufferedImage cursorImg = null;
-        try {
-            cursorImg = ImageIO.read(new File("images/cursor/circle_cursor.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "Custom Cursor");
-        applicationPanel.setCursor(customCursor);
     }
 }

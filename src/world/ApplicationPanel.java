@@ -2,6 +2,7 @@ package world;
 
 import collectables.CollectableManager;
 import effects.EffectManager;
+import effects.Particle;
 import entities.Entity;
 import entities.Player;
 import items.Revolver;
@@ -92,7 +93,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
             e.printStackTrace();
         }
 
-        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "Custom Cursor");
+        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(2, 2), "Custom Cursor");
         this.setCursor(customCursor);
     }
 
@@ -107,6 +108,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
             player.update();
             game.updateEntities();
             collectableManager.checkCollectables();
+            effectManager.update();
         }
     }
     public void paintComponent(Graphics g) {
@@ -114,6 +116,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
         g2 = (Graphics2D) g;
 
         ui.draw(g2);
+        effectManager.drawParticles(g2);
     }
 
     public void checkStatus() {

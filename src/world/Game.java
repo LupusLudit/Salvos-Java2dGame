@@ -91,7 +91,6 @@ public class Game {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = applicationPanel.getMousePosition();
         shooting = false;
-
         int delay = shootingDelay();
         changeDirection();
         if (mag > 0 && currentTime - lastShootTime >= delay){
@@ -100,6 +99,7 @@ public class Game {
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
             for (Entity entity : applicationPanel.getEntities()) {
                 if (entity.getHitBoxArea().contains(clickPoint)) {
+                    applicationPanel.getEffectManager().addHitParticles(mousePosition.getX(), mousePosition.getY());
                     entity.decreaseLives();
                     score += 5;
                 }
