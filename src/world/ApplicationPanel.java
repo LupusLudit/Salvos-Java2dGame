@@ -1,6 +1,7 @@
 package world;
 
 import collectables.CollectableManager;
+import effects.EffectManager;
 import entities.Entity;
 import entities.Player;
 import items.Revolver;
@@ -19,6 +20,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     private final int col = 24;
     private final int row = 14;
 
+    private Graphics2D g2;
     UserInput userInput = new UserInput(this);
     MouseInput mouseInput = new MouseInput();
     TilePainter tilePainter = new TilePainter(this);
@@ -28,6 +30,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     Player player = new Player(userInput, this);
     CollectableManager collectableManager = new CollectableManager(this);
     Shop shop = new Shop(this);
+    EffectManager effectManager = new EffectManager(this);
     private Status status;
     private int chosenOption = 0;
     private int wave = 1;
@@ -106,10 +109,9 @@ public class ApplicationPanel extends JPanel implements Runnable{
             collectableManager.checkCollectables();
         }
     }
-
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D) g;
+        g2 = (Graphics2D) g;
 
         ui.draw(g2);
     }
@@ -210,5 +212,13 @@ public class ApplicationPanel extends JPanel implements Runnable{
 
     public UserInput getUserInput() {
         return userInput;
+    }
+
+    public Graphics2D getG2() {
+        return g2;
+    }
+
+    public EffectManager getEffectManager() {
+        return effectManager;
     }
 }

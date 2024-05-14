@@ -76,7 +76,6 @@ public class Zombie extends Entity {
         if (counter >= 15 && canMove) {
             this.counter = 0;
         }
-
     }
 
     @Override
