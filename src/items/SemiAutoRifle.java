@@ -1,23 +1,23 @@
 package items;
 
 import world.AmmoType;
-import world.Panel;
+import world.ApplicationPanel;
 
 public class SemiAutoRifle extends Item{
 
-    public SemiAutoRifle(Panel panel) {
-        super(panel);
+    public SemiAutoRifle(ApplicationPanel applicationPanel) {
+        super(applicationPanel);
         setImage("/ui/semi-auto.png");
         setPrice(1);
     }
 
     @Override
     public void use() {
-        panel.getGame().setSelectedAmmo(AmmoType.SEMIAUTO);
+        applicationPanel.getGame().setSelectedAmmo(AmmoType.SEMIAUTO);
     }
 
     @Override
     public void collect() {
-        panel.getPlayer().getInventory().addToInventory(this);
+        applicationPanel.getPlayer().getInventory().addToInventory(this);
     }
 }

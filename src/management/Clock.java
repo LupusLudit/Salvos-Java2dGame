@@ -1,5 +1,7 @@
 package management;
 
+import world.ApplicationPanel;
+
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -9,15 +11,15 @@ public class Clock {
 
     private Timer timer = new Timer();
 
-    public void start(int durationInSeconds, world.Panel panel, Mode mode) {
+    public void start(int durationInSeconds, ApplicationPanel applicationPanel, Mode mode) {
         counter = durationInSeconds;
         TimerTask task = new TimerTask() {
             @Override
             public void run() {
                 running = true;
                 switch (mode){
-                    case STAMINA_COUNTER -> panel.getPlayer().setTime(counter);
-                    case WAVE_COUNTER -> panel.setWaveTimer(counter);
+                    case STAMINA_COUNTER -> applicationPanel.getPlayer().setTime(counter);
+                    case WAVE_COUNTER -> applicationPanel.setWaveTimer(counter);
                 }
                 System.out.println(counter);
                 counter--;

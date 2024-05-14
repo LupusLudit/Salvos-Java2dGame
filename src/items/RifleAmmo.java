@@ -1,12 +1,12 @@
 package items;
 
 import world.AmmoType;
-import world.Panel;
+import world.ApplicationPanel;
 
 public class RifleAmmo extends Item{
 
-    public RifleAmmo(Panel panel) {
-        super(panel);
+    public RifleAmmo(ApplicationPanel applicationPanel) {
+        super(applicationPanel);
         setImage("/ui/ak_ammo.png");
         setPrice(1);
     }
@@ -16,12 +16,12 @@ public class RifleAmmo extends Item{
 
     @Override
     public void collect() {
-        String[] arr = panel.getGame().getAmmoMap().get(AmmoType.ASSAULTRIFLE).split(",");
+        String[] arr = applicationPanel.getGame().getAmmoMap().get(AmmoType.ASSAULTRIFLE).split(",");
 
         int ammo = Integer.parseInt(arr[1]);
         ammo += 30;
 
         String text = arr[0] + "," + ammo + "," + arr[2];
-        panel.getGame().getAmmoMap().put(AmmoType.ASSAULTRIFLE, text);
+        applicationPanel.getGame().getAmmoMap().put(AmmoType.ASSAULTRIFLE, text);
     }
 }

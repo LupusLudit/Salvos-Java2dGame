@@ -1,26 +1,24 @@
 package items;
 
-import world.Panel;
+import world.ApplicationPanel;
 
 public class Bandage extends Item{
 
-    public Bandage(Panel panel) {
-        super(panel);
+    public Bandage(ApplicationPanel applicationPanel) {
+        super(applicationPanel);
         setImage("/ui/bandage.png");
     }
 
     @Override
     public void use() {
         for (int i = 0; i < 5; i++){
-            panel.getPlayer().increaseLives();
+            applicationPanel.getPlayer().increaseLives();
         }
-
-        int counter = panel.getPlayer().getInventory().getItems().get(this);
-        panel.getPlayer().getInventory().getItems().put(this, counter - 1);
+        applicationPanel.getPlayer().getInventory().removeItem(this);
     }
 
     @Override
     public void collect() {
-        panel.getPlayer().getInventory().addToInventory(this);
+        applicationPanel.getPlayer().getInventory().addToInventory(this);
     }
 }

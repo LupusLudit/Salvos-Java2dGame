@@ -7,23 +7,23 @@ public class Shop {
     int selectedCol;
     int selectedRow;
     Item[][] items = new Item[5][2];
-    world.Panel panel;
+    ApplicationPanel applicationPanel;
 
 
-    public Shop(world.Panel panel){
-        this.panel = panel;
+    public Shop(ApplicationPanel applicationPanel){
+        this.applicationPanel = applicationPanel;
 
-        items[0][0] = new Revolver(panel);
-        items[1][0] = new Pistol(panel);
-        items[2][0] = new SemiAutoRifle(panel);
-        items[3][0] = new AssaultRifle(panel);
-        items[4][0] = new TommyGun(panel);
+        items[0][0] = new Revolver(applicationPanel);
+        items[1][0] = new Pistol(applicationPanel);
+        items[2][0] = new SemiAutoRifle(applicationPanel);
+        items[3][0] = new AssaultRifle(applicationPanel);
+        items[4][0] = new TommyGun(applicationPanel);
 
-        items[0][1] = new RevolverAmmo(panel);
-        items[1][1] = new PistolAmmo(panel);
-        items[2][1] = new SemiAutoAmmo(panel);
-        items[3][1] = new RifleAmmo(panel);
-        items[4][1] = new TommyGunAmmo(panel);
+        items[0][1] = new RevolverAmmo(applicationPanel);
+        items[1][1] = new PistolAmmo(applicationPanel);
+        items[2][1] = new SemiAutoAmmo(applicationPanel);
+        items[3][1] = new RifleAmmo(applicationPanel);
+        items[4][1] = new TommyGunAmmo(applicationPanel);
     }
 
     public void addRow() {

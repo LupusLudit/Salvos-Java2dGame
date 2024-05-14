@@ -1,4 +1,4 @@
-import world.Panel;
+import world.ApplicationPanel;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -13,15 +13,15 @@ public class Main {
         window.setResizable(false);
         window.setUndecorated(true);
 
-        Panel panel = new Panel();
-        window.add(panel);
-        panel.requestFocus();
+        ApplicationPanel applicationPanel = new ApplicationPanel();
+        window.add(applicationPanel);
+        applicationPanel.requestFocus();
 
         window.pack();
         window.setLocationRelativeTo(null);
         window.setVisible(true);
 
-        panel.start();
+        applicationPanel.start();
 
         //cursor
         BufferedImage cursorImg = null;
@@ -32,6 +32,6 @@ public class Main {
         }
 
         Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "Custom Cursor");
-        panel.setCursor(customCursor);
+        applicationPanel.setCursor(customCursor);
     }
 }

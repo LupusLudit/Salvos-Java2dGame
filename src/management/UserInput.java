@@ -1,6 +1,6 @@
 package management;
 
-import world.Panel;
+import world.ApplicationPanel;
 import world.Status;
 
 import java.awt.event.KeyEvent;
@@ -14,10 +14,10 @@ public class UserInput implements KeyListener{
 
     private boolean reloadTriggered;
 
-    Panel panel;
+    ApplicationPanel applicationPanel;
 
-    public UserInput(Panel panel) {
-        this.panel = panel;
+    public UserInput(ApplicationPanel applicationPanel) {
+        this.applicationPanel = applicationPanel;
     }
 
     @Override
@@ -27,24 +27,24 @@ public class UserInput implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int input = e.getKeyCode();
-        switch (panel.getStatus()) {
+        switch (applicationPanel.getStatus()) {
             case SETUP -> {
                 switch (input) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
-                        panel.setChosenOption(panel.getChosenOption() - 1);
-                        if (panel.getChosenOption() < 0) {
-                            panel.setChosenOption(1);
+                        applicationPanel.setChosenOption(applicationPanel.getChosenOption() - 1);
+                        if (applicationPanel.getChosenOption() < 0) {
+                            applicationPanel.setChosenOption(1);
                         }
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
-                        panel.setChosenOption(panel.getChosenOption() + 1);
-                        if (panel.getChosenOption() > 1) {
-                            panel.setChosenOption(0);
+                        applicationPanel.setChosenOption(applicationPanel.getChosenOption() + 1);
+                        if (applicationPanel.getChosenOption() > 1) {
+                            applicationPanel.setChosenOption(0);
                         }
                     }
                     case KeyEvent.VK_ENTER -> {
-                        if (panel.getChosenOption() == 0) {
-                            panel.setStatus(Status.CUSTOMIZATION);
+                        if (applicationPanel.getChosenOption() == 0) {
+                            applicationPanel.setStatus(Status.CUSTOMIZATION);
                         } else {
                             System.exit(0);
                         }
@@ -54,23 +54,23 @@ public class UserInput implements KeyListener{
             case CUSTOMIZATION -> {
                 switch (input) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
-                        panel.setChosenOption(panel.getChosenOption() - 1);
-                        if (panel.getChosenOption() < 0) {
-                            panel.setChosenOption(3);
+                        applicationPanel.setChosenOption(applicationPanel.getChosenOption() - 1);
+                        if (applicationPanel.getChosenOption() < 0) {
+                            applicationPanel.setChosenOption(3);
                         }
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
-                        panel.setChosenOption(panel.getChosenOption() + 1);
-                        if (panel.getChosenOption() > 3) {
-                            panel.setChosenOption(0);
+                        applicationPanel.setChosenOption(applicationPanel.getChosenOption() + 1);
+                        if (applicationPanel.getChosenOption() > 3) {
+                            applicationPanel.setChosenOption(0);
                         }
                     }
-                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getGame().addBonus(panel.getChosenOption());
-                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getGame().subtractBonus(panel.getChosenOption());
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> applicationPanel.getGame().addBonus(applicationPanel.getChosenOption());
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> applicationPanel.getGame().subtractBonus(applicationPanel.getChosenOption());
 
                     case KeyEvent.VK_ENTER -> {
-                        if (panel.getChosenOption() == 3) {
-                            panel.setStatus(Status.PLAYING);
+                        if (applicationPanel.getChosenOption() == 3) {
+                            applicationPanel.setStatus(Status.PLAYING);
                         }
                     }
                 }
@@ -94,10 +94,10 @@ public class UserInput implements KeyListener{
                         pressed = true;
                     }
                     case KeyEvent.VK_SHIFT -> shiftPressed = true;
-                    case KeyEvent.VK_B -> panel.setStatus(Status.SHOP);
+                    case KeyEvent.VK_B -> applicationPanel.setStatus(Status.SHOP);
                     case KeyEvent.VK_R -> reloadTriggered = true;
 
-                    case KeyEvent.VK_I -> panel.setStatus(Status.INVENTORY);
+                    case KeyEvent.VK_I -> applicationPanel.setStatus(Status.INVENTORY);
                     default -> {
                         pressed = false;
                         shiftPressed = false;
@@ -108,14 +108,14 @@ public class UserInput implements KeyListener{
 
             case INVENTORY -> {
                 switch (input) {
-                    case KeyEvent.VK_W, KeyEvent.VK_UP -> panel.getPlayer().getInventory().subtractRow();
-                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> panel.getPlayer().getInventory().addRow();
-                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getPlayer().getInventory().subtractCol();
-                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getPlayer().getInventory().addCol();
-                    case KeyEvent.VK_I -> panel.setStatus(Status.PLAYING);
+                    case KeyEvent.VK_W, KeyEvent.VK_UP -> applicationPanel.getPlayer().getInventory().subtractRow();
+                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> applicationPanel.getPlayer().getInventory().addRow();
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> applicationPanel.getPlayer().getInventory().subtractCol();
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> applicationPanel.getPlayer().getInventory().addCol();
+                    case KeyEvent.VK_I -> applicationPanel.setStatus(Status.PLAYING);
                     case KeyEvent.VK_E -> {
-                        items.Item item = panel.getUi().getSelectedItem();
-                        if (item != null && panel.getPlayer().getInventory().getItems().get(item) > 0) {
+                        items.Item item = applicationPanel.getUi().getSelectedItem();
+                        if (item != null && applicationPanel.getPlayer().getInventory().getItems().get(item) > 0) {
                             item.use();
                         }
                     }
@@ -124,16 +124,16 @@ public class UserInput implements KeyListener{
 
             case SHOP -> {
                 switch (input) {
-                    case KeyEvent.VK_W, KeyEvent.VK_UP -> panel.getShop().subtractRow();
-                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> panel.getShop().addRow();
-                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> panel.getShop().subtractCol();
-                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> panel.getShop().addCol();
-                    case KeyEvent.VK_B -> panel.setStatus(Status.PLAYING);
+                    case KeyEvent.VK_W, KeyEvent.VK_UP -> applicationPanel.getShop().subtractRow();
+                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> applicationPanel.getShop().addRow();
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> applicationPanel.getShop().subtractCol();
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> applicationPanel.getShop().addCol();
+                    case KeyEvent.VK_B -> applicationPanel.setStatus(Status.PLAYING);
                     case KeyEvent.VK_E -> {
-                        if(panel.getGame().getScore() >= panel.getShop().getSelectedItem().getPrice() && panel.getPlayer().getInventory().getItems().size() < 10){
-                            int newScore = panel.getGame().getScore() - panel.getShop().getSelectedItem().getPrice();
-                            panel.getGame().setScore(newScore);
-                            panel.getShop().getSelectedItem().collect();
+                        if(applicationPanel.getGame().getScore() >= applicationPanel.getShop().getSelectedItem().getPrice() && applicationPanel.getPlayer().getInventory().getItems().size() < 10){
+                            int newScore = applicationPanel.getGame().getScore() - applicationPanel.getShop().getSelectedItem().getPrice();
+                            applicationPanel.getGame().setScore(newScore);
+                            applicationPanel.getShop().getSelectedItem().collect();
                         }
                     }
                 }

@@ -1,23 +1,22 @@
 package items;
 
-import world.Panel;
+import world.ApplicationPanel;
 
 public class EnergyDrink extends Item{
 
-    public EnergyDrink(Panel panel) {
-        super(panel);
+    public EnergyDrink(ApplicationPanel applicationPanel) {
+        super(applicationPanel);
         setImage("/ui/energy_drink.png");
     }
 
     @Override
     public void use() {
-        panel.getPlayer().addStamina(30);
-        int counter = panel.getPlayer().getInventory().getItems().get(this);
-        panel.getPlayer().getInventory().getItems().put(this, counter - 1);
+        applicationPanel.getPlayer().addStamina(30);
+        applicationPanel.getPlayer().getInventory().removeItem(this);
     }
 
     @Override
     public void collect() {
-        panel.getPlayer().getInventory().addToInventory(this);
+        applicationPanel.getPlayer().getInventory().addToInventory(this);
     }
 }

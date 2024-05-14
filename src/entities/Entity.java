@@ -1,6 +1,7 @@
 package entities;
 
 import management.CollisionManager;
+import world.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -18,7 +19,7 @@ public abstract class Entity {
     protected int direction;
     protected String defaultImagePath;
     Rectangle actualArea;
-    world.Panel panel;
+    ApplicationPanel applicationPanel;
 
     CollisionManager collisionManager;
     protected boolean canMove;
@@ -83,10 +84,10 @@ public abstract class Entity {
     }
 
     public boolean allEntitiesCollision() {
-        if (collisionManager.checkEntityCollision(this, panel.getPlayer())) {
+        if (collisionManager.checkEntityCollision(this, applicationPanel.getPlayer())) {
             return true;
         }
-        for (Entity entity : panel.getEntities()) {
+        for (Entity entity : applicationPanel.getEntities()) {
             if (entity != this) {
                 if (collisionManager.checkEntityCollision(this, entity)) {
                     return true;
@@ -101,11 +102,11 @@ public abstract class Entity {
         this.direction = direction;
     }
     public int getRelX() { // returns x coordinate relative to player
-        return x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
+        return x - applicationPanel.getPlayer().getX() + applicationPanel.getPlayer().getCenterX();
     }
 
     public int getRelY() { // returns y coordinate relative to player
-        return y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
+        return y - applicationPanel.getPlayer().getY() + applicationPanel.getPlayer().getCenterY();
     }
 
     public Rectangle getHitBoxArea() {

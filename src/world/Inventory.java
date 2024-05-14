@@ -3,8 +3,6 @@ package world;
 import items.Item;
 
 import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Inventory {
 
@@ -25,6 +23,15 @@ public class Inventory {
         }
     }
 
+    public void removeItem(Item item){
+        int counter = items.get(item);
+        if (counter - 1 == 0){
+            items.put(item, null);
+        }
+        else {
+            items.put(item, counter - 1);
+        }
+    }
 
 
     public void addRow() {
@@ -71,4 +78,5 @@ public class Inventory {
     public HashMap<Item, Integer> getItems() {
         return items;
     }
+
 }

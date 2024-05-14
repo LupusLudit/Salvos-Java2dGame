@@ -1,21 +1,21 @@
 package items;
 
-import world.Panel;
+import world.ApplicationPanel;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
 public abstract class Item {
 
-    protected Image image;
+    protected BufferedImage image;
 
-    protected world.Panel panel;
+    protected ApplicationPanel applicationPanel;
     private int price;
 
-    public Item(Panel panel) {
-        this.panel = panel;
+    public Item(ApplicationPanel applicationPanel) {
+        this.applicationPanel = applicationPanel;
     }
     public abstract void use();
     public abstract void collect();
@@ -32,7 +32,7 @@ public abstract class Item {
         this.price = price;
     }
 
-    public Image getImage() {
+    public BufferedImage getImage() {
         return image;
     }
 

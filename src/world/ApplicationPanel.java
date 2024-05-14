@@ -6,11 +6,15 @@ import entities.Player;
 import items.Revolver;
 import management.*;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
-public class Panel extends JPanel implements Runnable{
+public class ApplicationPanel extends JPanel implements Runnable{
     private final int squareSide = 48;
     private final int col = 24;
     private final int row = 14;
@@ -21,39 +25,31 @@ public class Panel extends JPanel implements Runnable{
     GameUI ui = new GameUI(this);
     ArrayList<Entity> entities = new ArrayList<>();
     Game game = new Game(this);
-    Player player;
-    Timer timer;
-
+    Player player = new Player(userInput, this);
+    CollectableManager collectableManager = new CollectableManager(this);
+    Shop shop = new Shop(this);
     private Status status;
-
     private int chosenOption = 0;
     private int wave = 1;
     private int waveTimer = 10;
-    Clock clock;
-    CollectableManager collectableManager = new CollectableManager(this);
+    Clock clock = new Clock();
 
-    Shop shop = new Shop(this);
+
+
 
     Thread gameThread;
 
-    public Panel() {
+    public ApplicationPanel() {
+        setPreferredSize(new Dimension(squareSide * col, squareSide * row));
+        setBackground(Color.BLACK);
+        setDoubleBuffered(true);
+        setFocusable(true);
+        addKeyListener(userInput);
+        addMouseListener(mouseInput);
+        changeCursor();
 
-        System.out.println(col);
-        System.out.println(row);
-
-        this.setPreferredSize(new Dimension(squareSide * col, squareSide * row));
-
-        this.setBackground(Color.BLACK);
-        this.setDoubleBuffered(true);
-        this.setFocusable(true);
-        this.addKeyListener(userInput);
-        this.addMouseListener(mouseInput);
-        game.setEntities(wave);
-
-        player = new Player(userInput, this);
         status = Status.SETUP;
-        clock = new Clock();
-
+        game.setEntities(wave);
         Revolver revolver = new Revolver(this);
         revolver.collect();
     }
@@ -83,6 +79,18 @@ public class Panel extends JPanel implements Runnable{
                 }
             }
         }
+    }
+
+    public void changeCursor(){
+        BufferedImage cursorImg = null;
+        try {
+            cursorImg = ImageIO.read(new File("images/cursor/circle_cursor.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "Custom Cursor");
+        this.setCursor(customCursor);
     }
 
     public void update() {

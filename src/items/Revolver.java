@@ -1,22 +1,22 @@
 package items;
 
 import world.AmmoType;
-import world.Panel;
+import world.ApplicationPanel;
 
 public class Revolver extends Item {
 
-    public Revolver(Panel panel) {
-        super(panel);
+    public Revolver(ApplicationPanel applicationPanel) {
+        super(applicationPanel);
         setImage("/ui/revolver.png");
         setPrice(1);
     }
     @Override
     public void use() {
-        panel.getGame().setSelectedAmmo(AmmoType.REVOLVER);
+        applicationPanel.getGame().setSelectedAmmo(AmmoType.REVOLVER);
     }
 
     @Override
     public void collect() {
-        panel.getPlayer().getInventory().addToInventory(this);
+        applicationPanel.getPlayer().getInventory().addToInventory(this);
     }
 }

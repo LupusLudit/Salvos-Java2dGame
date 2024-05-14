@@ -1,34 +1,36 @@
 package collectables;
 
 import items.Item;
+import world.ApplicationPanel;
+
 import java.awt.*;
 
 public class Collectable {
     private Item item;
     private int x, y;
     private Rectangle area;
-    private world.Panel panel;
+    private ApplicationPanel applicationPanel;
 
-    public Collectable(world.Panel panel, Item item, int x, int y) {
-        this.panel = panel;
+    public Collectable(ApplicationPanel applicationPanel, Item item, int x, int y) {
+        this.applicationPanel = applicationPanel;
         this.item = item;
-        this.x = x * panel.getSquareSide();
-        this.y = y * panel.getSquareSide();
-        this.area = new Rectangle(this.x, this.y, panel.getSquareSide(), panel.getSquareSide());
+        this.x = x * applicationPanel.getSquareSide();
+        this.y = y * applicationPanel.getSquareSide();
+        this.area = new Rectangle(this.x, this.y, applicationPanel.getSquareSide(), applicationPanel.getSquareSide());
     }
 
     public void draw(Graphics2D g) {
-        int relX = x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
-        int relY = y - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
+        int relX = x - applicationPanel.getPlayer().getX() + applicationPanel.getPlayer().getCenterX();
+        int relY = y - applicationPanel.getPlayer().getY() + applicationPanel.getPlayer().getCenterY();
 
-        if (Math.abs(panel.getPlayer().getX() - x) < panel.getPlayer().getCenterX() + panel.getSquareSide()
-                && Math.abs(panel.getPlayer().getY() - y) < panel.getPlayer().getCenterY() + panel.getSquareSide()) {
+        if (Math.abs(applicationPanel.getPlayer().getX() - x) < applicationPanel.getPlayer().getCenterX() + applicationPanel.getSquareSide()
+                && Math.abs(applicationPanel.getPlayer().getY() - y) < applicationPanel.getPlayer().getCenterY() + applicationPanel.getSquareSide()) {
             g.drawImage(item.getImage(), relX, relY, null);
         }
     }
 
     public boolean intersectsPlayer() {
-        return panel.getPlayer().getActualArea().intersects(area);
+        return applicationPanel.getPlayer().getActualArea().intersects(area);
     }
 
     public Item getItem() {
