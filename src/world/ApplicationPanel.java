@@ -85,7 +85,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
         }
     }
 
-    public void changeCursor(){
+    public void changeCursor() {
         BufferedImage cursorImg = null;
         try {
             cursorImg = ImageIO.read(new File("images/cursor/circle_cursor.png"));
@@ -93,7 +93,12 @@ public class ApplicationPanel extends JPanel implements Runnable{
             e.printStackTrace();
         }
 
-        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(2, 2), "Custom Cursor");
+        assert cursorImg != null;
+        int centerX = cursorImg.getWidth()/4;
+        int centerY = cursorImg.getHeight()/4;
+        Point hotSpot = new Point(centerX, centerY);
+
+        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, hotSpot, "Custom Cursor");
         this.setCursor(customCursor);
     }
 

@@ -94,12 +94,14 @@ public class Game {
         int delay = shootingDelay();
         changeDirection();
         if (mag > 0 && currentTime - lastShootTime >= delay){
+            //applicationPanel.getEffectManager().addGroundParticles(mousePosition.x, mousePosition.y);
             shooting = true;
             mag--;
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
             for (Entity entity : applicationPanel.getEntities()) {
                 if (entity.getHitBoxArea().contains(clickPoint)) {
                     applicationPanel.getEffectManager().addHitParticles(mousePosition.getX(), mousePosition.getY());
+                    applicationPanel.getEffectManager().addFlashingEffect(entity);
                     entity.decreaseLives();
                     score += 5;
                 }

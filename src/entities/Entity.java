@@ -110,7 +110,7 @@ public abstract class Entity {
     }
 
     public Rectangle getHitBoxArea() {
-        return new Rectangle(getRelX(), getRelY() - 16, 32, 48);
+        return new Rectangle(getRelX() + 8, getRelY(), 32, 48);
     }
 
     public int getX() {

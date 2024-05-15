@@ -1,47 +1,32 @@
 package effects;
 
+
 import world.ApplicationPanel;
 
 import java.awt.*;
-import java.util.ArrayList;
 
-public class Particle {
-    private ApplicationPanel panel;
+public class Particle extends Effect{
 
-    private double x;
-    private double y;
-    private int deltaX;
-    private int deltaY;
-    private int speed;
-    private int duration;
-    private final int sideLength = 5;
-    private Color color;
-
-    public Particle(ApplicationPanel panel, double x, double y, int deltaX, int deltaY, int speed, int duration, Color color) {
-        this.panel = panel;
+    public Particle(ApplicationPanel panel, double x, double y, double deltaX, double deltaY, double speed, int duration, Color color) {
+        super(panel,duration);
         this.x = x;
         this.y = y;
-        System.out.println("this.x: " + this.x);
         this.deltaX = deltaX;
         this.deltaY = deltaY;
         this.speed = speed;
-        this.duration = duration;
         this.color = color;
     }
 
+    @Override
     public void update(){
         duration--;
         x += deltaX*speed;
-        y += deltaY*speed + 1.5;
-        System.out.println("x: " + x);
-        System.out.println("y: " + y);
-
+        y += deltaY*speed + 2;
     }
+    @Override
     public void draw(Graphics2D g){
         g.setColor(color);
         g.fillRect((int)x, (int)y, sideLength, sideLength);
-        System.out.println("draw");
-
     }
 
     public int getDuration() {
