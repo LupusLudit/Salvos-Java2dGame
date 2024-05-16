@@ -71,7 +71,7 @@ public class EffectManager {
         effects.add(new FlashingEffect(panel, entity, 20));
     }
 
-    public ArrayList<Effect> getEffects() {
-        return effects;
+    public void addBlastingEffect(int direction){
+        effects.add(new Blasting(panel, 10, direction));
     }
 }

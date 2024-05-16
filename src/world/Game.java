@@ -10,7 +10,7 @@ import java.util.Iterator;
 public class Game {
 
 
-    ApplicationPanel applicationPanel;
+    ApplicationPanel panel;
     private int staminaBonus = 0;
     private int healthBonus = 0;
     private int speedBonus = 0;
@@ -27,7 +27,7 @@ public class Game {
     private int score = 0;
 
     public Game(ApplicationPanel applicationPanel) {
-        this.applicationPanel = applicationPanel;
+        this.panel = applicationPanel;
         selectedAmmo = AmmoType.FIST;
         initializeMaps();
     }
@@ -48,12 +48,12 @@ public class Game {
 
     public void setEntities(int wave) {
         for (int i = 0; i < wave * 3; i++) {
-            applicationPanel.getEntities().add(new Zombie(applicationPanel));
+            panel.getEntities().add(new Zombie(panel));
         }
     }
 
     public void updateEntities() {
-        Iterator<Entity> iterator = applicationPanel.getEntities().iterator();
+        Iterator<Entity> iterator = panel.getEntities().iterator();
         while (iterator.hasNext()) {
             Entity entity = iterator.next();
             entity.update();
@@ -67,11 +67,11 @@ public class Game {
         int ammo = Integer.parseInt(values[1]);
         int maxCapacity = Integer.parseInt(values[2]);
 
-        if (cursorOnScreen(applicationPanel.getMousePosition()) && applicationPanel.getMouseInput().isMouseClicked()) {
+        if (cursorOnScreen(panel.getMousePosition()) && panel.getMouseInput().isMouseClicked()) {
             simulateShooting(mag, ammo, maxCapacity);
         }
 
-        if (mag == 0 || applicationPanel.getUserInput().isReloadTriggered()) {
+        if (mag == 0 || panel.getUserInput().isReloadTriggered()) {
             reloadCounter++;
             if (reloadCounter == 100) {
                 reload(mag, ammo, maxCapacity);
@@ -81,7 +81,7 @@ public class Game {
     }
 
     public void drawEntities(Graphics2D g) {
-        for (Entity entity : applicationPanel.getEntities()) {
+        for (Entity entity : panel.getEntities()) {
             if (entity != null) {
                 entity.draw(g);
             }
@@ -89,19 +89,21 @@ public class Game {
     }
     public void simulateShooting(int mag, int ammo, int maxCapacity) {
         long currentTime = System.currentTimeMillis();
-        Point mousePosition = applicationPanel.getMousePosition();
+        Point mousePosition = panel.getMousePosition();
         shooting = false;
         int delay = shootingDelay();
         changeDirection();
         if (mag > 0 && currentTime - lastShootTime >= delay){
+            panel.getEffectManager().addBlastingEffect(panel.getPlayer().getDirection());
             //applicationPanel.getEffectManager().addGroundParticles(mousePosition.x, mousePosition.y);
             shooting = true;
             mag--;
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
-            for (Entity entity : applicationPanel.getEntities()) {
+            for (Entity entity : panel.getEntities()) {
                 if (entity.getHitBoxArea().contains(clickPoint)) {
-                    applicationPanel.getEffectManager().addHitParticles(mousePosition.getX(), mousePosition.getY());
-                    applicationPanel.getEffectManager().addFlashingEffect(entity);
+                    panel.getEffectManager().addHitParticles(mousePosition.getX(), mousePosition.getY());
+                    panel.getEffectManager().addFlashingEffect(entity);
+
                     entity.decreaseLives();
                     score += 5;
                 }
@@ -113,27 +115,27 @@ public class Game {
     }
 
     private boolean cursorOnScreen(Point mousePosition) {
-        return mousePosition != null && applicationPanel.contains(mousePosition);
+        return mousePosition != null && panel.contains(mousePosition);
     }
 
     public void changeDirection() {
-        Point mousePosition = applicationPanel.getMousePosition();
-        double xLeft = mousePosition.getX() * ((double) applicationPanel.getRow() / applicationPanel.getCol());
-        double xRight = (applicationPanel.getWidth() - mousePosition.getX()) * ((double) applicationPanel.getRow() / applicationPanel.getCol());
+        Point mousePosition = panel.getMousePosition();
+        double xLeft = mousePosition.getX() * ((double) panel.getRow() / panel.getCol());
+        double xRight = (panel.getWidth() - mousePosition.getX()) * ((double) panel.getRow() / panel.getCol());
 
-        if (mousePosition.getY() <= applicationPanel.getPlayer().getCenterY()) {
-            applicationPanel.getPlayer().setDirection(0);
+        if (mousePosition.getY() <= panel.getPlayer().getCenterY()) {
+            panel.getPlayer().setDirection(0);
             if (xLeft <= mousePosition.getY()) {
-                applicationPanel.getPlayer().setDirection(2);
+                panel.getPlayer().setDirection(2);
             } else if (xRight <= mousePosition.getY()) {
-                applicationPanel.getPlayer().setDirection(3);
+                panel.getPlayer().setDirection(3);
             }
         } else {
-            applicationPanel.getPlayer().setDirection(1);
-            if (xLeft <= (applicationPanel.getHeight() - mousePosition.getY())) {
-                applicationPanel.getPlayer().setDirection(2);
-            } else if (xRight <= (applicationPanel.getHeight() - mousePosition.getY())) {
-                applicationPanel.getPlayer().setDirection(3);
+            panel.getPlayer().setDirection(1);
+            if (xLeft <= (panel.getHeight() - mousePosition.getY())) {
+                panel.getPlayer().setDirection(2);
+            } else if (xRight <= (panel.getHeight() - mousePosition.getY())) {
+                panel.getPlayer().setDirection(3);
             }
         }
     }
@@ -153,9 +155,9 @@ public class Game {
 
     public void reload(int mag, int ammo, int maxCapacity) {
         if (ammo >= maxCapacity) {
-            if (applicationPanel.getUserInput().isReloadTriggered()) {
+            if (panel.getUserInput().isReloadTriggered()) {
                 ammo += mag;
-                applicationPanel.getUserInput().setReloadTriggered(false);
+                panel.getUserInput().setReloadTriggered(false);
             }
             mag = maxCapacity;
             ammo -= maxCapacity;

@@ -6,7 +6,7 @@ import java.awt.*;
 
 public abstract class Effect {
 
-    private ApplicationPanel panel;
+    protected  ApplicationPanel panel;
 
     protected double x;
     protected double y;

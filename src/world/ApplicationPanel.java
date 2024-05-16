@@ -37,10 +37,6 @@ public class ApplicationPanel extends JPanel implements Runnable{
     private int wave = 1;
     private int waveTimer = 10;
     Clock clock = new Clock();
-
-
-
-
     Thread gameThread;
 
     public ApplicationPanel() {
@@ -88,7 +84,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     public void changeCursor() {
         BufferedImage cursorImg = null;
         try {
-            cursorImg = ImageIO.read(new File("images/cursor/circle_cursor.png"));
+            cursorImg = ImageIO.read(new File("resources/cursor/circle_cursor.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }
