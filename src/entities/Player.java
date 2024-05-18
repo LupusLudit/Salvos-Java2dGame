@@ -16,7 +16,6 @@ import java.util.Objects;
 public class Player extends Entity {
 
     UserInput userInput;
-    ApplicationPanel applicationPanel;
     private final int centerX;
     private final int centerY;
 
@@ -30,9 +29,9 @@ public class Player extends Entity {
     Inventory inventory = new Inventory();
 
     public Player(UserInput userInput, ApplicationPanel applicationPanel) {
+        super(applicationPanel);
         defaultImagePath = "character/sprite_";
         this.userInput = userInput;
-        this.applicationPanel = applicationPanel;
         this.collisionManager = new CollisionManager();
 
         canMove = true;
@@ -50,16 +49,16 @@ public class Player extends Entity {
     public void draw(Graphics2D g) {
         g.drawImage(chooseImage(direction, counter), centerX, centerY, null);
 
-        drawBar(g, maxLives, lives, applicationPanel.getHeight() - 80, new Color(255, 0, 30));
-        drawBar(g, maxStamina, stamina, applicationPanel.getHeight() - 50, new Color(60, 0, 255));
+        drawBar(g, maxLives, lives, panel.getHeight() - 80, new Color(255, 0, 30));
+        drawBar(g, maxStamina, stamina, panel.getHeight() - 50, new Color(60, 0, 255));
     }
     public void drawBar(Graphics2D g, int max, int current, int y, Color color) {
-        double scale = (double) (applicationPanel.getSquareSide() * 4) / max;
+        double scale = (double) (panel.getSquareSide() * 4) / max;
         double value = scale * current;
 
-        int width = applicationPanel.getSquareSide() * 4;
+        int width =panel.getSquareSide() * 4;
         int height = 15;
-        int x = applicationPanel.getWidth() / 2 - width / 2;
+        int x = panel.getWidth() / 2 - width / 2;
 
         g.setColor(new Color(35, 35, 35));
         g.fillRoundRect(x - 2, y - 2, width + 4, height + 4, 10, 10);
@@ -70,7 +69,7 @@ public class Player extends Entity {
     public void update() {
         direction = userInput.getDirection();
         if (userInput.isPressed()) {
-            canMove = !collisionManager.checkTileCollision(this, applicationPanel) && !allEntitiesCollision();
+            canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
             if (canMove) {
                 move();
                 actualArea.setRect(x + 8, y + 16, 32, 32);
@@ -127,7 +126,7 @@ public class Player extends Entity {
 
     @Override
     public boolean allEntitiesCollision() {
-        for (Entity entity : applicationPanel.getEntities()) {
+        for (Entity entity : panel.getEntities()) {
             if (collisionManager.checkEntityCollision(this, entity)) {
                 return true;
             }
@@ -136,7 +135,7 @@ public class Player extends Entity {
     }
 
     public boolean entityHitPlayer() {
-        for (Entity entity : applicationPanel.getEntities()) {
+        for (Entity entity : panel.getEntities()) {
             if (collisionManager.checkEntityCollision(entity, this)) {
                 return true;
             }
@@ -145,16 +144,16 @@ public class Player extends Entity {
     }
 
     public void setSpeed() {
-        speed = (5 + (applicationPanel.getGame().getSpeedBonus() * 0.25));
+        speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
         if (clock.isRunning()) {
-            speed = (6 + (applicationPanel.getGame().getSpeedBonus() * 0.25));
+            speed = (6 + (panel.getGame().getSpeedBonus() * 0.25));
         }
     }
 
     public void setBonuses() {
         setSpeed();
-        maxLives = 30 + applicationPanel.getGame().getHealthBonus();
-        maxStamina = 30 + applicationPanel.getGame().getStaminaBonus();
+        maxLives = 30 + panel.getGame().getHealthBonus();
+        maxStamina = 30 + panel.getGame().getStaminaBonus();
 
         lives = maxLives;
         stamina = maxStamina;
@@ -169,7 +168,7 @@ public class Player extends Entity {
     private int time = 30;
     public void addStamina(int durationInSeconds) {
         clock = new Clock();
-        clock.start(durationInSeconds, applicationPanel, Mode.STAMINA_COUNTER);
+        clock.start(durationInSeconds, panel, Mode.STAMINA_COUNTER);
     }
 
     public int getCenterX() {

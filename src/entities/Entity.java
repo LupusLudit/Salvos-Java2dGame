@@ -1,6 +1,7 @@
 package entities;
 
 import management.CollisionManager;
+import pathFinding.Node;
 import world.ApplicationPanel;
 
 import javax.imageio.ImageIO;
@@ -19,12 +20,16 @@ public abstract class Entity {
     protected int direction;
     protected String defaultImagePath;
     Rectangle actualArea;
-    ApplicationPanel applicationPanel;
+    protected ApplicationPanel panel;
 
     CollisionManager collisionManager;
     protected boolean canMove;
     protected int lives;
     protected int maxLives;
+
+    public Entity(ApplicationPanel panel) {
+        this.panel = panel;
+    }
 
     public abstract void draw(Graphics2D g);
 
@@ -84,10 +89,10 @@ public abstract class Entity {
     }
 
     public boolean allEntitiesCollision() {
-        if (collisionManager.checkEntityCollision(this, applicationPanel.getPlayer())) {
+        if (collisionManager.checkEntityCollision(this, panel.getPlayer())) {
             return true;
         }
-        for (Entity entity : applicationPanel.getEntities()) {
+        for (Entity entity : panel.getEntities()) {
             if (entity != this) {
                 if (collisionManager.checkEntityCollision(this, entity)) {
                     return true;
@@ -98,19 +103,52 @@ public abstract class Entity {
         return false;
     }
 
+    public void changeDirection(int goalCol, int goalRow) {
+        int startCol = x/48;
+        int startRow = y/48;
+        panel.getSearch().setNodes(startCol, startRow, goalCol, goalRow);
+        panel.getSearch().checkNodes();
+
+        if (panel.getSearch().isPathPossible()) {
+            Node nextNode = panel.getSearch().getPath().pop();
+            int nextX = nextNode.getCol();
+            int nextY = nextNode.getRow();
+
+            // Determine the direction to move based on the next node's position
+            if (nextX < x/48) {
+                direction = 2; // left
+            } else if (nextX > x/48) {
+                direction = 3; // right
+            } else if (nextY < y/48) {
+                direction = 0; // up
+            } else if (nextY > y/48) {
+                direction = 1; // down
+            }
+
+            // Check if the entity is at the correct position to move to the next node
+            if (nextX == getRelX(panel.getPlayer()) / panel.getSquareSide() && nextY == getRelY(panel.getPlayer()) / panel.getSquareSide()) {
+                panel.getSearch().getPath().pop(); // Pop the node only when moving to it
+            }
+        }
+    }
+
+
+
+
     public void setDirection(int direction) {
         this.direction = direction;
     }
-    public int getRelX() { // returns x coordinate relative to player
-        return x - applicationPanel.getPlayer().getX() + applicationPanel.getPlayer().getCenterX();
+
+    public int getRelX(Entity entity) { // returns x coordinate relative to player
+        return x - entity.getX() + panel.getPlayer().getCenterX();
     }
 
-    public int getRelY() { // returns y coordinate relative to player
-        return y - applicationPanel.getPlayer().getY() + applicationPanel.getPlayer().getCenterY();
+    public int getRelY(Entity entity) { // returns y coordinate relative to player
+        return y - entity.getY() + panel.getPlayer().getCenterY();
     }
 
     public Rectangle getHitBoxArea() {
-        return new Rectangle(getRelX() + 8, getRelY(), 32, 48);
+        return new Rectangle(getRelX(panel.getPlayer()) + 8, getRelY(panel.getPlayer()) , 32, 48);
     }
 
     public int getX() {

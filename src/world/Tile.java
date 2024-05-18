@@ -6,12 +6,12 @@ public class Tile {
 
     private BufferedImage image;
 
-    private boolean collision;
+    private boolean solid;
 
 
-    public Tile(BufferedImage image, boolean collision) {
+    public Tile(BufferedImage image, boolean solid) {
         this.image = image;
-        this.collision = collision;
+        this.solid = solid;
     }
 
     public BufferedImage getImage() {
@@ -23,7 +23,7 @@ public class Tile {
     }
 
 
-    public boolean isCollision() {
-        return collision;
+    public boolean isSolid() {
+        return solid;
     }
 }

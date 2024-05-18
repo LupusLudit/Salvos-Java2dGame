@@ -18,23 +18,23 @@ public class CollisionManager {
         switch (entity.getDirection()) {
             case 0 -> {
                 topRow = (int) (entity.getActualArea().y - entity.getSpeed()) / applicationPanel.getSquareSide();
-                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + topRow)).isCollision();
-                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + topRow)).isCollision();
+                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + topRow)).isSolid();
+                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + topRow)).isSolid();
             }
             case 1 -> {
                 bottomRow = (int) (entity.getActualArea().y + entity.getActualArea().height + entity.getSpeed()) / applicationPanel.getSquareSide();
-                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + bottomRow)).isCollision();
-                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + bottomRow)).isCollision();
+                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + bottomRow)).isSolid();
+                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + bottomRow)).isSolid();
             }
             case 2 -> {
                 leftCol = (int) (entity.getActualArea().x - entity.getSpeed()) / applicationPanel.getSquareSide();
-                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + topRow)).isCollision();
-                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + bottomRow)).isCollision();
+                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + topRow)).isSolid();
+                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(leftCol + "," + bottomRow)).isSolid();
             }
             case 3 -> {
                 rightCol = (int) (entity.getActualArea().x + entity.getActualArea().width + entity.getSpeed()) / applicationPanel.getSquareSide();
-                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + topRow)).isCollision();
-                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + bottomRow)).isCollision();
+                firstTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + topRow)).isSolid();
+                secondTile = applicationPanel.getTilePainter().getTiles().get(applicationPanel.getTilePainter().getMap().get(rightCol + "," + bottomRow)).isSolid();
             }
         }
         return firstTile || secondTile;

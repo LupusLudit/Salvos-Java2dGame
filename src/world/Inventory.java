@@ -26,7 +26,7 @@ public class Inventory {
     public void removeItem(Item item){
         int counter = items.get(item);
         if (counter - 1 == 0){
-            items.put(item, null);
+            items.put(item, 0);
         }
         else {
             items.put(item, counter - 1);

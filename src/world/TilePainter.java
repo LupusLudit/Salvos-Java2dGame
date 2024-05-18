@@ -93,12 +93,12 @@ public class TilePainter {
         return bi;
     }
 
-    private void setTileImage(int fieldIndex, String imageIndex, boolean collision) {
+    private void setTileImage(int fieldIndex, String imageIndex, boolean solid) {
         BufferedImage temp;
         try {
             temp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(("/background/tiles" + imageIndex + ".png"))));
             temp = convertToBufferedImage(temp.getScaledInstance(48, 48, temp.getType()));
-            tiles.put(fieldIndex, new Tile(temp, collision));
+            tiles.put(fieldIndex, new Tile(temp, solid));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -182,5 +182,18 @@ public class TilePainter {
 
     public HashMap<Integer, Tile> getTiles() {
         return tiles;
+    }
+
+    public boolean isTileSolid(int col, int row){
+        int cell = map.get(col + "," + row);
+        return tiles.get(cell).isSolid();
+    }
+
+    public int getMapHeight() {
+        return mapHeight;
+    }
+
+    public int getMapWidth() {
+        return mapWidth;
     }
 }

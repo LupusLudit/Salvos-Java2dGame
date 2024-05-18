@@ -7,6 +7,7 @@ import entities.Entity;
 import entities.Player;
 import items.Revolver;
 import management.*;
+import pathFinding.Search;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -37,6 +38,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     private int wave = 1;
     private int waveTimer = 10;
     Clock clock = new Clock();
+    Search search = new Search(this);
     Thread gameThread;
 
     public ApplicationPanel() {
@@ -224,5 +226,9 @@ public class ApplicationPanel extends JPanel implements Runnable{
 
     public EffectManager getEffectManager() {
         return effectManager;
+    }
+
+    public Search getSearch() {
+        return search;
     }
 }
