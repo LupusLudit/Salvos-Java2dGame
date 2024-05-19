@@ -40,9 +40,7 @@ public class GameUI {
             switch (panel.getStatus()) {
                 case SETUP -> drawStartingScreen(g);
                 case CUSTOMIZATION -> drawCustomizationScreen(g);
-                case PLAYING -> {
-                    drawBackground(g);
-                }
+                case PLAYING -> drawBackground(g);
                 case GAMEOVER -> drawDeathScreen(g);
                 case SHOP -> { //will be edited later
                     drawBackground(g);

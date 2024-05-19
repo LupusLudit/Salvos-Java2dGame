@@ -54,6 +54,5 @@ public class Blasting extends Effect{
             throw new RuntimeException(e);
         }
         g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
-        System.out.println("draw");
     }
 }

@@ -56,7 +56,7 @@ public class Zombie extends Entity {
     @Override
     public void update() {
         updateDelay++;
-        changeDirection(panel.getPlayer().getX()/panel.getSquareSide(), panel.getPlayer().getY()/panel.getSquareSide());
+        updatePath((panel.getPlayer().getX() + 24)/panel.getSquareSide(), (panel.getPlayer().getY() + 32)/panel.getSquareSide());
 
         canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
         if (canMove) {

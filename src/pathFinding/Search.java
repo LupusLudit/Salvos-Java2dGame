@@ -47,9 +47,10 @@ public class Search {
 
         for (int i = 0; i < panel.getTilePainter().getMapHeight(); i++) {
             for (int j = 0; j < panel.getTilePainter().getMapWidth(); j++) {
-                boolean solid = panel.getTilePainter().isTileSolid(j,i);
-                nodes[j][i].setSolid(solid);
-                //System.out.println("Tile at (" + "(" + j+ "," + i + ") is solid: " + solid);
+                if (panel.getTilePainter().isTileSolid(j,i)){
+                    nodes[j][i].setSolid(true);
+                }
+
                 setDistanceValues(nodes[j][i]);
             }
         }
@@ -102,8 +103,6 @@ public class Search {
                 pathPossible = true;
                 numOfAttempts = 0;
                 findPath();
-                System.out.println("goal col: " + current.getCol());
-                System.out.println("goal row: " + current.getRow());
             }
             numOfAttempts--;
         }
@@ -130,14 +129,6 @@ public class Search {
         while (temp != start){
             path.push(temp);
             temp = temp.getParent();
-            try {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/background/path.png")));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            int x = temp.getCol()*48 - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
-            int y = temp.getRow()*48 - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
-            panel.getG2().drawImage(image, x, y, null);
         }
     }
 

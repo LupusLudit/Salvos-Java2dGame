@@ -103,37 +103,57 @@ public abstract class Entity {
         return false;
     }
 
-    public void changeDirection(int goalCol, int goalRow) {
-        int startCol = x/48;
-        int startRow = y/48;
+    public void updatePath(int goalCol, int goalRow) {
+        int startCol = (x + 24)/panel.getSquareSide();
+        int startRow = (y + 32)/panel.getSquareSide();
         panel.getSearch().setNodes(startCol, startRow, goalCol, goalRow);
         panel.getSearch().checkNodes();
 
         if (panel.getSearch().isPathPossible()) {
             Node nextNode = panel.getSearch().getPath().pop();
-            int nextX = nextNode.getCol();
-            int nextY = nextNode.getRow();
+            int pathTileX = nextNode.getCol() * panel.getSquareSide();
+            int pathTileY = nextNode.getRow() * panel.getSquareSide();
 
-            // Determine the direction to move based on the next node's position
-            if (nextX < x/48) {
-                direction = 2; // left
-            } else if (nextX > x/48) {
-                direction = 3; // right
-            } else if (nextY < y/48) {
-                direction = 0; // up
-            } else if (nextY > y/48) {
-                direction = 1; // down
+            int leftX = actualArea.x;
+            int rightX = actualArea.x + actualArea.width;
+            int topY = actualArea.y;
+            int bottomY = actualArea.y+ actualArea.height;
+
+            changeDirection(leftX,rightX,topY,bottomY,pathTileX,pathTileY);
+        }
+    }
+    private void changeDirection(int leftX, int rightX, int topY, int bottomY, int pathTileX, int pathTileY){
+        if (topY > pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()){
+            direction = 0;
+        }
+        else if (topY <= pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()){
+            direction = 1;
+        }
+        else if (topY >= pathTileY && leftX >= pathTileX && bottomY < pathTileY + panel.getSquareSide()){
+            direction = 2;
+        }else if (topY >= pathTileY && leftX < pathTileX && bottomY < pathTileY + panel.getSquareSide()) {
+            direction = 3;
+        }else if(topY > pathTileY && leftX > pathTileX){
+            if (collisionManager.checkTileCollision(this, panel)){
+                direction = 2;
             }
-
-            // Check if the entity is at the correct position to move to the next node
-            if (nextX == getRelX(panel.getPlayer()) / panel.getSquareSide() && nextY == getRelY(panel.getPlayer()) / panel.getSquareSide()) {
-                panel.getSearch().getPath().pop(); // Pop the node only when moving to it
+        }
+        else if(topY >= pathTileY && leftX <= pathTileX){
+            if (collisionManager.checkTileCollision(this, panel)){
+                direction = 3;
+            }
+        }
+        else if(leftX >= pathTileX){
+            if (collisionManager.checkTileCollision(this, panel)){
+                direction = 2;
+            }
+        }
+        else {
+            if (collisionManager.checkTileCollision(this, panel)){
+                direction = 3;
             }
         }
     }
-
-
-
 
     public void setDirection(int direction) {
         this.direction = direction;

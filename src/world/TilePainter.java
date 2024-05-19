@@ -1,5 +1,7 @@
 package world;
 
+import entities.Entity;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -14,13 +16,13 @@ public class TilePainter {
     HashMap<String, Integer> map = new HashMap<>();
     HashMap<Integer, Tile> tiles = new HashMap<>();
 
-    ApplicationPanel applicationPanel;
+    ApplicationPanel panel;
 
     private int mapHeight;
     private int mapWidth;
 
     public TilePainter(ApplicationPanel applicationPanel) {
-        this.applicationPanel = applicationPanel;
+        this.panel = applicationPanel;
         initializeTileImages();
         setMap();
     }
@@ -52,8 +54,8 @@ public class TilePainter {
             for (int j = 0; j < mapWidth; j++) {
                 int cell = map.get(j + "," + i);
 
-                int x = (j * applicationPanel.getSquareSide()) - applicationPanel.getPlayer().getX() + applicationPanel.getPlayer().getCenterX();
-                int y = (i * applicationPanel.getSquareSide()) - applicationPanel.getPlayer().getY() + applicationPanel.getPlayer().getCenterY();
+                int x = (j * panel.getSquareSide()) - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
+                int y = (i * panel.getSquareSide()) - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
 
                 if (isInRange(i, j)) {
                     g.drawImage(tiles.get(cell).getImage(), x, y, null);
@@ -66,10 +68,10 @@ public class TilePainter {
         boolean drawX = false;
         boolean drawY = false;
 
-        if (Math.abs(applicationPanel.getPlayer().getX() - j * applicationPanel.getSquareSide()) < applicationPanel.getPlayer().getCenterX() + applicationPanel.getSquareSide()) {
+        if (Math.abs(panel.getPlayer().getX() - j * panel.getSquareSide()) < panel.getPlayer().getCenterX() + panel.getSquareSide()) {
             drawX = true;
         }
-        if (Math.abs(applicationPanel.getPlayer().getY() - i * applicationPanel.getSquareSide()) < applicationPanel.getPlayer().getCenterY() + applicationPanel.getSquareSide()) {
+        if (Math.abs(panel.getPlayer().getY() - i * panel.getSquareSide()) < panel.getPlayer().getCenterY() + panel.getSquareSide()) {
             drawY = true;
         }
 
@@ -188,7 +190,6 @@ public class TilePainter {
         int cell = map.get(col + "," + row);
         return tiles.get(cell).isSolid();
     }
-
     public int getMapHeight() {
         return mapHeight;
     }
