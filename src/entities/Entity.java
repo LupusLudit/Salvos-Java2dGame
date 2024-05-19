@@ -123,6 +123,14 @@ public abstract class Entity {
         }
     }
     private void changeDirection(int leftX, int rightX, int topY, int bottomY, int pathTileX, int pathTileY){
+
+        boolean entityCollision = false;
+        for (Entity entity: panel.getEntities()){
+            if (entity != this && collisionManager.checkEntityCollision(this,entity)){
+                entityCollision = true;
+                break;
+            }
+        }
         if (topY > pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()){
             direction = 0;
         }
@@ -134,22 +142,22 @@ public abstract class Entity {
         }else if (topY >= pathTileY && leftX < pathTileX && bottomY < pathTileY + panel.getSquareSide()) {
             direction = 3;
         }else if(topY > pathTileY && leftX > pathTileX){
-            if (collisionManager.checkTileCollision(this, panel)){
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
                 direction = 2;
             }
         }
         else if(topY >= pathTileY && leftX <= pathTileX){
-            if (collisionManager.checkTileCollision(this, panel)){
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
                 direction = 3;
             }
         }
         else if(leftX >= pathTileX){
-            if (collisionManager.checkTileCollision(this, panel)){
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
                 direction = 2;
             }
         }
         else {
-            if (collisionManager.checkTileCollision(this, panel)){
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
                 direction = 3;
             }
         }

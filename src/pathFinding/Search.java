@@ -4,6 +4,7 @@ import entities.Entity;
 import world.ApplicationPanel;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -37,7 +38,6 @@ public class Search {
         finished = false;
     }
 
-
     public void setNodes(int startCol, int startRow, int goalCol, int goalRow) {
         initialize();
         start = nodes[startCol][startRow];
@@ -50,7 +50,6 @@ public class Search {
                 if (panel.getTilePainter().isTileSolid(j,i)){
                     nodes[j][i].setSolid(true);
                 }
-
                 setDistanceValues(nodes[j][i]);
             }
         }
@@ -125,10 +124,10 @@ public class Search {
 
     public void findPath(){
         Node temp = current;
-        BufferedImage image;
         while (temp != start){
             path.push(temp);
             temp = temp.getParent();
+
         }
     }
 

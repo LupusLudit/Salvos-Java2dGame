@@ -190,6 +190,17 @@ public class TilePainter {
         int cell = map.get(col + "," + row);
         return tiles.get(cell).isSolid();
     }
+
+    public boolean entityOnTile(int col, int row){
+        Rectangle rectangle = new Rectangle(col*48, row*48, 48, 48);
+        for (Entity entity: panel.getEntities()){
+            if (rectangle.intersects(entity.getActualArea())){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public int getMapHeight() {
         return mapHeight;
     }

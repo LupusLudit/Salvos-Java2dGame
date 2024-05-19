@@ -85,6 +85,7 @@ public class Game {
             if (entity != null) {
                 entity.draw(g);
             }
+
         }
     }
     public void simulateShooting(int mag, int ammo, int maxCapacity) {
