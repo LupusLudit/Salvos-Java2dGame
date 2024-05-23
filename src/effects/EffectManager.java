@@ -6,10 +6,11 @@ import world.ApplicationPanel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class EffectManager {
 
-    private ArrayList<Effect> effects = new ArrayList<>();
+    private List<Effect> effects = new ArrayList<>();
     private ApplicationPanel panel;
 
     public EffectManager(ApplicationPanel panel) {
@@ -39,8 +40,6 @@ public class EffectManager {
         }
     }
 
-
-
     public void addHitParticles(double x, double y) {
         Color color = new Color(255, 0, 30);
         effects.add(new Particle(panel, x, y, -1,-1,1,15, color));
@@ -54,17 +53,36 @@ public class EffectManager {
     }
 
     public void addWaterParticles(int x, int y) {
+        Color color = new Color(20, 120, 170);
+        effects.add(new Particle(panel, x, y, -1,-2,0.7,15, color));
+        effects.add(new Particle(panel, x, y, -2,-3,0.7,15, color));
+        effects.add(new Particle(panel, x, y, 0.5,-2,0.7,15, color));
+        effects.add(new Particle(panel, x, y, 1,-1.5,0.7,15, color));
+        effects.add(new Particle(panel, x, y, -1.5,2,0.7,15, color));
+        effects.add(new Particle(panel, x, y, 1.5,1,0.7,15, color));
+        effects.add(new Particle(panel, x, y, 3,1,0.7,15, color));
     }
 
     public void addGroundParticles(int x, int y) {
-        Color color = new Color(80, 40, 20);
+        Color color = new Color(80, 50, 20);
         effects.add(new Particle(panel, x, y, -2,-2,0.7,15, color));
-        effects.add(new Particle(panel, x, y, -2,-3,0.7,15, color));
-        effects.add(new Particle(panel, x, y, 0,-2,0.7,15, color));
-        effects.add(new Particle(panel, x, y, 3,-3,0.7,15, color));
+        effects.add(new Particle(panel, x, y, -1,-3,0.7,15, color));
+        effects.add(new Particle(panel, x, y, 0.5,-2,0.7,15, color));
+        effects.add(new Particle(panel, x, y, 2.5,-3,0.7,15, color));
         effects.add(new Particle(panel, x, y, -2,2,0.7,15, color));
         effects.add(new Particle(panel, x, y, 1,1,0.7,15, color));
         effects.add(new Particle(panel, x, y, 2,2,0.7,15, color));
+    }
+
+    public void addRockParticles(int x, int y) {
+        Color color = new Color(70, 70, 70);
+        effects.add(new Particle(panel, x, y, 1.5,-2,0.7,20, color));
+        effects.add(new Particle(panel, x, y, -2,-2.5,0.7,20, color));
+        effects.add(new Particle(panel, x, y, 0,-1,0.7,20, color));
+        effects.add(new Particle(panel, x, y, 3,-2,0.7,20, color));
+        effects.add(new Particle(panel, x, y, -2,2.5,0.7,20, color));
+        effects.add(new Particle(panel, x, y, 1.5,1,0.7,20, color));
+        effects.add(new Particle(panel, x, y, 2,1,0.7,20, color));
     }
 
     public void addFlashingEffect(Entity entity){
@@ -72,6 +90,6 @@ public class EffectManager {
     }
 
     public void addBlastingEffect(int direction){
-        effects.add(new Blasting(panel, 10, direction));
+        effects.add(new Blasting(panel, 7, direction));
     }
 }

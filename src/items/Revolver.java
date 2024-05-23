@@ -1,6 +1,6 @@
 package items;
 
-import world.AmmoType;
+import world.Weapon;
 import world.ApplicationPanel;
 
 public class Revolver extends Item {
@@ -12,7 +12,7 @@ public class Revolver extends Item {
     }
     @Override
     public void use() {
-        applicationPanel.getGame().setSelectedAmmo(AmmoType.REVOLVER);
+        applicationPanel.getGame().setSelectedWeapon(Weapon.REVOLVER);
     }
 
     @Override

@@ -1,6 +1,6 @@
 package items;
 
-import world.AmmoType;
+import world.Weapon;
 import world.ApplicationPanel;
 
 public class AssaultRifle extends Item{
@@ -13,7 +13,7 @@ public class AssaultRifle extends Item{
 
     @Override
     public void use() {
-        applicationPanel.getGame().setSelectedAmmo(AmmoType.ASSAULTRIFLE);
+        applicationPanel.getGame().setSelectedWeapon(Weapon.ASSAULTRIFLE);
     }
 
     @Override

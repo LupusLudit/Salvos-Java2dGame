@@ -1,6 +1,6 @@
 package items;
 
-import world.AmmoType;
+import world.Weapon;
 import world.ApplicationPanel;
 
 public class TommyGun extends Item{
@@ -12,7 +12,7 @@ public class TommyGun extends Item{
 
     @Override
     public void use() {
-        applicationPanel.getGame().setSelectedAmmo(AmmoType.SUBMACHINE_GUN);
+        applicationPanel.getGame().setSelectedWeapon(Weapon.SUBMACHINE_GUN);
     }
 
     @Override

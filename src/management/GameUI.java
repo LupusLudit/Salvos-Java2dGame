@@ -110,7 +110,7 @@ public class GameUI {
         int x = panel.getSquareSide() / 2;
         int y = panel.getHeight() - 4 * panel.getSquareSide() - 10;
         BufferedImage image = null;
-        switch (panel.getGame().getSelectedAmmo()) {
+        switch (panel.getGame().getSelectedWeapon()) {
             case REVOLVER -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/revolver.png")));
             case PISTOL -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
             case SEMIAUTO -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
@@ -230,14 +230,14 @@ public class GameUI {
     }
 
     public void drawTimer(Graphics2D g) {
-        g.setFont(new Font("font", Font.BOLD, 48));
+        g.setFont(large);
         g.setColor(Color.WHITE);
         String text = "0:" + panel.getPlayer().getTime();
         g.drawString(text, panel.getWidth() - textLength(g, text) - 10, panel.getSquareSide());
     }
 
     public void drawWaveMessage(Graphics2D g) {
-        g.setFont(new Font("font", Font.BOLD, 48));
+        g.setFont(large);
         g.setColor(Color.WHITE);
         String text = "NEXT WAVE IN: " + panel.getWaveTimer();
         g.drawString(text, panel.getWidth() / 2 - textLength(g, text) / 2, panel.getSquareSide() * 3);

@@ -4,6 +4,7 @@ import management.Clock;
 import management.CollisionManager;
 import management.Mode;
 import management.UserInput;
+import world.Weapon;
 import world.ApplicationPanel;
 import world.Inventory;
 
@@ -14,14 +15,11 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Player extends Entity {
-
     UserInput userInput;
     private final int centerX;
     private final int centerY;
-
     private int stamina;
     private int maxStamina;
-
     private int staminaCounter = 0;
     private int hitCounter = 0;
     Clock clock = new Clock();
@@ -30,12 +28,13 @@ public class Player extends Entity {
 
     public Player(UserInput userInput, ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        defaultImagePath = "character/sprite_";
+        defaultImagePath = "entities/sprite_";
         this.userInput = userInput;
         this.collisionManager = new CollisionManager();
 
         canMove = true;
         setBonuses();
+        currentImage = loadImage("idle");
 
         this.x = 45 * applicationPanel.getSquareSide();
         this.y = 45 * applicationPanel.getSquareSide();
@@ -47,8 +46,13 @@ public class Player extends Entity {
 
     @Override
     public void draw(Graphics2D g) {
-        g.drawImage(chooseImage(direction, counter), centerX, centerY, null);
-
+        changeCurrentImage(counter);
+        g.drawImage(currentImage, centerX, centerY, null);
+        if (panel.getGame().getSelectedWeapon()!=Weapon.FIST && panel.getMouseInput().isMouseClicked() && direction != 0){
+            try {
+                g.drawImage(weaponOverlay(), centerX,centerY,null);
+            } catch (IOException ignored){}
+        }
         drawBar(g, maxLives, lives, panel.getHeight() - 80, new Color(255, 0, 30));
         drawBar(g, maxStamina, stamina, panel.getHeight() - 50, new Color(60, 0, 255));
     }
@@ -67,21 +71,49 @@ public class Player extends Entity {
     }
     @Override
     public void update() {
-        direction = userInput.getDirection();
-        if (userInput.isPressed()) {
+        if (userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
+            direction = userInput.getDirection();
             canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
             if (canMove) {
                 move();
                 actualArea.setRect(x + 8, y + 16, 32, 32);
 
                 counter++;
-                if (counter == 15) {
+                if (counter == 29) {
                     counter = 0;
                 }
             }
         }
         handleHealth();
         handleStamina();
+    }
+    @Override
+    public void changeCurrentImage(int counter) {
+        if (counter != 0 && counter % 7 == 0 && canMove && userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
+            imageIndex++;
+            if (imageIndex == 4) {
+                imageIndex = 0;
+            }
+            currentImage = loadImage(String.valueOf(imageIndex));
+        }
+        else if (!userInput.isPressed() && !panel.getMouseInput().isMouseClicked()){
+            currentImage = loadImage("idle");
+        }
+        else if (panel.getMouseInput().isMouseClicked() && panel.getGame().getSelectedWeapon() != Weapon.FIST){
+            currentImage = loadImage("nohands");
+        }
+    }
+
+    public BufferedImage weaponOverlay() throws IOException {
+        String path = "";
+        switch (panel.getGame().getSelectedWeapon()){
+            case REVOLVER -> path = "/hands/hands_revolver_" + direction + ".png";
+            case PISTOL -> path = "/hands/hands_pistol_" + direction + ".png";
+            case SEMIAUTO -> path = "/hands/hands_semiRifle_" + direction + ".png";
+            case ASSAULTRIFLE -> path = "/hands/hands_ak_" + direction + ".png";
+            case SUBMACHINE_GUN -> path = "/hands/hands_tommy_" + direction + ".png";
+        }
+        return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path)));
     }
 
     private void move() {
@@ -180,7 +212,7 @@ public class Player extends Entity {
     public Image getDefaultImage() {
         BufferedImage image = null;
         try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + "0.png")));
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + "1_idle.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

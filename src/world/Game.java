@@ -15,12 +15,9 @@ public class Game {
     private int healthBonus = 0;
     private int speedBonus = 0;
     private int bonusCounter = 0;
-    private AmmoType selectedAmmo;
-    HashMap<AmmoType, String> ammoMap = new HashMap<>();
+    private Weapon selectedWeapon;
+    HashMap<Weapon, String> ammoMap = new HashMap<>();
     HashMap<Integer, Integer> bonusMap = new HashMap<>();
-
-    private boolean shooting = false;
-
     private long lastShootTime = 0;
     private int reloadCounter = 0;
 
@@ -28,18 +25,18 @@ public class Game {
 
     public Game(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
-        selectedAmmo = AmmoType.FIST;
+        selectedWeapon = Weapon.FIST;
         initializeMaps();
     }
 
 
     private void initializeMaps() {
-        ammoMap.put(AmmoType.FIST, "0,0,0");
-        ammoMap.put(AmmoType.REVOLVER, "6,36,6");
-        ammoMap.put(AmmoType.PISTOL, "0,0,9");
-        ammoMap.put(AmmoType.SEMIAUTO, "0,0,10");
-        ammoMap.put(AmmoType.ASSAULTRIFLE, "0,0,30");
-        ammoMap.put(AmmoType.SUBMACHINE_GUN, "0,0,50");
+        ammoMap.put(Weapon.FIST, "0,0,0");
+        ammoMap.put(Weapon.REVOLVER, "6,36,6");
+        ammoMap.put(Weapon.PISTOL, "0,0,9");
+        ammoMap.put(Weapon.SEMIAUTO, "0,0,10");
+        ammoMap.put(Weapon.ASSAULTRIFLE, "0,0,30");
+        ammoMap.put(Weapon.SUBMACHINE_GUN, "0,0,50");
 
         bonusMap.put(0, 0);
         bonusMap.put(1, 0);
@@ -62,7 +59,7 @@ public class Game {
             }
         }
 
-        String[] values = ammoMap.get(selectedAmmo).split(",");
+        String[] values = ammoMap.get(selectedWeapon).split(",");
         int mag = Integer.parseInt(values[0]);
         int ammo = Integer.parseInt(values[1]);
         int maxCapacity = Integer.parseInt(values[2]);
@@ -88,30 +85,46 @@ public class Game {
 
         }
     }
+
     public void simulateShooting(int mag, int ammo, int maxCapacity) {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();
-        shooting = false;
         int delay = shootingDelay();
         changeDirection();
+
         if (mag > 0 && currentTime - lastShootTime >= delay){
             panel.getEffectManager().addBlastingEffect(panel.getPlayer().getDirection());
-            //applicationPanel.getEffectManager().addGroundParticles(mousePosition.x, mousePosition.y);
-            shooting = true;
+            addParticles(mousePosition.x, mousePosition.y);
+
             mag--;
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
             for (Entity entity : panel.getEntities()) {
                 if (entity.getHitBoxArea().contains(clickPoint)) {
-                    panel.getEffectManager().addHitParticles(mousePosition.getX(), mousePosition.getY());
-                    panel.getEffectManager().addFlashingEffect(entity);
-
                     entity.decreaseLives();
                     score += 5;
+
+                    panel.getEffectManager().addHitParticles(mousePosition.getX(), mousePosition.getY());
+                    panel.getEffectManager().addFlashingEffect(entity);
                 }
             }
             lastShootTime = currentTime;
             String text = mag + "," + ammo + "," + maxCapacity;
-            ammoMap.put(selectedAmmo, text);
+            ammoMap.put(selectedWeapon, text);
+        }
+    }
+
+    private void addParticles(int x, int y){
+        int col = (x + panel.getPlayer().getX() - panel.getPlayer().getCenterX())/panel.getSquareSide();
+        int row = (y + panel.getPlayer().getY() - panel.getPlayer().getCenterY())/panel.getSquareSide();
+
+        if (panel.getTilePainter().getTile(col,row).getImageIndex() < 12) {
+            panel.getEffectManager().addWaterParticles(x, y);
+        }
+        else if(panel.getTilePainter().getTile(col,row).getImageIndex() == 42){
+            panel.getEffectManager().addRockParticles(x, y);
+        }
+        else{
+            panel.getEffectManager().addGroundParticles(x, y);
         }
     }
 
@@ -143,7 +156,7 @@ public class Game {
 
     public int shootingDelay() {
         int delay = 0;
-        switch (selectedAmmo) {
+        switch (selectedWeapon) {
             case REVOLVER -> delay = 1000;
             case PISTOL -> delay = 300;
             case SEMIAUTO -> delay = 150;
@@ -167,7 +180,7 @@ public class Game {
             ammo = 0;
         }
         String text = mag + "," + ammo + "," + maxCapacity;
-        ammoMap.put(selectedAmmo, text);
+        ammoMap.put(selectedWeapon, text);
     }
 
 
@@ -189,8 +202,8 @@ public class Game {
         }
     }
 
-    public void setSelectedAmmo(AmmoType selectedAmmo) {
-        this.selectedAmmo = selectedAmmo;
+    public void setSelectedWeapon(Weapon selectedWeapon) {
+        this.selectedWeapon = selectedWeapon;
     }
 
     public void setScore(int score) {
@@ -211,26 +224,22 @@ public class Game {
     }
 
     public String getAmmo() {
-        return ammoMap.get(selectedAmmo).split(",")[1];
+        return ammoMap.get(selectedWeapon).split(",")[1];
     }
 
     public String getMagazine() {
-        return ammoMap.get(selectedAmmo).split(",")[0];
+        return ammoMap.get(selectedWeapon).split(",")[0];
     }
 
-    public AmmoType getSelectedAmmo() {
-        return selectedAmmo;
+    public Weapon getSelectedWeapon() {
+        return selectedWeapon;
     }
 
     public int getScore() {
         return score;
     }
 
-    public HashMap<AmmoType, String> getAmmoMap() {
+    public HashMap<Weapon, String> getAmmoMap() {
         return ammoMap;
-    }
-
-    public boolean isShooting() {
-        return shooting;
     }
 }

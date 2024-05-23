@@ -4,6 +4,7 @@ import management.CollisionManager;
 import world.ApplicationPanel;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Zombie extends Entity {
@@ -11,7 +12,7 @@ public class Zombie extends Entity {
 
     public Zombie(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        defaultImagePath = "zombie/zombie-sprite_";
+        defaultImagePath = "entities/zombie_";
         this.panel = applicationPanel;
 
         speed = 3;
@@ -24,31 +25,15 @@ public class Zombie extends Entity {
         chooseSpawnPoint();
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
         this.collisionManager = new CollisionManager();
+        currentImage = loadImage("idle");
     }
-
-    /*public void updateDirection() {
-        int dx = panel.getPlayer().getX() - x;
-        int dy = panel.getPlayer().getY() - y;
-
-        if (Math.abs(dx) >= Math.abs(dy)) {
-            direction = 2;
-            if (dx > 0) {
-                direction = 3;
-            }
-        } else {
-            direction = 0;
-            if (dy > 0) {
-                direction = 1;
-            }
-        }
-
-    }*/
 
     @Override
     public void draw(Graphics2D g) {
+        changeCurrentImage(counter);
         if (Math.abs(panel.getPlayer().getX() - x) < panel.getPlayer().getCenterX() + panel.getSquareSide()
                 && Math.abs(panel.getPlayer().getY() - y) < panel.getPlayer().getCenterY() + panel.getSquareSide()) { //is in range control
-            g.drawImage(chooseImage(direction, counter), getRelX(panel.getPlayer()), getRelY(panel.getPlayer()), null);
+            g.drawImage(currentImage, getRelX(panel.getPlayer()), getRelY(panel.getPlayer()), null);
         }
         drawBar(g, maxLives, lives, getRelY(panel.getPlayer()) - 15, new Color(255, 0, 30));
     }
@@ -70,12 +55,23 @@ public class Zombie extends Entity {
             actualArea.setRect(x + 8, y + 16, 32, 32);
         }
         counter++;
-        if (counter >= 15 && canMove) {
+        if (counter == 29 && canMove) {
             this.counter = 0;
         }
     }
-
-
+    @Override
+    public void changeCurrentImage(int counter) {
+        if (!canMove){
+            currentImage = loadImage("idle");
+        }
+        else if (counter != 0 && counter % 7 == 0) {
+            imageIndex++;
+            if (imageIndex == 4) {
+                imageIndex = 0;
+            }
+            currentImage =  loadImage(String.valueOf(imageIndex));
+        }
+    }
     @Override
     public void drawBar(Graphics2D g, int max, int current, int y, Color color) {
         double scale = (double) (panel.getSquareSide()) / max;

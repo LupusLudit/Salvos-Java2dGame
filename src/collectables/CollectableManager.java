@@ -19,8 +19,6 @@ public class CollectableManager {
 
         Bandage bandage = new Bandage(applicationPanel);
         EnergyDrink energyDrink = new EnergyDrink(applicationPanel);
-        PistolAmmo pistolAmmo = new PistolAmmo(applicationPanel);
-        SemiAutoAmmo semiAutoAmmo = new SemiAutoAmmo(applicationPanel);
         RifleAmmo rifleAmmo = new RifleAmmo(applicationPanel);
 
 

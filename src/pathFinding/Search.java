@@ -1,14 +1,8 @@
 package pathFinding;
 
-import entities.Entity;
 import world.ApplicationPanel;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Objects;
 import java.util.Stack;
 
 public class Search {
@@ -47,7 +41,7 @@ public class Search {
 
         for (int i = 0; i < panel.getTilePainter().getMapHeight(); i++) {
             for (int j = 0; j < panel.getTilePainter().getMapWidth(); j++) {
-                if (panel.getTilePainter().isTileSolid(j,i)){
+                if (panel.getTilePainter().getTile(j,i).isSolid()){
                     nodes[j][i].setSolid(true);
                 }
                 setDistanceValues(nodes[j][i]);

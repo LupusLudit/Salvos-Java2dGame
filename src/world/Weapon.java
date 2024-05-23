@@ -1,6 +1,6 @@
 package world;
 
-public enum AmmoType {
+public enum Weapon {
     REVOLVER,
     PISTOL,
     SEMIAUTO,

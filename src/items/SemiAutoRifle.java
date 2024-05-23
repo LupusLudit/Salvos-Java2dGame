@@ -1,6 +1,6 @@
 package items;
 
-import world.AmmoType;
+import world.Weapon;
 import world.ApplicationPanel;
 
 public class SemiAutoRifle extends Item{
@@ -13,7 +13,7 @@ public class SemiAutoRifle extends Item{
 
     @Override
     public void use() {
-        applicationPanel.getGame().setSelectedAmmo(AmmoType.SEMIAUTO);
+        applicationPanel.getGame().setSelectedWeapon(Weapon.SEMIAUTO);
     }
 
     @Override

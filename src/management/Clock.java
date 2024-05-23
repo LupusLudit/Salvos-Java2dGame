@@ -21,7 +21,6 @@ public class Clock {
                     case STAMINA_COUNTER -> applicationPanel.getPlayer().setTime(counter);
                     case WAVE_COUNTER -> applicationPanel.setWaveTimer(counter);
                 }
-                System.out.println(counter);
                 counter--;
             }
         };

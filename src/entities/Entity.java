@@ -26,7 +26,8 @@ public abstract class Entity {
     protected boolean canMove;
     protected int lives;
     protected int maxLives;
-
+    protected int imageIndex = 0;
+    protected BufferedImage currentImage;
     public Entity(ApplicationPanel panel) {
         this.panel = panel;
     }
@@ -34,52 +35,16 @@ public abstract class Entity {
     public abstract void draw(Graphics2D g);
 
     public abstract void update();
-
-    public BufferedImage chooseImage(int direction, int counter) {
-        BufferedImage image;
-        switch (direction) {
-            case 0 -> {
-                if (counter < 10) {
-                    image = loadImage("2");
-                    break;
-                }
-                image = loadImage("3");
-            }
-            case 1 -> {
-                if (counter < 10) {
-                    image = loadImage("0");
-                    break;
-                }
-                image = loadImage("1");
-            }
-            case 2 -> {
-                if (counter < 10) {
-                    image = loadImage("6");
-                    break;
-                }
-                image = loadImage("7");
-            }
-            case 3 -> {
-                if (counter < 10) {
-                    image = loadImage("4");
-                    break;
-                }
-                image = loadImage("5");
-            }
-            default -> throw new IllegalStateException("Unexpected value for direction: " + direction);
-        }
-        return image;
-    }
+    public abstract void changeCurrentImage(int counter);
 
     public BufferedImage loadImage(String index) {
         BufferedImage image = null;
         try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + index + ".png")));
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + direction + "_" + index + ".png")));
         } catch (IOException e) {
         }
         return image;
     }
-
     public abstract void drawBar(Graphics2D g, int max, int current, int y, Color color);
 
     public void decreaseLives() {
@@ -104,8 +69,8 @@ public abstract class Entity {
     }
 
     public void updatePath(int goalCol, int goalRow) {
-        int startCol = (x + 24)/panel.getSquareSide();
-        int startRow = (y + 32)/panel.getSquareSide();
+        int startCol = (x + 24) / panel.getSquareSide();
+        int startRow = (y + 32) / panel.getSquareSide();
         panel.getSearch().setNodes(startCol, startRow, goalCol, goalRow);
         panel.getSearch().checkNodes();
 
@@ -117,47 +82,43 @@ public abstract class Entity {
             int leftX = actualArea.x;
             int rightX = actualArea.x + actualArea.width;
             int topY = actualArea.y;
-            int bottomY = actualArea.y+ actualArea.height;
+            int bottomY = actualArea.y + actualArea.height;
 
-            changeDirection(leftX,rightX,topY,bottomY,pathTileX,pathTileY);
+            changeDirection(leftX, rightX, topY, bottomY, pathTileX, pathTileY);
         }
     }
-    private void changeDirection(int leftX, int rightX, int topY, int bottomY, int pathTileX, int pathTileY){
+
+    private void changeDirection(int leftX, int rightX, int topY, int bottomY, int pathTileX, int pathTileY) {
 
         boolean entityCollision = false;
-        for (Entity entity: panel.getEntities()){
-            if (entity != this && collisionManager.checkEntityCollision(this,entity)){
+        for (Entity entity : panel.getEntities()) {
+            if (entity != this && collisionManager.checkEntityCollision(this, entity)) {
                 entityCollision = true;
                 break;
             }
         }
-        if (topY > pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()){
+        if (topY > pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()) {
             direction = 0;
-        }
-        else if (topY <= pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()){
+        } else if (topY <= pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()) {
             direction = 1;
-        }
-        else if (topY >= pathTileY && leftX >= pathTileX && bottomY < pathTileY + panel.getSquareSide()){
+        } else if (topY >= pathTileY && leftX >= pathTileX && bottomY < pathTileY + panel.getSquareSide()) {
             direction = 2;
-        }else if (topY >= pathTileY && leftX < pathTileX && bottomY < pathTileY + panel.getSquareSide()) {
+        } else if (topY >= pathTileY && leftX < pathTileX && bottomY < pathTileY + panel.getSquareSide()) {
             direction = 3;
-        }else if(topY > pathTileY && leftX > pathTileX){
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
+        } else if (topY > pathTileY && leftX > pathTileX) {
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
                 direction = 2;
             }
-        }
-        else if(topY >= pathTileY && leftX <= pathTileX){
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
+        } else if (topY >= pathTileY && leftX <= pathTileX) {
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
                 direction = 3;
             }
-        }
-        else if(leftX >= pathTileX){
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
+        } else if (leftX >= pathTileX) {
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
                 direction = 2;
             }
-        }
-        else {
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision){
+        } else {
+            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
                 direction = 3;
             }
         }
@@ -176,7 +137,7 @@ public abstract class Entity {
     }
 
     public Rectangle getHitBoxArea() {
-        return new Rectangle(getRelX(panel.getPlayer()) + 8, getRelY(panel.getPlayer()) , 32, 48);
+        return new Rectangle(getRelX(panel.getPlayer()) + 8, getRelY(panel.getPlayer()), 32, 48);
     }
 
     public int getX() {

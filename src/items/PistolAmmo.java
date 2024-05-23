@@ -1,6 +1,6 @@
 package items;
 
-import world.AmmoType;
+import world.Weapon;
 import world.ApplicationPanel;
 
 public class PistolAmmo extends Item{
@@ -17,12 +17,12 @@ public class PistolAmmo extends Item{
 
     @Override
     public void collect() {
-        String[] arr = applicationPanel.getGame().getAmmoMap().get(AmmoType.PISTOL).split(",");
+        String[] arr = applicationPanel.getGame().getAmmoMap().get(Weapon.PISTOL).split(",");
 
         int ammo = Integer.parseInt(arr[1]);
         ammo += 9;
 
         String text = arr[0] + "," + ammo + "," + arr[2];
-        applicationPanel.getGame().getAmmoMap().put(AmmoType.PISTOL, text);
+        applicationPanel.getGame().getAmmoMap().put(Weapon.PISTOL, text);
     }
 }
