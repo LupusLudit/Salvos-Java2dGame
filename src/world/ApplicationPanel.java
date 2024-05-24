@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ApplicationPanel extends JPanel implements Runnable{
     private final int squareSide = 48;
@@ -28,7 +29,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     MouseInput mouseInput = new MouseInput();
     TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
-    List<Entity> entities = new ArrayList<>();
+    private ArrayList<Entity> entities = new ArrayList<>();
     Game game = new Game(this);
     Player player = new Player(userInput, this);
     CollectableManager collectableManager = new CollectableManager(this);
@@ -72,8 +73,8 @@ public class ApplicationPanel extends JPanel implements Runnable{
             long deltaTime = currentTime - lastFrameTime;
             if (deltaTime >= desiredFrameTime) {
                 lastFrameTime = currentTime;
-                repaint();
                 update();
+                repaint();
             } else {
                 try {
                     Thread.sleep((desiredFrameTime - deltaTime) / 1_000_000); //sleep for the remaining time left
@@ -138,6 +139,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
         else {
             clock = new Clock();
             clock.start(10, this, Mode.WAVE_COUNTER);
+            collectableManager.addRandomCollectables();
         }
     }
 
@@ -177,7 +179,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
         return tilePainter;
     }
 
-    public List<Entity> getEntities() {
+    public ArrayList<Entity> getEntities() {
         return entities;
     }
 

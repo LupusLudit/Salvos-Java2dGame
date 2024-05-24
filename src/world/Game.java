@@ -77,15 +77,13 @@ public class Game {
         }
     }
 
-    public void drawEntities(Graphics2D g) {
-        for (Entity entity : panel.getEntities()) {
-            if (entity != null) {
+    public void drawEntities(Graphics2D g){
+        for (Entity entity: panel.getEntities()){
+            if(entity != null){
                 entity.draw(g);
             }
-
         }
     }
-
     public void simulateShooting(int mag, int ammo, int maxCapacity) {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();

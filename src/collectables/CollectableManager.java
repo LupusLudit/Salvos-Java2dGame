@@ -6,26 +6,37 @@ import world.ApplicationPanel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 public class CollectableManager {
 
 
     ArrayList<Collectable> collectables = new ArrayList<>();
-    ApplicationPanel applicationPanel;
+    ApplicationPanel panel;
+    Bandage bandage;
+    EnergyDrink energyDrink;
+    RevolverAmmo revolverAmmo;
+    PistolAmmo pistolAmmo;
+    SemiAutoAmmo semiAutoAmmo;
+    RifleAmmo rifleAmmo;
+    TommyGunAmmo tommyGunAmmo;
 
+    public CollectableManager(ApplicationPanel panel) {
+        this.panel = panel;
+        instantiate();
+    }
 
-    public CollectableManager(ApplicationPanel applicationPanel) {
-        this.applicationPanel = applicationPanel;
-
-        Bandage bandage = new Bandage(applicationPanel);
-        EnergyDrink energyDrink = new EnergyDrink(applicationPanel);
-        RifleAmmo rifleAmmo = new RifleAmmo(applicationPanel);
-
-
-        addCollectables(new Collectable(applicationPanel, bandage, 40, 40));
-        addCollectables(new Collectable(applicationPanel, bandage, 39, 38));
-        addCollectables(new Collectable(applicationPanel, energyDrink, 35, 35));
-        addCollectables(new Collectable(applicationPanel, rifleAmmo, 30, 30));
+    /**
+     * This method instantiate collectables. It is necessary to store the same items in memory, so the program works properly and is more memory safe.
+     */
+    private void instantiate(){
+        bandage = new Bandage(panel);
+        energyDrink = new EnergyDrink(panel);
+        revolverAmmo = new RevolverAmmo(panel);
+        pistolAmmo = new PistolAmmo(panel);
+        semiAutoAmmo = new SemiAutoAmmo(panel);
+        rifleAmmo = new RifleAmmo(panel);
+        tommyGunAmmo = new TommyGunAmmo(panel);
     }
 
     public void addCollectables(Collectable collectable){
@@ -38,7 +49,7 @@ public class CollectableManager {
         Iterator<Collectable> iterator = collectables.iterator();
         while (iterator.hasNext()) {
             Collectable collectable = iterator.next();
-            if (collectable.intersectsPlayer() && applicationPanel.getPlayer().getInventory().getItems().size() < 6) {
+            if (collectable.intersectsPlayer() && panel.getPlayer().getInventory().getItems().size() < 6) {
                 collectable.getItem().collect();
                 iterator.remove();
             }
@@ -50,6 +61,30 @@ public class CollectableManager {
             if (collectable != null) {
                 collectable.draw(g);
             }
+        }
+    }
+
+    public void addRandomCollectables(){
+        Random rn = new Random();
+
+        int col = rn.nextInt(50)+20;
+        int row = rn.nextInt(50)+20;
+
+        int chosen = rn.nextInt(7);
+
+        for (int i = 0; i < 7; i++){
+        if (!panel.getTilePainter().getTile(col,row).isSolid()){
+            switch (chosen){
+                case 0 -> addCollectables(new Collectable(panel, bandage, col,row));
+                case 1 -> addCollectables(new Collectable(panel, energyDrink, col,row));
+                case 2 -> addCollectables(new Collectable(panel, revolverAmmo, col,row));
+                case 3 -> addCollectables(new Collectable(panel, pistolAmmo, col,row));
+                case 4 -> addCollectables(new Collectable(panel, semiAutoAmmo, col,row));
+                case 5 -> addCollectables(new Collectable(panel, rifleAmmo, col,row));
+                case 6 -> addCollectables(new Collectable(panel, tommyGunAmmo, col,row));
+            }
+            System.out.println("added collectable");
+        }
         }
     }
 }
