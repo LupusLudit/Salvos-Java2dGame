@@ -44,7 +44,7 @@ public class GameUI {
                 case GAMEOVER -> drawDeathScreen(g);
                 case SHOP -> { //will be edited later
                     drawBackground(g);
-                    drawShop(g);
+                    drawShopWindow(g);
                 }
                 case INVENTORY -> { //will be edited later
                     drawBackground(g);
@@ -54,7 +54,6 @@ public class GameUI {
             if (panel.getPlayer().getClock().isRunning()) drawTimer(g);
             if (panel.getEntities().isEmpty()) drawWaveMessage(g);
         } catch (IOException ignored) {}
-
     }
 
     public void drawBackground(Graphics2D g) throws IOException {
@@ -205,7 +204,7 @@ public class GameUI {
         drawSelectionArrow(g,y, width, panel.getPlayer().getInventory().getSelectedCol());
     }
 
-    public void drawShop(Graphics2D g) {
+    public void drawShopWindow(Graphics2D g) {
         int width = panel.getSquareSide() * 5 + 12;
         int height = panel.getSquareSide() * 3;
         int x = panel.getWidth() / 2 - width / 2;
@@ -262,34 +261,6 @@ public class GameUI {
         g.setStroke(new BasicStroke(3));
         g.drawRoundRect(x, y, width, height, 50, 50);
     }
-/*
-    public void drawFireBlast(Graphics2D g) throws IOException {
-        int x = 0;
-        int y = 0;
-        switch (panel.getPlayer().getDirection()) {
-            case 0 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_0.png")));
-                x = panel.getPlayer().getCenterX();
-                y = panel.getPlayer().getCenterY() - panel.getSquareSide() / 2;
-            }
-            case 1 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_1.png")));
-                x = panel.getPlayer().getCenterX();
-                y = panel.getPlayer().getCenterY() + panel.getSquareSide() / 2;
-            }
-            case 2 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_2.png")));
-                x = panel.getPlayer().getCenterX() - panel.getSquareSide() / 2;
-                y = panel.getPlayer().getCenterY();
-            }
-            case 3 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_3.png")));
-                x = panel.getPlayer().getCenterX() + panel.getSquareSide() / 2;
-                y = panel.getPlayer().getCenterY();
-            }
-        }
-        g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
-    }*/
     public void drawSelectionArrow(Graphics2D g, int y, int width, int col){
         g.setFont(small);
         String text = "^";
@@ -318,5 +289,9 @@ public class GameUI {
     }
     public items.Item getSelectedItem() {
         return invByPos[panel.getPlayer().getInventory().getSelectedCol()][panel.getPlayer().getInventory().getSelectedRow()];
+    }
+
+    public Font getMedium() {
+        return medium;
     }
 }

@@ -103,13 +103,13 @@ public class ApplicationPanel extends JPanel implements Runnable{
     }
 
     public void update() {
+        checkStatus();
         if (status == Status.CUSTOMIZATION) {
             player.setBonuses();
         } else if (status != Status.SETUP && status != Status.GAMEOVER) {
             if (entities.isEmpty() && !clock.isRunning()){
                 newWave();
             }
-            checkStatus();
             player.update();
             game.updateEntities();
             collectableManager.checkCollectables();
@@ -121,7 +121,9 @@ public class ApplicationPanel extends JPanel implements Runnable{
         g2 = (Graphics2D) g;
 
         ui.draw(g2);
-        effectManager.drawParticles(g2);
+        if (status != Status.SETUP && status != Status.GAMEOVER) {
+            effectManager.drawParticles(g2);
+        }
     }
 
     public void checkStatus() {

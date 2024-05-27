@@ -169,6 +169,7 @@ public class Player extends Entity {
     public boolean entityHitPlayer() {
         for (Entity entity : panel.getEntities()) {
             if (collisionManager.checkEntityCollision(entity, this)) {
+                panel.getEffectManager().addBitingEffect(entity);
                 return true;
             }
         }

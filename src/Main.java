@@ -11,7 +11,6 @@ public class Main {
         ApplicationPanel applicationPanel = new ApplicationPanel();
         window.add(applicationPanel);
         applicationPanel.requestFocus();
-        
 
         window.pack();
         window.setLocationRelativeTo(null);

@@ -51,6 +51,7 @@ public class CollectableManager {
             Collectable collectable = iterator.next();
             if (collectable.intersectsPlayer() && panel.getPlayer().getInventory().getItems().size() < 6) {
                 collectable.getItem().collect();
+                panel.getEffectManager().addPickUpEffects();
                 iterator.remove();
             }
         }
@@ -66,13 +67,14 @@ public class CollectableManager {
 
     public void addRandomCollectables(){
         Random rn = new Random();
-
-        int col = rn.nextInt(50)+20;
-        int row = rn.nextInt(50)+20;
-
-        int chosen = rn.nextInt(7);
-
+        int col;
+        int row;
+        int chosen;
         for (int i = 0; i < 7; i++){
+            col = rn.nextInt(50)+20;
+            row = rn.nextInt(50)+20;
+            chosen = rn.nextInt(7);
+
         if (!panel.getTilePainter().getTile(col,row).isSolid()){
             switch (chosen){
                 case 0 -> addCollectables(new Collectable(panel, bandage, col,row));

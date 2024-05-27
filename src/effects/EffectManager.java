@@ -17,7 +17,6 @@ public class EffectManager {
         this.panel = panel;
     }
 
-
     public void update() {
         Iterator<Effect> iterator = effects.iterator();
         while (iterator.hasNext()) {
@@ -25,13 +24,16 @@ public class EffectManager {
             if (effect != null) {
                 if (effect.getDuration() > 0) {
                     effect.update();
-                }else iterator.remove();
+                } else {
+                    iterator.remove();
+                }
             }
         }
     }
 
     public void drawParticles(Graphics2D g) {
-        Iterator<Effect> iterator = effects.iterator();
+        List<Effect> effectsCopy = new ArrayList<>(effects);  // Vytvoření kopie seznamu
+        Iterator<Effect> iterator = effectsCopy.iterator();
         while (iterator.hasNext()) {
             Effect effect = iterator.next();
             if (effect != null) {
@@ -85,6 +87,14 @@ public class EffectManager {
         effects.add(new Particle(panel, x, y, 2,1,0.7,20, color));
     }
 
+    public void addPickUpEffects(){
+        effects.add(new PickUp(panel,120));
+    }
+
+    public void addBitingEffect(Entity entity){
+        effects.add(new BitingEffect(panel, 60, entity));
+    }
+
     public void addFlashingEffect(Entity entity){
         effects.add(new FlashingEffect(panel, entity, 20));
     }
@@ -93,3 +103,4 @@ public class EffectManager {
         effects.add(new Blasting(panel, 7, direction));
     }
 }
+

@@ -6,6 +6,5 @@ public enum Weapon {
     SEMIAUTO,
     ASSAULTRIFLE,
     SUBMACHINE_GUN,
-
     FIST
 }
