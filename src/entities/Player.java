@@ -48,19 +48,21 @@ public class Player extends Entity {
     public void draw(Graphics2D g) {
         changeCurrentImage(counter);
         g.drawImage(currentImage, centerX, centerY, null);
-        if (panel.getGame().getSelectedWeapon()!=Weapon.FIST && panel.getMouseInput().isMouseClicked() && direction != 0){
+        if (panel.getGame().getSelectedWeapon() != Weapon.FIST && panel.getMouseInput().isMouseClicked() && direction != 0) {
             try {
-                g.drawImage(weaponOverlay(), centerX,centerY,null);
-            } catch (IOException ignored){}
+                g.drawImage(weaponOverlay(), centerX, centerY, null);
+            } catch (IOException ignored) {
+            }
         }
         drawBar(g, maxLives, lives, panel.getHeight() - 80, new Color(255, 0, 30));
         drawBar(g, maxStamina, stamina, panel.getHeight() - 50, new Color(60, 0, 255));
     }
+
     public void drawBar(Graphics2D g, int max, int current, int y, Color color) {
         double scale = (double) (panel.getSquareSide() * 4) / max;
         double value = scale * current;
 
-        int width =panel.getSquareSide() * 4;
+        int width = panel.getSquareSide() * 4;
         int height = 15;
         int x = panel.getWidth() / 2 - width / 2;
 
@@ -69,6 +71,7 @@ public class Player extends Entity {
         g.setColor(color);
         g.fillRoundRect(x, y, (int) value, height, 10, 10);
     }
+
     @Override
     public void update() {
         if (userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
@@ -87,6 +90,7 @@ public class Player extends Entity {
         handleHealth();
         handleStamina();
     }
+
     @Override
     public void changeCurrentImage(int counter) {
         if (counter != 0 && counter % 7 == 0 && canMove && userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
@@ -95,18 +99,16 @@ public class Player extends Entity {
                 imageIndex = 0;
             }
             currentImage = loadImage(String.valueOf(imageIndex));
-        }
-        else if (!userInput.isPressed() && !panel.getMouseInput().isMouseClicked()){
+        } else if (!userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
             currentImage = loadImage("idle");
-        }
-        else if (panel.getMouseInput().isMouseClicked() && panel.getGame().getSelectedWeapon() != Weapon.FIST){
+        } else if (panel.getMouseInput().isMouseClicked() && panel.getGame().getSelectedWeapon() != Weapon.FIST) {
             currentImage = loadImage("nohands");
         }
     }
 
     public BufferedImage weaponOverlay() throws IOException {
         String path = "";
-        switch (panel.getGame().getSelectedWeapon()){
+        switch (panel.getGame().getSelectedWeapon()) {
             case REVOLVER -> path = "/hands/hands_revolver_" + direction + ".png";
             case PISTOL -> path = "/hands/hands_pistol_" + direction + ".png";
             case SEMIAUTO -> path = "/hands/hands_semiRifle_" + direction + ".png";
@@ -126,11 +128,16 @@ public class Player extends Entity {
     }
 
     private void handleHealth() {
-        if (entityHitPlayer()) {
-            hitCounter++;
-            if (hitCounter == 15) {
-                decreaseLives();
-                hitCounter = 0;
+        for (Entity entity : panel.getEntities()) {
+            if (collisionManager.checkEntityCollision(entity, this)) {
+                hitCounter++;
+                if (hitCounter == 15) {
+                    decreaseLives();
+                    hitCounter = 0;
+                }
+                if (entity.isCanBite()) {
+                    panel.getEffectManager().addBitingEffect(entity);
+                }
             }
         }
     }
@@ -166,16 +173,6 @@ public class Player extends Entity {
         return false;
     }
 
-    public boolean entityHitPlayer() {
-        for (Entity entity : panel.getEntities()) {
-            if (collisionManager.checkEntityCollision(entity, this)) {
-                panel.getEffectManager().addBitingEffect(entity);
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void setSpeed() {
         speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
         if (clock.isRunning()) {
@@ -199,6 +196,7 @@ public class Player extends Entity {
     }
 
     private int time = 30;
+
     public void addStamina(int durationInSeconds) {
         clock = new Clock();
         clock.start(durationInSeconds, panel, Mode.STAMINA_COUNTER);
@@ -207,9 +205,11 @@ public class Player extends Entity {
     public int getCenterX() {
         return centerX;
     }
+
     public int getCenterY() {
         return centerY;
     }
+
     public Image getDefaultImage() {
         BufferedImage image = null;
         try {

@@ -28,6 +28,7 @@ public abstract class Entity {
     protected int maxLives;
     protected int imageIndex = 0;
     protected BufferedImage currentImage;
+    protected boolean canBite = true;
     public Entity(ApplicationPanel panel) {
         this.panel = panel;
     }
@@ -162,5 +163,13 @@ public abstract class Entity {
 
     public int getLives() {
         return lives;
+    }
+
+    public boolean isCanBite() {
+        return canBite;
+    }
+
+    public void setCanBite(boolean canBite) {
+        this.canBite = canBite;
     }
 }

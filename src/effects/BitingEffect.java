@@ -20,27 +20,22 @@ public class BitingEffect extends Effect{
     @Override
     public void update() {
         duration--;
+        entity.setCanBite(duration == 0);
     }
 
     @Override
     public void draw(Graphics2D g) {
         try {
             pickImage();
-        } catch (IOException e) {
-            System.out.println("problem");
-            System.out.println("duration: " + duration);
-            System.out.println("x :" + entity.getRelX(panel.getPlayer()));
-            System.out.println("y :" + entity.getRelY(panel.getPlayer()));
-            throw new RuntimeException(e);
-        }
-        g.drawImage(image, entity.getRelX(panel.getPlayer()), entity.getRelY(panel.getPlayer()) - panel.getSquareSide(), null);
+        } catch (IOException ignored) {}
+        g.drawImage(image, entity.getRelX(panel.getPlayer()) - panel.getSquareSide()/2, entity.getRelY(panel.getPlayer()) - panel.getSquareSide()*3,panel.getSquareSide()*2, panel.getSquareSide()*2, null);
     }
 
     private void pickImage() throws IOException {
-        if (duration >= 40){
+        if (duration >= 20){
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/mouth/mouth_open.png")));
         }
-        else if (duration >= 20){
+        else if (duration >= 10){
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/mouth/mouth_closing.png")));
         }
         else{

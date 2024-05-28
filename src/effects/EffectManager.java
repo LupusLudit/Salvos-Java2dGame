@@ -1,6 +1,8 @@
 package effects;
 
 import entities.Entity;
+import entities.Player;
+import entities.Zombie;
 import world.ApplicationPanel;
 
 import java.awt.*;
@@ -32,8 +34,7 @@ public class EffectManager {
     }
 
     public void drawParticles(Graphics2D g) {
-        List<Effect> effectsCopy = new ArrayList<>(effects);  // Vytvoření kopie seznamu
-        Iterator<Effect> iterator = effectsCopy.iterator();
+        Iterator<Effect> iterator = effects.iterator();
         while (iterator.hasNext()) {
             Effect effect = iterator.next();
             if (effect != null) {
@@ -85,14 +86,17 @@ public class EffectManager {
         effects.add(new Particle(panel, x, y, -2,2.5,0.7,20, color));
         effects.add(new Particle(panel, x, y, 1.5,1,0.7,20, color));
         effects.add(new Particle(panel, x, y, 2,1,0.7,20, color));
+
     }
+
+
 
     public void addPickUpEffects(){
         effects.add(new PickUp(panel,120));
     }
 
     public void addBitingEffect(Entity entity){
-        effects.add(new BitingEffect(panel, 60, entity));
+        effects.add(new BitingEffect(panel, 30, entity));
     }
 
     public void addFlashingEffect(Entity entity){
