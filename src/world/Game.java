@@ -44,7 +44,8 @@ public class Game {
     }
 
     public void setEntities(int wave) {
-        for (int i = 0; i < wave*3; i++) {
+        int maxEntities = Math.min(wave * 3, 18);
+        for (int i = 0; i < maxEntities; i++) {
             panel.getEntities().add(new Zombie(panel));
         }
     }

@@ -71,8 +71,8 @@ public class CollectableManager {
         int row;
         int chosen;
         for (int i = 0; i < 7; i++){
-            col = rn.nextInt(50)+20;
-            row = rn.nextInt(50)+20;
+            col = rn.nextInt(20)+70;
+            row = rn.nextInt(17)+80;
             chosen = rn.nextInt(7);
 
         if (!panel.getTilePainter().getTile(col,row).isSolid()){

@@ -13,7 +13,7 @@ public class Search {
     private Stack<Node> path = new Stack<>();
     private Node current, start, goal;
     private boolean finished;
-    private int numOfAttempts = 500;
+    private int numOfAttempts = 750;
     private boolean pathPossible = false;
 
     public Search(ApplicationPanel panel) {
@@ -64,7 +64,7 @@ public class Search {
         int minFValue;
         pathPossible = false;
         finished = false;
-        numOfAttempts = 500;
+        numOfAttempts = 750;
         while (!finished && numOfAttempts > 0){
             col = current.getCol();
             row = current.getRow();

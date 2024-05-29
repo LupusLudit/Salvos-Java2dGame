@@ -36,8 +36,8 @@ public class Player extends Entity {
         setBonuses();
         currentImage = loadImage("idle");
 
-        this.x = 45 * applicationPanel.getSquareSide();
-        this.y = 45 * applicationPanel.getSquareSide();
+        this.x = 59 * applicationPanel.getSquareSide();
+        this.y = 64 * applicationPanel.getSquareSide();
         centerX = (applicationPanel.getSquareSide() * applicationPanel.getCol()) / 2 - (applicationPanel.getSquareSide() / 2);
         centerY = (applicationPanel.getSquareSide() * applicationPanel.getRow()) / 2 - (applicationPanel.getSquareSide() / 2);
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);

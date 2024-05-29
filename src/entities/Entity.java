@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public abstract class Entity {
@@ -21,7 +23,6 @@ public abstract class Entity {
     protected String defaultImagePath;
     Rectangle actualArea;
     protected ApplicationPanel panel;
-
     CollisionManager collisionManager;
     protected boolean canMove;
     protected int lives;
@@ -29,6 +30,11 @@ public abstract class Entity {
     protected int imageIndex = 0;
     protected BufferedImage currentImage;
     protected boolean canBite = true;
+
+    // Cache for loaded images
+    private final Map<String, BufferedImage> imageCache = new HashMap<>();
+
+    protected int pathUpdateCounter = 0;
     public Entity(ApplicationPanel panel) {
         this.panel = panel;
     }
@@ -36,16 +42,23 @@ public abstract class Entity {
     public abstract void draw(Graphics2D g);
 
     public abstract void update();
+
     public abstract void changeCurrentImage(int counter);
 
     public BufferedImage loadImage(String index) {
-        BufferedImage image = null;
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + direction + "_" + index + ".png")));
-        } catch (IOException e) {
+        String key = defaultImagePath + direction + "_" + index + ".png";
+        if (imageCache.containsKey(key)) {
+            return imageCache.get(key);
         }
-        return image;
+        try {
+            BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + key)));
+            imageCache.put(key, image);
+            return image;
+        } catch (IOException e) {
+            return null;
+        }
     }
+
     public abstract void drawBar(Graphics2D g, int max, int current, int y, Color color);
 
     public void decreaseLives() {
@@ -64,7 +77,6 @@ public abstract class Entity {
                     return true;
                 }
             }
-
         }
         return false;
     }
@@ -91,13 +103,6 @@ public abstract class Entity {
 
     private void changeDirection(int leftX, int rightX, int topY, int bottomY, int pathTileX, int pathTileY) {
 
-        boolean entityCollision = false;
-        for (Entity entity : panel.getEntities()) {
-            if (entity != this && collisionManager.checkEntityCollision(this, entity)) {
-                entityCollision = true;
-                break;
-            }
-        }
         if (topY > pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()) {
             direction = 0;
         } else if (topY <= pathTileY && leftX >= pathTileX && rightX < pathTileX + panel.getSquareSide()) {
@@ -107,19 +112,19 @@ public abstract class Entity {
         } else if (topY >= pathTileY && leftX < pathTileX && bottomY < pathTileY + panel.getSquareSide()) {
             direction = 3;
         } else if (topY > pathTileY && leftX > pathTileX) {
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
+            if (collisionManager.checkTileCollision(this, panel)) {
                 direction = 2;
             }
         } else if (topY >= pathTileY && leftX <= pathTileX) {
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
+            if (collisionManager.checkTileCollision(this, panel)) {
                 direction = 3;
             }
         } else if (leftX >= pathTileX) {
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
+            if (collisionManager.checkTileCollision(this, panel)) {
                 direction = 2;
             }
         } else {
-            if (collisionManager.checkTileCollision(this, panel) || entityCollision) {
+            if (collisionManager.checkTileCollision(this, panel)) {
                 direction = 3;
             }
         }
@@ -129,11 +134,11 @@ public abstract class Entity {
         this.direction = direction;
     }
 
-    public int getRelX(Entity entity) { // returns x coordinate relative to player
+    public int getRelX(Entity entity) {
         return x - entity.getX() + panel.getPlayer().getCenterX();
     }
 
-    public int getRelY(Entity entity) { // returns y coordinate relative to player
+    public int getRelY(Entity entity) {
         return y - entity.getY() + panel.getPlayer().getCenterY();
     }
 

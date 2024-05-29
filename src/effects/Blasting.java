@@ -30,22 +30,22 @@ public class Blasting extends Effect{
         try {
         switch (direction) {
             case 0 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_0.png")));
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_0.png")));
                 x = panel.getPlayer().getCenterX();
                 y = panel.getPlayer().getCenterY() - panel.getSquareSide() + 7;
             }
             case 1 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_1.png")));
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_1.png")));
                 x = panel.getPlayer().getCenterX();
                 y = panel.getPlayer().getCenterY() + panel.getSquareSide()/2 + 5;
             }
             case 2 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_2.png")));
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_2.png")));
                 x = panel.getPlayer().getCenterX() - panel.getSquareSide();
                 y = panel.getPlayer().getCenterY() - panel.getSquareSide()/4;
             }
             case 3 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/blasts/gunBlast_3.png")));
+                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_3.png")));
                 x = panel.getPlayer().getCenterX() + panel.getSquareSide();
                 y = panel.getPlayer().getCenterY() - panel.getSquareSide()/4;
             }

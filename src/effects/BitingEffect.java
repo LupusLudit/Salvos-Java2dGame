@@ -33,13 +33,13 @@ public class BitingEffect extends Effect{
 
     private void pickImage() throws IOException {
         if (duration >= 20){
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/mouth/mouth_open.png")));
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/mouth/mouth_open.png")));
         }
         else if (duration >= 10){
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/mouth/mouth_closing.png")));
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/mouth/mouth_closing.png")));
         }
         else{
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/mouth/mouth_closed.png")));
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/mouth/mouth_closed.png")));
         }
 
     }

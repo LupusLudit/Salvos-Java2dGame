@@ -29,7 +29,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     MouseInput mouseInput = new MouseInput();
     TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
-    private ArrayList<Entity> entities = new ArrayList<>();
+    private List<Entity> entities = new ArrayList<>();
     Game game = new Game(this);
     Player player = new Player(userInput, this);
     CollectableManager collectableManager = new CollectableManager(this);
@@ -181,7 +181,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
         return tilePainter;
     }
 
-    public ArrayList<Entity> getEntities() {
+    public List<Entity> getEntities() {
         return entities;
     }
 
