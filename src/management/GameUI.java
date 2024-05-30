@@ -1,6 +1,8 @@
 package management;
+
 import items.Item;
 import world.ApplicationPanel;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -9,6 +11,7 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+
 public class GameUI {
     ApplicationPanel panel;
     private Font large;
@@ -16,12 +19,13 @@ public class GameUI {
     private Font small;
     private Font verySmall;
     Item[][] invByPos = new items.Item[5][2];
+
     public GameUI(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
         initializeFonts();
     }
 
-    private void initializeFonts(){
+    private void initializeFonts() {
         try {
             InputStream inputStream = getClass().getResourceAsStream("/fonts/PIXELADE.TTF");
             Font baseFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
@@ -35,6 +39,7 @@ public class GameUI {
             throw new RuntimeException(e);
         }
     }
+
     public void draw(Graphics2D g) {
         try {
             switch (panel.getStatus()) {
@@ -53,7 +58,8 @@ public class GameUI {
             }
             if (panel.getPlayer().getClock().isRunning()) drawTimer(g);
             if (panel.getEntities().isEmpty()) drawWaveMessage(g);
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     public void drawBackground(Graphics2D g) throws IOException {
@@ -73,20 +79,20 @@ public class GameUI {
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         g.setFont(large);
         g.setColor(new Color(133, 25, 25));
-        g.drawString("YOU DIED", centerX(g, "YOU DIED"), centerY(g, "YOU DIED"));
+        g.drawString("YOU DIED", centerX(g, "YOU DIED"), centerY(g, "YOU DIED") - panel.getSquareSide() * 2);
         g.setColor(Color.white);
         g.setFont(medium);
-        if (panel.getChosenOption() > 1){
+        if (panel.getChosenOption() > 1) {
             panel.setChosenOption(0);
         }
-        drawSelectionLabel(g, "RESTART", centerX(g, "RESTART"), centerY(g, "RESTART") + panel.getSquareSide()*2, 0, true);
-        drawSelectionLabel(g, "QUIT", centerX(g, "QUIT"), centerY(g, "QUIT") + panel.getSquareSide()*3, 1, true);
+        drawSelectionLabel(g, "RESTART", centerX(g, "RESTART"), centerY(g, "RESTART") + panel.getSquareSide() * 2, 0, true);
+        drawSelectionLabel(g, "QUIT", centerX(g, "QUIT"), centerY(g, "QUIT") + panel.getSquareSide() * 3, 1, true);
     }
 
     public void drawStartingScreen(Graphics2D g) throws IOException {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/startingScreen.png")));
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/startingScreen.png")));
         g.drawImage(image, 0, 0, panel.getWidth(), panel.getHeight(), null);
 
         g.setColor(Color.white);
@@ -95,7 +101,7 @@ public class GameUI {
         drawSelectionLabel(g, "QUIT", centerX(g, "QUIT"), centerY(g, "QUIT") + panel.getSquareSide(), 1, true);
     }
 
-    private void drawSelectionLabel(Graphics2D g, String text, int x, int y, int chosen, boolean multiple){
+    private void drawSelectionLabel(Graphics2D g, String text, int x, int y, int chosen, boolean multiple) {
         g.drawString(text, x, y);
         if (panel.getChosenOption() == chosen) drawArrows(g, text, x, y, multiple);
     }
@@ -105,7 +111,7 @@ public class GameUI {
         g.setColor(Color.white);
         int x = panel.getSquareSide() / 2;
         int y = panel.getHeight() - panel.getSquareSide() - 30;
-        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/ammo.png")));
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/ammo.png")));
 
         g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
         String text = panel.getGame().getMagazine() + "/" + panel.getGame().getAmmo();
@@ -117,12 +123,18 @@ public class GameUI {
         int y = panel.getHeight() - 4 * panel.getSquareSide() - 10;
         BufferedImage image = null;
         switch (panel.getGame().getSelectedWeapon()) {
-            case REVOLVER -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/revolver.png")));
-            case PISTOL -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/pistol.png")));
-            case SEMIAUTO -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/semi-auto.png")));
-            case ASSAULTRIFLE -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/assault-rifle.png")));
-            case SUBMACHINE_GUN -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/tommyGun.png")));
-            case FIST -> image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/fist.png")));
+            case REVOLVER ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/revolver.png")));
+            case PISTOL ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/pistol.png")));
+            case SEMIAUTO ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/semi-auto.png")));
+            case ASSAULTRIFLE ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/assault-rifle.png")));
+            case SUBMACHINE_GUN ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/tommyGun.png")));
+            case FIST ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/fist.png")));
         }
         g.drawImage(image, x, y, panel.getSquareSide() * 3, panel.getSquareSide() * 3, null);
 
@@ -175,7 +187,7 @@ public class GameUI {
     }
 
     public void drawInventoryWindow(Graphics2D g) {
-        int width = panel.getSquareSide() * 5 + 12;
+        int width = panel.getSquareSide() * 5 + 24;
         int height = panel.getSquareSide() * 3;
         int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getSquareSide() * 3;
@@ -208,11 +220,11 @@ public class GameUI {
             }
         });
         y = panel.getSquareSide() * 3 + (panel.getPlayer().getInventory().getSelectedRow() + 1) * (panel.getSquareSide() + 16);
-        drawSelectionArrow(g,y, width, panel.getPlayer().getInventory().getSelectedCol());
+        drawSelectionArrow(g, y, width, panel.getPlayer().getInventory().getSelectedCol());
     }
 
     public void drawShopWindow(Graphics2D g) {
-        int width = panel.getSquareSide() * 5 + 12;
+        int width = panel.getSquareSide() * 5 + 24;
         int height = panel.getSquareSide() * 3;
         int x = panel.getWidth() / 2 - width / 2;
         int y = panel.getHeight() / 2 - height / 2;
@@ -232,7 +244,7 @@ public class GameUI {
             }
         }
         y = panel.getHeight() / 2 - height / 2 + (panel.getShop().getSelectedRow() + 1) * (panel.getSquareSide() + 16);
-        drawSelectionArrow(g,y, width, panel.getShop().getSelectedCol());
+        drawSelectionArrow(g, y, width, panel.getShop().getSelectedCol());
     }
 
     public void drawTimer(Graphics2D g) {
@@ -253,7 +265,7 @@ public class GameUI {
         g.setColor(Color.WHITE);
         g.setFont(medium);
         String text = String.valueOf(panel.getGame().getScore());
-        Image image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/star.png")));
+        Image image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/star.png")));
         g.drawImage(image, 5, 5, panel.getSquareSide(), panel.getSquareSide(), null);
         g.drawString(text, panel.getSquareSide() + 15, textHeight(g, text) + 6);
     }
@@ -261,39 +273,48 @@ public class GameUI {
     public void drawBackgroundRect(Graphics2D g, int x, int y, int width, int height) {
         Color color = new Color(0, 0, 0, 230);
         g.setColor(color);
-        g.fillRoundRect(x, y, width, height, 50, 50);
+        g.fillRoundRect(x, y, width, height, 25, 25);
 
         color = new Color(255, 255, 255);
         g.setColor(color);
         g.setStroke(new BasicStroke(3));
-        g.drawRoundRect(x, y, width, height, 50, 50);
+        g.drawRoundRect(x, y, width, height, 25, 25);
     }
-    public void drawSelectionArrow(Graphics2D g, int y, int width, int col){
+
+    public void drawSelectionArrow(Graphics2D g, int y, int width, int col) {
         g.setFont(small);
         String text = "^";
         int x = panel.getWidth() / 2 - width / 2 + col * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
         g.drawString(text, x, y);
     }
-    public void drawInformationWindow(Graphics2D g, String text, int rectY){
+
+    public void drawInformationWindow(Graphics2D g, String text, int rectY) {
         g.setFont(medium);
-        drawBackgroundRect(g, panel.getWidth()/2 - textLength(g, text)/2 - 16, rectY - panel.getSquareSide() - textHeight(g, text), textLength(g, text) + 32, textHeight(g, text) + 12);
-        g.drawString(text, panel.getWidth()/2 - textLength(g, text)/2, rectY - panel.getSquareSide() - 6);
+        int x = panel.getWidth() / 2 - textLength(g, text) / 2 - 16;
+        int y = rectY - panel.getSquareSide() - textHeight(g, text);
+
+        drawBackgroundRect(g, x, y, textLength(g, text) + 32, textHeight(g, text) + 12);
+        g.drawString(text, x+16, rectY - panel.getSquareSide() - 6);
     }
 
     public int textHeight(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
     }
+
     public int textLength(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
     }
+
     public int centerX(Graphics2D g, String text) {
         int length = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
         return panel.getWidth() / 2 - length / 2;
     }
+
     public int centerY(Graphics2D g, String text) {
         int height = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
         return panel.getHeight() / 2 + height / 2;
     }
+
     public items.Item getSelectedItem() {
         return invByPos[panel.getPlayer().getInventory().getSelectedCol()][panel.getPlayer().getInventory().getSelectedRow()];
     }

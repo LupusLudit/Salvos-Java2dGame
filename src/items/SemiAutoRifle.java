@@ -7,7 +7,7 @@ public class SemiAutoRifle extends Item{
 
     public SemiAutoRifle(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/semi-auto.png");
+        setImage("/items/semi-auto.png");
         setPrice(1);
     }
 

@@ -32,11 +32,10 @@ public class EffectManager {
     }
 
     public void drawParticles(Graphics2D g) {
-        synchronized (effects) {
-            for (Effect effect : effects) {
-                if (effect != null) {
-                    effect.draw(g);
-                }
+        List<Effect> effectsCopy = new ArrayList<>(effects);
+        for (Effect effect : effectsCopy) {
+            if (effect != null) {
+                effect.draw(g);
             }
         }
     }
@@ -65,7 +64,7 @@ public class EffectManager {
     }
 
     public void addGroundParticles(int x, int y) {
-        Color color = new Color(90, 50, 40);
+        Color color = new Color(116, 55, 39);
         effects.add(new Particle(panel, x, y, -2,-2,0.7,15, color));
         effects.add(new Particle(panel, x, y, -1,-3,0.7,15, color));
         effects.add(new Particle(panel, x, y, 0.5,-2,0.7,15, color));
@@ -104,7 +103,7 @@ public class EffectManager {
     }
 
     public void addPunchingEffect(int direction){
-        effects.add(new PunchingEffect(panel, 15, direction));
+        effects.add(new PunchingEffect(panel, 30, direction));
     }
 
     public void addReloadingEffect(){

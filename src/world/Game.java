@@ -70,9 +70,9 @@ public class Game {
             attackEntities(mag, ammo, maxCapacity);
         }
 
-        if (mag == 0 || panel.getUserInput().isReloadTriggered()) {
+        if ((mag == 0 || panel.getUserInput().isReloadTriggered()) && selectedWeapon != Weapon.FIST) {
             reloadCounter++;
-            if (reloadCounter == 1 && selectedWeapon!=Weapon.FIST){
+            if (reloadCounter == 1){
                 panel.getEffectManager().addReloadingEffect();
             }
             if (reloadCounter == 100) {

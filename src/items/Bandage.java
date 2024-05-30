@@ -6,7 +6,7 @@ public class Bandage extends Item{
 
     public Bandage(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/bandage.png");
+        setImage("/items/bandage.png");
     }
 
     @Override

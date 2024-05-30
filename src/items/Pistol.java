@@ -7,7 +7,7 @@ public class Pistol extends Item{
 
     public Pistol(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/pistol.png");
+        setImage("/items/pistol.png");
         setPrice(1);
     }
 

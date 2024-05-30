@@ -7,7 +7,7 @@ public class RifleAmmo extends Item{
 
     public RifleAmmo(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/ak_ammo.png");
+        setImage("/items/akAmmo.png");
         setPrice(1);
     }
 

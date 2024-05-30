@@ -6,7 +6,7 @@ public class EnergyDrink extends Item{
 
     public EnergyDrink(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/energy_drink.png");
+        setImage("/items/energyDrink.png");
     }
 
     @Override

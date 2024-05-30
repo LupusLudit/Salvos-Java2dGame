@@ -16,9 +16,6 @@ public class PunchingEffect extends Effect{
     public PunchingEffect(ApplicationPanel panel, int duration, int direction) {
         super(panel, duration);
         this.direction = direction;
-        try {
-            fistImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/ui/fist.png")));
-        }catch (IOException ignored){}
     }
 
     @Override
@@ -30,17 +27,14 @@ public class PunchingEffect extends Effect{
     public void draw(Graphics2D g) {
         int x = 0;
         int y = 0;
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punchingBlows/punchBlow_" + direction + ".png")));
-        }catch (IOException ignored){}
         switch (direction) {
             case 0 -> {
                 x = panel.getPlayer().getCenterX();
-                y = panel.getPlayer().getCenterY() - 20;
+                y = panel.getPlayer().getCenterY() - panel.getSquareSide()/2;
             }
             case 1 -> {
                 x = panel.getPlayer().getCenterX();
-                y = panel.getPlayer().getCenterY() + 20;
+                y = panel.getPlayer().getCenterY() + panel.getSquareSide()/2;
             }
             case 2 -> {
                 x = panel.getPlayer().getCenterX() - panel.getSquareSide()/2;
@@ -51,10 +45,25 @@ public class PunchingEffect extends Effect{
                 y = panel.getPlayer().getCenterY();
             }
         }
-        g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
+        try {
+            chooseImages();
+        }catch (IOException ignored){}
 
-        x = panel.getPlayer().getCenterX() - 15 + duration*2;
-        y = panel.getPlayer().getCenterY() - panel.getSquareSide();
-        g.drawImage(fistImage, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
+        g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
+        x = panel.getPlayer().getCenterX() - panel.getSquareSide()/2;
+        y = panel.getHeight() - panel.getSquareSide()*4; //The effect will be displayed above the players bars
+        g.drawImage(fistImage, x, y, panel.getSquareSide()*2, panel.getSquareSide()*2, null);
+    }
+
+    public void chooseImages() throws IOException {
+        image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punching/punchBlow_" + direction + ".png")));
+        if (duration >= 20){
+            fistImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punching/punching_0.png")));
+        }
+        else if (direction >= 10){
+            fistImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punching/punching_1.png")));
+        }else {
+            fistImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punching/punching_2.png")));
+        }
     }
 }

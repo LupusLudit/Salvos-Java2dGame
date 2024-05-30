@@ -7,7 +7,7 @@ public class SemiAutoAmmo extends Item{
 
     public SemiAutoAmmo(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/grant_ammo.png");
+        setImage("/items/grant_ammo.png");
         setPrice(1);
     }
 

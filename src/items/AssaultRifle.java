@@ -7,7 +7,7 @@ public class AssaultRifle extends Item{
 
     public AssaultRifle(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/assault-rifle.png");
+        setImage("/items/assault-rifle.png");
         setPrice(1);
     }
 

@@ -7,7 +7,7 @@ public class Revolver extends Item {
 
     public Revolver(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/revolver.png");
+        setImage("/items/revolver.png");
         setPrice(1);
     }
     @Override

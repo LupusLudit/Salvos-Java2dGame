@@ -6,7 +6,7 @@ import world.ApplicationPanel;
 public class TommyGun extends Item{
     public TommyGun(ApplicationPanel applicationPanel) {
         super(applicationPanel);
-        setImage("/ui/tommyGun.png");
+        setImage("/items/tommyGun.png");
         setPrice(1);
     }
 
