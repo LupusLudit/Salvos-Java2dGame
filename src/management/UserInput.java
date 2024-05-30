@@ -2,11 +2,12 @@ package management;
 
 import world.ApplicationPanel;
 import world.Status;
+import world.Weapon;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class UserInput implements KeyListener{
+public class UserInput implements KeyListener {
 
     private int direction = 0;
     private boolean pressed;
@@ -65,10 +66,16 @@ public class UserInput implements KeyListener{
                             applicationPanel.setChosenOption(0);
                         }
                     }
-                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> applicationPanel.getGame().addBonus(applicationPanel.getChosenOption());
-                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> applicationPanel.getGame().subtractBonus(applicationPanel.getChosenOption());
-
-                    case KeyEvent.VK_ENTER -> {
+                    case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> {
+                        if (applicationPanel.getChosenOption() != 3){
+                            applicationPanel.getGame().addBonus(applicationPanel.getChosenOption());
+                        }
+                    }
+                    case KeyEvent.VK_A, KeyEvent.VK_LEFT -> {
+                        if (applicationPanel.getChosenOption() != 3) {
+                            applicationPanel.getGame().subtractBonus(applicationPanel.getChosenOption());
+                        }
+                    }case KeyEvent.VK_ENTER -> {
                         if (applicationPanel.getChosenOption() == 3) {
                             applicationPanel.setStatus(Status.PLAYING);
                         }
@@ -117,6 +124,8 @@ public class UserInput implements KeyListener{
                         items.Item item = applicationPanel.getUi().getSelectedItem();
                         if (item != null && applicationPanel.getPlayer().getInventory().getItems().get(item) > 0) {
                             item.use();
+                        } else {
+                            applicationPanel.getGame().setSelectedWeapon(Weapon.FIST);
                         }
                     }
                 }
@@ -130,10 +139,34 @@ public class UserInput implements KeyListener{
                     case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> applicationPanel.getShop().addCol();
                     case KeyEvent.VK_B -> applicationPanel.setStatus(Status.PLAYING);
                     case KeyEvent.VK_E -> {
-                        if(applicationPanel.getGame().getScore() >= applicationPanel.getShop().getSelectedItem().getPrice() && applicationPanel.getPlayer().getInventory().getItems().size() < 10){
+                        if (applicationPanel.getGame().getScore() >= applicationPanel.getShop().getSelectedItem().getPrice() && applicationPanel.getPlayer().getInventory().getItems().size() < 10) {
                             int newScore = applicationPanel.getGame().getScore() - applicationPanel.getShop().getSelectedItem().getPrice();
                             applicationPanel.getGame().setScore(newScore);
                             applicationPanel.getShop().getSelectedItem().collect();
+                        }
+                    }
+                }
+            }
+            case GAMEOVER -> {
+                switch (input) {
+                    case KeyEvent.VK_W, KeyEvent.VK_UP -> {
+                        applicationPanel.setChosenOption(applicationPanel.getChosenOption() - 1);
+                        if (applicationPanel.getChosenOption() < 0) {
+                            applicationPanel.setChosenOption(1);
+                        }
+                    }
+                    case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
+                        applicationPanel.setChosenOption(applicationPanel.getChosenOption() + 1);
+                        if (applicationPanel.getChosenOption() > 1) {
+                            applicationPanel.setChosenOption(0);
+                        }
+                    }
+                    case KeyEvent.VK_ENTER -> {
+                        if (applicationPanel.getChosenOption() == 0) {
+                            applicationPanel.restart();
+
+                        } else {
+                            System.exit(0);
                         }
                     }
                 }

@@ -2,7 +2,6 @@ package world;
 
 import collectables.CollectableManager;
 import effects.EffectManager;
-import effects.Particle;
 import entities.Entity;
 import entities.Player;
 import items.Revolver;
@@ -17,7 +16,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ApplicationPanel extends JPanel implements Runnable{
     private final int squareSide = 48;
@@ -25,16 +23,17 @@ public class ApplicationPanel extends JPanel implements Runnable{
     private final int row = 14;
 
     private Graphics2D g2;
+    MouseInput mouseInput = new MouseInput();;
+    TilePainter tilePainter;
     UserInput userInput = new UserInput(this);
-    MouseInput mouseInput = new MouseInput();
-    TilePainter tilePainter = new TilePainter(this);
     GameUI ui = new GameUI(this);
-    private List<Entity> entities = new ArrayList<>();
-    Game game = new Game(this);
-    Player player = new Player(userInput, this);
-    CollectableManager collectableManager = new CollectableManager(this);
-    Shop shop = new Shop(this);
-    EffectManager effectManager = new EffectManager(this);
+    CollisionManager collisionManager = new CollisionManager(this);
+    private List<Entity> entities;
+    Game game;
+    Player player;
+    CollectableManager collectableManager;
+    Shop shop = new Shop(this);;
+    EffectManager effectManager;
     private Status status;
     private int chosenOption = 0;
     private int wave = 1;
@@ -52,15 +51,26 @@ public class ApplicationPanel extends JPanel implements Runnable{
         addMouseListener(mouseInput);
         changeCursor();
 
-        status = Status.SETUP;
-        game.setEntities(wave);
-        Revolver revolver = new Revolver(this);
-        revolver.collect();
+        restart();
     }
 
     public void start() {
         gameThread = new Thread(this);
         gameThread.start();
+    }
+
+    public void restart(){
+        tilePainter = new TilePainter(this);
+        entities = new ArrayList<>();
+        game = new Game(this);
+        player = new Player(userInput, this);
+        collectableManager = new CollectableManager(this);
+        effectManager = new EffectManager(this);
+        status = Status.SETUP;
+        wave = 1;
+        game.setEntities(wave);
+        Revolver revolver = new Revolver(this);
+        revolver.collect();
     }
 
 
@@ -121,13 +131,12 @@ public class ApplicationPanel extends JPanel implements Runnable{
         g2 = (Graphics2D) g;
 
         ui.draw(g2);
-        if (status != Status.SETUP && status != Status.GAMEOVER) {
+        if (status == Status.PLAYING) {
             effectManager.drawParticles(g2);
         }
     }
 
     public void checkStatus() {
-
         if (player.getLives() <= 0) {
             status = Status.GAMEOVER;
         }
@@ -235,5 +244,9 @@ public class ApplicationPanel extends JPanel implements Runnable{
 
     public Search getSearch() {
         return search;
+    }
+
+    public CollisionManager getCollisionManager() {
+        return collisionManager;
     }
 }

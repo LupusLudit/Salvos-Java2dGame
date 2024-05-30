@@ -49,7 +49,7 @@ public class CollectableManager {
         Iterator<Collectable> iterator = collectables.iterator();
         while (iterator.hasNext()) {
             Collectable collectable = iterator.next();
-            if (collectable.intersectsPlayer() && panel.getPlayer().getInventory().getItems().size() < 6) {
+            if (collectable.intersectsPlayer() && panel.getPlayer().getInventory().getItems().size() < 10) {
                 collectable.getItem().collect();
                 panel.getEffectManager().addPickUpEffects();
                 iterator.remove();
@@ -71,8 +71,8 @@ public class CollectableManager {
         int row;
         int chosen;
         for (int i = 0; i < 7; i++){
-            col = rn.nextInt(20)+70;
-            row = rn.nextInt(17)+80;
+            col = rn.nextInt(15)+61;
+            row = rn.nextInt(17)+61;
             chosen = rn.nextInt(7);
 
         if (!panel.getTilePainter().getTile(col,row).isSolid()){

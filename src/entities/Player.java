@@ -23,21 +23,20 @@ public class Player extends Entity {
     private int staminaCounter = 0;
     private int hitCounter = 0;
     Clock clock = new Clock();
-
     Inventory inventory = new Inventory();
 
     public Player(UserInput userInput, ApplicationPanel applicationPanel) {
         super(applicationPanel);
         defaultImagePath = "entities/sprite_";
         this.userInput = userInput;
-        this.collisionManager = new CollisionManager();
+        this.collisionManager = panel.getCollisionManager();
 
         canMove = true;
         setBonuses();
         currentImage = loadImage("idle");
 
-        this.x = 59 * applicationPanel.getSquareSide();
-        this.y = 64 * applicationPanel.getSquareSide();
+        this.x = 50 * applicationPanel.getSquareSide();
+        this.y = 50 * applicationPanel.getSquareSide();
         centerX = (applicationPanel.getSquareSide() * applicationPanel.getCol()) / 2 - (applicationPanel.getSquareSide() / 2);
         centerY = (applicationPanel.getSquareSide() * applicationPanel.getRow()) / 2 - (applicationPanel.getSquareSide() / 2);
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
@@ -76,7 +75,7 @@ public class Player extends Entity {
     public void update() {
         if (userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
             direction = userInput.getDirection();
-            canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
+            canMove = !collisionManager.checkTileCollision(this) && !allEntitiesCollision();
             if (canMove) {
                 move();
                 actualArea.setRect(x + 8, y + 16, 32, 32);

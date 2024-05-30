@@ -74,6 +74,13 @@ public class GameUI {
         g.setFont(large);
         g.setColor(new Color(133, 25, 25));
         g.drawString("YOU DIED", centerX(g, "YOU DIED"), centerY(g, "YOU DIED"));
+        g.setColor(Color.white);
+        g.setFont(medium);
+        if (panel.getChosenOption() > 1){
+            panel.setChosenOption(0);
+        }
+        drawSelectionLabel(g, "RESTART", centerX(g, "RESTART"), centerY(g, "RESTART") + panel.getSquareSide()*2, 0, true);
+        drawSelectionLabel(g, "QUIT", centerX(g, "QUIT"), centerY(g, "QUIT") + panel.getSquareSide()*3, 1, true);
     }
 
     public void drawStartingScreen(Graphics2D g) throws IOException {

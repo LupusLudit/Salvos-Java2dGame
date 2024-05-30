@@ -31,7 +31,7 @@ public class Game {
 
 
     private void initializeMaps() {
-        ammoMap.put(Weapon.FIST, "0,0,0");
+        ammoMap.put(Weapon.FIST, "1,0,0");
         ammoMap.put(Weapon.REVOLVER, "6,36,6");
         ammoMap.put(Weapon.PISTOL, "0,0,9");
         ammoMap.put(Weapon.SEMIAUTO, "0,0,10");
@@ -51,59 +51,69 @@ public class Game {
     }
 
     public void updateEntities() {
-        Iterator<Entity> iterator = panel.getEntities().iterator();
-        while (iterator.hasNext()) {
-            Entity entity = iterator.next();
-            entity.update();
-            if (entity.getLives() == 0) {
-                iterator.remove();
-            }
-        }
-
         String[] values = ammoMap.get(selectedWeapon).split(",");
         int mag = Integer.parseInt(values[0]);
         int ammo = Integer.parseInt(values[1]);
         int maxCapacity = Integer.parseInt(values[2]);
 
-        if (cursorOnScreen(panel.getMousePosition()) && panel.getMouseInput().isMouseClicked()) {
-            simulateShooting(mag, ammo, maxCapacity);
+        Iterator<Entity> iterator = panel.getEntities().iterator();
+        while (iterator.hasNext()) {
+            Entity entity = iterator.next();
+            entity.update();
+
+            if (entity.getLives() == 0) {
+                iterator.remove();
+            }
+        }
+
+        if (cursorOnScreen(panel.getMousePosition()) && panel.getMouseInput().isMouseClicked() && reloadCounter == 0) {
+            attackEntities(mag, ammo, maxCapacity);
         }
 
         if (mag == 0 || panel.getUserInput().isReloadTriggered()) {
             reloadCounter++;
+            if (reloadCounter == 1 && selectedWeapon!=Weapon.FIST){
+                panel.getEffectManager().addReloadingEffect();
+            }
             if (reloadCounter == 100) {
                 reload(mag, ammo, maxCapacity);
                 reloadCounter = 0;
             }
+
         }
     }
 
-    public void drawEntities(Graphics2D g){
-        for (Entity entity: panel.getEntities()){
-            if(entity != null){
+    public void drawEntities(Graphics2D g) {
+        for (Entity entity : panel.getEntities()) {
+            if (entity != null) {
                 entity.draw(g);
             }
         }
     }
-    public void simulateShooting(int mag, int ammo, int maxCapacity) {
+
+    public void attackEntities(int mag, int ammo, int maxCapacity) {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();
         int delay = shootingDelay();
         changeDirection();
 
-        if (mag > 0 && currentTime - lastShootTime >= delay){
-            panel.getEffectManager().addBlastingEffect(panel.getPlayer().getDirection());
-            addParticles(mousePosition.x, mousePosition.y);
-
-            mag--;
+        if (mag > 0 && currentTime - lastShootTime >= delay) {
+            if (selectedWeapon != Weapon.FIST) {
+                panel.getEffectManager().addBlastingEffect(panel.getPlayer().getDirection());
+                addParticles(mousePosition.x, mousePosition.y);
+                mag--;
+            }if (selectedWeapon == Weapon.FIST ){
+                panel.getEffectManager().addPunchingEffect(panel.getPlayer().getDirection());
+            }
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
             for (Entity entity : panel.getEntities()) {
-                if (entity.getHitBoxArea().contains(clickPoint)) {
+                if (selectedWeapon == Weapon.FIST && panel.getCollisionManager().checkAdjutantTiles(panel.getPlayer(), entity)) {
                     entity.decreaseLives();
                     score += 5;
-
+                } else if (selectedWeapon != Weapon.FIST && entity.getHitBoxArea().contains(clickPoint)) {
+                    entity.decreaseLives();
+                    score += 5;
                     panel.getEffectManager().addHitParticles(mousePosition.getX(), mousePosition.getY());
-                    panel.getEffectManager().addFlashingEffect(entity);
                 }
             }
             lastShootTime = currentTime;
@@ -111,18 +121,16 @@ public class Game {
             ammoMap.put(selectedWeapon, text);
         }
     }
+    private void addParticles(int x, int y) {
+        int col = (x + panel.getPlayer().getX() - panel.getPlayer().getCenterX()) / panel.getSquareSide();
+        int row = (y + panel.getPlayer().getY() - panel.getPlayer().getCenterY()) / panel.getSquareSide();
+        int index = panel.getTilePainter().getTile(col, row).getImageIndex();
 
-    private void addParticles(int x, int y){
-        int col = (x + panel.getPlayer().getX() - panel.getPlayer().getCenterX())/panel.getSquareSide();
-        int row = (y + panel.getPlayer().getY() - panel.getPlayer().getCenterY())/panel.getSquareSide();
-
-        if (panel.getTilePainter().getTile(col,row).getImageIndex() < 12) {
-            panel.getEffectManager().addWaterParticles(x, y);
-        }
-        else if(panel.getTilePainter().getTile(col,row).getImageIndex() == 42){
+        if (index == 14 || index == 18 || index == 19) {
+            panel.getEffectManager().addRadioactiveParticles(x, y);
+        } else if (index < 14 || index == 15 || index == 16) {
             panel.getEffectManager().addRockParticles(x, y);
-        }
-        else{
+        } else {
             panel.getEffectManager().addGroundParticles(x, y);
         }
     }
@@ -156,6 +164,7 @@ public class Game {
     public int shootingDelay() {
         int delay = 0;
         switch (selectedWeapon) {
+            case FIST -> delay = 750;
             case REVOLVER -> delay = 1000;
             case PISTOL -> delay = 300;
             case SEMIAUTO -> delay = 150;

@@ -13,6 +13,7 @@ public class Zombie extends Entity {
         super(applicationPanel);
         defaultImagePath = "entities/zombie_";
         this.panel = applicationPanel;
+        this.collisionManager = panel.getCollisionManager();
 
         speed = 3;
         canMove = true;
@@ -23,7 +24,6 @@ public class Zombie extends Entity {
 
         chooseSpawnPoint();
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
-        this.collisionManager = new CollisionManager();
         currentImage = loadImage("idle");
     }
 
@@ -40,11 +40,11 @@ public class Zombie extends Entity {
     @Override
     public void update() {
         pathUpdateCounter++;
-        if (pathUpdateCounter % 5 == 0){
+        if (pathUpdateCounter % 4 == 0){
             updatePath((panel.getPlayer().getX() + 24)/panel.getSquareSide(), (panel.getPlayer().getY() + 32)/panel.getSquareSide());
         }
 
-        canMove = !collisionManager.checkTileCollision(this, panel) && !allEntitiesCollision();
+        canMove = !collisionManager.checkTileCollision(this) && !allEntitiesCollision();
         if (canMove) {
             switch (direction) {
                 case 0 -> y -= speed;
@@ -95,16 +95,16 @@ public class Zombie extends Entity {
             int xBound = rn.nextInt(3);
             switch (xBound) {
                 case 0 -> {
-                    x = (rn.nextInt(5) + 37) * panel.getSquareSide();
-                    y = (rn.nextInt(5) + 27) * panel.getSquareSide();
+                    x = (rn.nextInt(5) + 27) * panel.getSquareSide();
+                    y = (rn.nextInt(5) + 24) * panel.getSquareSide();
                 }
                 case 1 -> {
-                    x = (rn.nextInt(5) + 33) * panel.getSquareSide();
-                    y = (rn.nextInt(5) + 87) * panel.getSquareSide();
+                    x = (rn.nextInt(5) + 63) * panel.getSquareSide();
+                    y = (rn.nextInt(5) + 30) * panel.getSquareSide();
                 }
                 case 2 -> {
-                    x = (rn.nextInt(5) + 71) * panel.getSquareSide();
-                    y = (rn.nextInt(5) + 35) * panel.getSquareSide();
+                    x = (rn.nextInt(5) + 28) * panel.getSquareSide();
+                    y = (rn.nextInt(5) + 68) * panel.getSquareSide();
                 }
             }
 

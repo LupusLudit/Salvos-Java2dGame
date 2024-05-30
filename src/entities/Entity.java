@@ -23,13 +23,13 @@ public abstract class Entity {
     protected String defaultImagePath;
     Rectangle actualArea;
     protected ApplicationPanel panel;
-    CollisionManager collisionManager;
     protected boolean canMove;
     protected int lives;
     protected int maxLives;
     protected int imageIndex = 0;
     protected BufferedImage currentImage;
     protected boolean canBite = true;
+    protected CollisionManager collisionManager;
 
     // Cache for loaded images
     private final Map<String, BufferedImage> imageCache = new HashMap<>();
@@ -62,7 +62,10 @@ public abstract class Entity {
     public abstract void drawBar(Graphics2D g, int max, int current, int y, Color color);
 
     public void decreaseLives() {
-        if (lives - 1 >= 0) {
+        if (lives > 0) {
+            if (lives == 1){
+                panel.getEffectManager().addFlashingEffect(this);
+            }
             lives--;
         }
     }
@@ -112,19 +115,19 @@ public abstract class Entity {
         } else if (topY >= pathTileY && leftX < pathTileX && bottomY < pathTileY + panel.getSquareSide()) {
             direction = 3;
         } else if (topY > pathTileY && leftX > pathTileX) {
-            if (collisionManager.checkTileCollision(this, panel)) {
+            if (collisionManager.checkTileCollision(this)) {
                 direction = 2;
             }
         } else if (topY >= pathTileY && leftX <= pathTileX) {
-            if (collisionManager.checkTileCollision(this, panel)) {
+            if (collisionManager.checkTileCollision(this)){
                 direction = 3;
             }
         } else if (leftX >= pathTileX) {
-            if (collisionManager.checkTileCollision(this, panel)) {
+            if (collisionManager.checkTileCollision(this)) {
                 direction = 2;
             }
         } else {
-            if (collisionManager.checkTileCollision(this, panel)) {
+            if (collisionManager.checkTileCollision(this)) {
                 direction = 3;
             }
         }

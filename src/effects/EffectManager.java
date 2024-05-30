@@ -1,8 +1,6 @@
 package effects;
 
 import entities.Entity;
-import entities.Player;
-import entities.Zombie;
 import world.ApplicationPanel;
 
 import java.awt.*;
@@ -34,11 +32,11 @@ public class EffectManager {
     }
 
     public void drawParticles(Graphics2D g) {
-        Iterator<Effect> iterator = effects.iterator();
-        while (iterator.hasNext()) {
-            Effect effect = iterator.next();
-            if (effect != null) {
-                effect.draw(g);
+        synchronized (effects) {
+            for (Effect effect : effects) {
+                if (effect != null) {
+                    effect.draw(g);
+                }
             }
         }
     }
@@ -55,8 +53,8 @@ public class EffectManager {
 
     }
 
-    public void addWaterParticles(int x, int y) {
-        Color color = new Color(20, 120, 170);
+    public void addRadioactiveParticles(int x, int y) {
+        Color color = new Color(44, 249, 29);
         effects.add(new Particle(panel, x, y, -1,-2,0.7,15, color));
         effects.add(new Particle(panel, x, y, -2,-3,0.7,15, color));
         effects.add(new Particle(panel, x, y, 0.5,-2,0.7,15, color));
@@ -67,7 +65,7 @@ public class EffectManager {
     }
 
     public void addGroundParticles(int x, int y) {
-        Color color = new Color(80, 50, 20);
+        Color color = new Color(90, 50, 40);
         effects.add(new Particle(panel, x, y, -2,-2,0.7,15, color));
         effects.add(new Particle(panel, x, y, -1,-3,0.7,15, color));
         effects.add(new Particle(panel, x, y, 0.5,-2,0.7,15, color));
@@ -89,8 +87,6 @@ public class EffectManager {
 
     }
 
-
-
     public void addPickUpEffects(){
         effects.add(new PickUp(panel,120));
     }
@@ -105,6 +101,14 @@ public class EffectManager {
 
     public void addBlastingEffect(int direction){
         effects.add(new Blasting(panel, 7, direction));
+    }
+
+    public void addPunchingEffect(int direction){
+        effects.add(new PunchingEffect(panel, 15, direction));
+    }
+
+    public void addReloadingEffect(){
+        effects.add(new ReloadingEffect(panel,100));
     }
 }
 

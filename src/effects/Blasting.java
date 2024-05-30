@@ -28,30 +28,26 @@ public class Blasting extends Effect{
         int x = 0;
         int y = 0;
         try {
+            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_" + direction +".png")));
+        }
+        catch (IOException ignored){}
         switch (direction) {
             case 0 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_0.png")));
                 x = panel.getPlayer().getCenterX();
                 y = panel.getPlayer().getCenterY() - panel.getSquareSide() + 7;
             }
             case 1 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_1.png")));
                 x = panel.getPlayer().getCenterX();
                 y = panel.getPlayer().getCenterY() + panel.getSquareSide()/2 + 5;
             }
             case 2 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_2.png")));
                 x = panel.getPlayer().getCenterX() - panel.getSquareSide();
                 y = panel.getPlayer().getCenterY() - panel.getSquareSide()/4;
             }
             case 3 -> {
-                image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_3.png")));
                 x = panel.getPlayer().getCenterX() + panel.getSquareSide();
                 y = panel.getPlayer().getCenterY() - panel.getSquareSide()/4;
             }
-        }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
         g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
     }
