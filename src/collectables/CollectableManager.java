@@ -18,7 +18,7 @@ public class CollectableManager {
     RevolverAmmo revolverAmmo;
     PistolAmmo pistolAmmo;
     SemiAutoAmmo semiAutoAmmo;
-    RifleAmmo rifleAmmo;
+    AssaultRifleAmmo rifleAmmo;
     TommyGunAmmo tommyGunAmmo;
 
     public CollectableManager(ApplicationPanel panel) {
@@ -35,7 +35,7 @@ public class CollectableManager {
         revolverAmmo = new RevolverAmmo(panel);
         pistolAmmo = new PistolAmmo(panel);
         semiAutoAmmo = new SemiAutoAmmo(panel);
-        rifleAmmo = new RifleAmmo(panel);
+        rifleAmmo = new AssaultRifleAmmo(panel);
         tommyGunAmmo = new TommyGunAmmo(panel);
     }
 

@@ -8,7 +8,7 @@ public class Pistol extends Item{
     public Pistol(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/pistol.png");
-        setPrice(1);
+        setPrice(200);
     }
 
     @Override

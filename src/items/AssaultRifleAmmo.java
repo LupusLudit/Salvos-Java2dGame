@@ -3,12 +3,12 @@ package items;
 import world.Weapon;
 import world.ApplicationPanel;
 
-public class RifleAmmo extends Item{
+public class AssaultRifleAmmo extends Item{
 
-    public RifleAmmo(ApplicationPanel applicationPanel) {
+    public AssaultRifleAmmo(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/akAmmo.png");
-        setPrice(1);
+        setPrice(150);
     }
 
     @Override

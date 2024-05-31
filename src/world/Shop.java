@@ -22,7 +22,7 @@ public class Shop {
         items[0][1] = new RevolverAmmo(applicationPanel);
         items[1][1] = new PistolAmmo(applicationPanel);
         items[2][1] = new SemiAutoAmmo(applicationPanel);
-        items[3][1] = new RifleAmmo(applicationPanel);
+        items[3][1] = new AssaultRifleAmmo(applicationPanel);
         items[4][1] = new TommyGunAmmo(applicationPanel);
     }
 

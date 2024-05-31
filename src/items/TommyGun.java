@@ -7,7 +7,7 @@ public class TommyGun extends Item{
     public TommyGun(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/tommyGun.png");
-        setPrice(1);
+        setPrice(2000);
     }
 
     @Override

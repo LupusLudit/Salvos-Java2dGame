@@ -9,7 +9,7 @@ public class RevolverAmmo extends Item{
     public RevolverAmmo(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/revolverAmmo.png");
-        setPrice(1);
+        setPrice(25);
     }
     @Override
     public void use() {}
