@@ -2,13 +2,10 @@ package items;
 
 import logic.ApplicationPanel;
 
-/**
- * The type Energy drink.
- */
 public class EnergyDrink extends Item{
 
     /**
-     * Instantiates a new Energy drink.
+     * Energy drink constructor.
      *
      * @param applicationPanel the application panel
      */
@@ -19,12 +16,12 @@ public class EnergyDrink extends Item{
 
     @Override
     public void use() {
-        applicationPanel.getPlayer().addStamina(30);
-        applicationPanel.getPlayer().getInventory().removeItem(this);
+        panel.getPlayer().startClock(30);
+        panel.getPlayer().getInventory().removeItem(this);
     }
 
     @Override
     public void collect() {
-        applicationPanel.getPlayer().getInventory().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

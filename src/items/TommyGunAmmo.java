@@ -2,14 +2,10 @@ package items;
 
 import logic.Weapon;
 import logic.ApplicationPanel;
-
-/**
- * The type Tommy gun ammo.
- */
 public class TommyGunAmmo extends Item{
 
     /**
-     * Instantiates a new Tommy gun ammo.
+     * Tommy gun ammo constructor.
      *
      * @param applicationPanel the application panel
      */
@@ -23,12 +19,12 @@ public class TommyGunAmmo extends Item{
 
     @Override
     public void collect() {
-        String[] arr = applicationPanel.getGame().getAmmoMap().get(Weapon.SUBMACHINE_GUN).split(",");
+        String[] arr = panel.getGame().getAmmoMap().get(Weapon.SUBMACHINE_GUN).split(",");
 
         int ammo = Integer.parseInt(arr[1]);
         ammo += 150;
 
         String text = arr[0] + "," + ammo + "," + arr[2];
-        applicationPanel.getGame().getAmmoMap().put(Weapon.SUBMACHINE_GUN, text);
+        panel.getGame().getAmmoMap().put(Weapon.SUBMACHINE_GUN, text);
     }
 }

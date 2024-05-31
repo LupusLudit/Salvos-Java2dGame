@@ -2,14 +2,10 @@ package items;
 
 import logic.Weapon;
 import logic.ApplicationPanel;
-
-/**
- * The type Assault rifle ammo.
- */
 public class AssaultRifleAmmo extends Item{
 
     /**
-     * Instantiates a new Assault rifle ammo.
+     * Assault constructor
      *
      * @param applicationPanel the application panel
      */
@@ -24,12 +20,12 @@ public class AssaultRifleAmmo extends Item{
 
     @Override
     public void collect() {
-        String[] arr = applicationPanel.getGame().getAmmoMap().get(Weapon.ASSAULTRIFLE).split(",");
+        String[] arr = panel.getGame().getAmmoMap().get(Weapon.ASSAULTRIFLE).split(",");
 
         int ammo = Integer.parseInt(arr[1]);
         ammo += 90;
 
         String text = arr[0] + "," + ammo + "," + arr[2];
-        applicationPanel.getGame().getAmmoMap().put(Weapon.ASSAULTRIFLE, text);
+        panel.getGame().getAmmoMap().put(Weapon.ASSAULTRIFLE, text);
     }
 }

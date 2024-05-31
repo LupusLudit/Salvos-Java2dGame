@@ -6,47 +6,35 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
-
-/**
- * The type Item.
- */
 public abstract class Item {
-
-    /**
-     * The Image.
-     */
     protected BufferedImage image;
 
-    /**
-     * The Application panel.
-     */
-    protected ApplicationPanel applicationPanel;
+    protected ApplicationPanel panel;
     private int price;
 
     /**
-     * Instantiates a new Item.
+     * Item constructor.
      *
-     * @param applicationPanel the application panel
+     * @param panel the application panel
      */
-    public Item(ApplicationPanel applicationPanel) {
-        this.applicationPanel = applicationPanel;
+    public Item(ApplicationPanel panel) {
+        this.panel = panel;
     }
 
     /**
-     * Use.
+     * Uses this item.
+     * Use means to experience the effects of the item.
+     * (Also applies to all Overrides)
      */
     public abstract void use();
 
     /**
-     * Collect.
+     * Collects this item.
+     * Collect means to add to players inventory.
+     * (Also applies to all Overrides)
      */
     public abstract void collect();
 
-    /**
-     * Set image.
-     *
-     * @param imagePath the image path
-     */
     public void setImage(String imagePath){
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(imagePath)));
@@ -54,30 +42,12 @@ public abstract class Item {
             System.out.println("image path problem.");
         }
     }
-
-    /**
-     * Sets price.
-     *
-     * @param price the price
-     */
     public void setPrice(int price) {
         this.price = price;
     }
-
-    /**
-     * Gets image.
-     *
-     * @return the image
-     */
     public BufferedImage getImage() {
         return image;
     }
-
-    /**
-     * Gets price.
-     *
-     * @return the price
-     */
     public int getPrice() {
         return price;
     }

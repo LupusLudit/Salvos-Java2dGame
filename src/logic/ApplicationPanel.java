@@ -39,6 +39,10 @@ public class ApplicationPanel extends JPanel implements Runnable{
     Clock clock = new Clock();
     Search search = new Search(this);
     Thread gameThread;
+
+    /**
+     * Application panel constructor.
+     */
     public ApplicationPanel() {
         setPreferredSize(new Dimension(squareSide * col, squareSide * row));
         setBackground(Color.BLACK);
@@ -77,6 +81,12 @@ public class ApplicationPanel extends JPanel implements Runnable{
     }
 
 
+    /**
+     * Overrides the default JPanel run method.
+     * Ensures that the program doesn't update too quickly (60 FPS).
+     * Uses delta time algorithm.
+     */
+
     @Override
     public void run() {
         long desiredFrameTime = 16_666_666; // 60 FPS
@@ -97,7 +107,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     }
 
     /**
-     * Update.
+     * Updates the whole code.
      */
     public void update() {
         checkStatus();
@@ -113,6 +123,12 @@ public class ApplicationPanel extends JPanel implements Runnable{
             effectManager.update();
         }
     }
+
+    /**
+     * Draws everything on the screen.
+     *
+     * @param g the <code>Graphics</code> object to protect
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
@@ -127,7 +143,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     }
 
     /**
-     * Change cursor.
+     * Changes the default cursor to a custom one.
      */
     public void changeCursor() {
         BufferedImage cursorImg = null;
@@ -145,7 +161,8 @@ public class ApplicationPanel extends JPanel implements Runnable{
     }
 
     /**
-     * Check status.
+     * Checks whether player is dead or not.
+     * If so, it changes the game status.
      */
     public void checkStatus() {
         if (player.getLives() <= 0) {
@@ -154,7 +171,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     }
 
     /**
-     * New wave.
+     * "Starts" new wave of enemies if the entities ArrayList is empty.
      */
     public void newWave() {
         if (waveTimer == 0) {
@@ -169,199 +186,72 @@ public class ApplicationPanel extends JPanel implements Runnable{
         }
     }
 
-    /**
-     * Sets status.
-     *
-     * @param status the status
-     */
     public void setStatus(Status status) {
         this.status = status;
     }
-
-    /**
-     * Sets chosen option.
-     *
-     * @param chosenOption the chosen option
-     */
     public void setChosenOption(int chosenOption) {
         this.chosenOption = chosenOption;
     }
-
     public int getWidth() {
         return squareSide * col;
     }
-
     public int getHeight() {
         return squareSide * row;
     }
-
-    /**
-     * Gets square side.
-     *
-     * @return the square side
-     */
     public int getSquareSide() {
         return squareSide;
     }
-
-    /**
-     * Gets col.
-     *
-     * @return the col
-     */
     public int getCol() {
         return col;
     }
-
-    /**
-     * Gets row.
-     *
-     * @return the row
-     */
     public int getRow() {
         return row;
     }
-
-    /**
-     * Gets player.
-     *
-     * @return the player
-     */
     public Player getPlayer() {
         return player;
     }
-
-    /**
-     * Gets tile painter.
-     *
-     * @return the tile painter
-     */
     public TilePainter getTilePainter() {
         return tilePainter;
     }
-
-    /**
-     * Gets entities.
-     *
-     * @return the entities
-     */
     public List<Entity> getEntities() {
         return entities;
     }
-
-    /**
-     * Gets status.
-     *
-     * @return the status
-     */
     public Status getStatus() {
         return status;
     }
-
-    /**
-     * Gets game.
-     *
-     * @return the game
-     */
     public Game getGame() {
         return game;
     }
-
-    /**
-     * Gets mouse input.
-     *
-     * @return the mouse input
-     */
     public MouseInput getMouseInput() {
         return mouseInput;
     }
-
-    /**
-     * Gets chosen option.
-     *
-     * @return the chosen option
-     */
     public int getChosenOption() {
         return chosenOption;
     }
-
-    /**
-     * Gets ui.
-     *
-     * @return the ui
-     */
     public GameUI getUi() {
         return ui;
     }
-
-    /**
-     * Gets wave timer.
-     *
-     * @return the wave timer
-     */
     public int getWaveTimer() {
         return waveTimer;
     }
-
-    /**
-     * Sets wave timer.
-     *
-     * @param waveTimer the wave timer
-     */
     public void setWaveTimer(int waveTimer) {
         this.waveTimer = waveTimer;
     }
-
-    /**
-     * Gets collectable manager.
-     *
-     * @return the collectable manager
-     */
     public CollectableManager getCollectableManager() {
         return collectableManager;
     }
-
-    /**
-     * Gets shop.
-     *
-     * @return the shop
-     */
     public Shop getShop() {
         return shop;
     }
-
-    /**
-     * Gets user input.
-     *
-     * @return the user input
-     */
     public UserInput getUserInput() {
         return userInput;
     }
-
-    /**
-     * Gets effect manager.
-     *
-     * @return the effect manager
-     */
     public EffectManager getEffectManager() {
         return effectManager;
     }
-
-    /**
-     * Gets search.
-     *
-     * @return the search
-     */
     public Search getSearch() {
         return search;
     }
-
-    /**
-     * Gets collision manager.
-     *
-     * @return the collision manager
-     */
     public CollisionManager getCollisionManager() {
         return collisionManager;
     }

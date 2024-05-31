@@ -30,7 +30,7 @@ public class Zombie extends Entity {
 
         chooseSpawnPoint();
         this.actualArea = new Rectangle(x + 8, y + 16, 32, 32);
-        currentImage = loadImage("idle");
+        currentImage = loadSprite("idle");
     }
 
     @Override
@@ -69,14 +69,14 @@ public class Zombie extends Entity {
     @Override
     public void changeCurrentImage(int counter) {
         if (!canMove){
-            currentImage = loadImage("idle");
+            currentImage = loadSprite("idle");
         }
         else if (counter != 0 && counter % 7 == 0) {
             imageIndex++;
             if (imageIndex == 4) {
                 imageIndex = 0;
             }
-            currentImage =  loadImage(String.valueOf(imageIndex));
+            currentImage =  loadSprite(String.valueOf(imageIndex));
         }
     }
     @Override
@@ -95,7 +95,8 @@ public class Zombie extends Entity {
     }
 
     /**
-     * Choose spawn point.
+     * Chooses random spawn point
+     * (Chooses randomly specific area in which should the zombie be spawned)
      */
     public void chooseSpawnPoint() {
         Random rn = new Random();

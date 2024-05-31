@@ -2,14 +2,10 @@ package items;
 
 import logic.Weapon;
 import logic.ApplicationPanel;
-
-/**
- * The type Revolver.
- */
 public class Revolver extends Item {
 
     /**
-     * Instantiates a new Revolver.
+     * Revolver constructor.
      *
      * @param applicationPanel the application panel
      */
@@ -20,11 +16,11 @@ public class Revolver extends Item {
     }
     @Override
     public void use() {
-        applicationPanel.getGame().setSelectedWeapon(Weapon.REVOLVER);
+        panel.getGame().setSelectedWeapon(Weapon.REVOLVER);
     }
 
     @Override
     public void collect() {
-        applicationPanel.getPlayer().getInventory().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

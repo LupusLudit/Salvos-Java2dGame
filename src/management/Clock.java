@@ -31,7 +31,7 @@ public class Clock {
             public void run() {
                 running = true;
                 switch (mode){
-                    case STAMINA_COUNTER -> applicationPanel.getPlayer().setTime(counter);
+                    case SPEED_COUNTER -> applicationPanel.getPlayer().setTime(counter);
                     case WAVE_COUNTER -> applicationPanel.setWaveTimer(counter);
                 }
                 counter--;

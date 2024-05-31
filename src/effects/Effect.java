@@ -30,13 +30,13 @@ public abstract class Effect {
 
     /**
      * Updates the effect.
-     * (Also applies to all OverRides)
+     * (Also applies to all Overrides)
      */
     public abstract void update();
 
     /**
      * Draws the effect on the screen.
-     * (Also applies to all OverRides)
+     * (Also applies to all Overrides)
      *
      * @param g Graphics2D (so the collectable can be drawn on screen)
      * @throws IOException if the program couldn't find the image on the specific address.

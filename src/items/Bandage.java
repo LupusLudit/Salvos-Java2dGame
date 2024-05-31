@@ -2,13 +2,10 @@ package items;
 
 import logic.ApplicationPanel;
 
-/**
- * The type Bandage.
- */
 public class Bandage extends Item{
 
     /**
-     * Instantiates a new Bandage.
+     * Bandage constructor.
      *
      * @param applicationPanel the application panel
      */
@@ -20,13 +17,13 @@ public class Bandage extends Item{
     @Override
     public void use() {
         for (int i = 0; i < 5; i++){
-            applicationPanel.getPlayer().increaseLives();
+            panel.getPlayer().increaseLives();
         }
-        applicationPanel.getPlayer().getInventory().removeItem(this);
+        panel.getPlayer().getInventory().removeItem(this);
     }
 
     @Override
     public void collect() {
-        applicationPanel.getPlayer().getInventory().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

@@ -12,116 +12,65 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * The type Entity.
- */
 public abstract class Entity {
 
-    /**
-     * The X.
-     */
     protected int x;
-    /**
-     * The Y.
-     */
     protected int y;
-
-    /**
-     * The Speed.
-     */
     protected double speed;
-    /**
-     * The Counter.
-     */
     protected int counter = 0;
-    /**
-     * The Direction.
-     */
     protected int direction;
-    /**
-     * The Default image path.
-     */
     protected String defaultImagePath;
-    /**
-     * The Actual area.
-     */
     Rectangle actualArea;
-    /**
-     * The Panel.
-     */
     protected ApplicationPanel panel;
-    /**
-     * The Can move.
-     */
     protected boolean canMove;
-    /**
-     * The Lives.
-     */
     protected int lives;
-    /**
-     * The Max lives.
-     */
     protected int maxLives;
-    /**
-     * The Image index.
-     */
     protected int imageIndex = 0;
-    /**
-     * The Current image.
-     */
     protected BufferedImage currentImage;
-    /**
-     * The Can bite.
-     */
     protected boolean canBite = true;
-    /**
-     * The Collision manager.
-     */
     protected CollisionManager collisionManager;
 
     // Cache for loaded images
     private final Map<String, BufferedImage> imageCache = new HashMap<>();
-
-    /**
-     * The Path update counter.
-     */
     protected int pathUpdateCounter = 0;
 
     /**
-     * Instantiates a new Entity.
+     * Entity constructor.
      *
-     * @param panel the panel
+     * @param panel the application panel
      */
     public Entity(ApplicationPanel panel) {
         this.panel = panel;
     }
 
     /**
-     * Draw.
+     * Draws an entity.
+     * (Also applies to all Overrides)
      *
-     * @param g the g
+     * @param g Graphics2D (so the collectable can be drawn on screen)
      */
     public abstract void draw(Graphics2D g);
 
     /**
-     * Update.
+     * Updates entity.
+     * (Also applies to all Overrides)
      */
     public abstract void update();
 
     /**
-     * Change current image.
+     * Changes current image.
      *
-     * @param counter the counter
+     * @param counter image counter (based on which the image is chosen)
      */
     public abstract void changeCurrentImage(int counter);
 
     /**
-     * Load image buffered image.
+     * Loads the sprite that should be drawn.
      *
-     * @param index the index
-     * @return the buffered image
+     * @param index the index of the sprite
+     * @return the selected sprite (BufferedImage)
      */
-    public BufferedImage loadImage(String index) {
+    public BufferedImage loadSprite(String index) {
         String key = defaultImagePath + direction + "_" + index + ".png";
         if (imageCache.containsKey(key)) {
             return imageCache.get(key);
@@ -136,18 +85,19 @@ public abstract class Entity {
     }
 
     /**
-     * Draw bar.
+     * Draws a bar.
+     * (Also applies to all Overrides)
      *
-     * @param g       the g
-     * @param max     the max
-     * @param current the current
-     * @param y       the y
-     * @param color   the color
+     * @param g       Graphics2D (so the collectable can be drawn on screen)
+     * @param max     the maximum bar "length"
+     * @param current the current bar "length"
+     * @param y       the y coordinate (There is no need for x coordinate because we calculate it in the method)
+     * @param color   the color of the bar
      */
     public abstract void drawBar(Graphics2D g, int max, int current, int y, Color color);
 
     /**
-     * Decrease lives.
+     * Decreases live.
      */
     public void decreaseLives() {
         if (lives > 0) {
@@ -159,9 +109,9 @@ public abstract class Entity {
     }
 
     /**
-     * All entities collision boolean.
+     * Checks if the entity collided with another entity.
      *
-     * @return the boolean
+     * @return true if it did collide with another entity.
      */
     public boolean allEntitiesCollision() {
         if (collisionManager.checkEntityCollision(this, panel.getPlayer())) {
@@ -178,10 +128,11 @@ public abstract class Entity {
     }
 
     /**
-     * Update path.
+     * First searches for the path to the goal tile.
+     * Then updates the direction.
      *
-     * @param goalCol the goal col
-     * @param goalRow the goal row
+     * @param goalCol the goal column of the tile
+     * @param goalRow the goal row of the tile
      */
     public void updatePath(int goalCol, int goalRow) {
         int startCol = (x + 24) / panel.getSquareSide();
@@ -202,6 +153,19 @@ public abstract class Entity {
             changeDirection(leftX, rightX, topY, bottomY, pathTileX, pathTileY);
         }
     }
+
+    /**
+     * Changes the direction of the entity after the search has been done.
+     * It checks if it is about to hit a solid tile.
+     * If so, it updates the direction so the entity will go "around" the solid tile.
+     *
+     * @param leftX
+     * @param rightX
+     * @param topY
+     * @param bottomY
+     * @param pathTileX
+     * @param pathTileY
+     */
 
     private void changeDirection(int leftX, int rightX, int topY, int bottomY, int pathTileX, int pathTileY) {
 
@@ -231,113 +195,59 @@ public abstract class Entity {
             }
         }
     }
-
     /**
-     * Sets direction.
-     *
-     * @param direction the direction
-     */
-    public void setDirection(int direction) {
-        this.direction = direction;
-    }
-
-    /**
-     * Gets rel x.
+     * Returns x coordinate relative to @param entity.
      *
      * @param entity the entity
-     * @return the rel x
+     * @return the relative x coordinate
      */
     public int getRelX(Entity entity) {
         return x - entity.getX() + panel.getPlayer().getCenterX();
     }
 
     /**
-     * Gets rel y.
+     * Returns y coordinate relative to @param entity.
      *
      * @param entity the entity
-     * @return the rel y
+     * @return the relative y coordinate
      */
     public int getRelY(Entity entity) {
         return y - entity.getY() + panel.getPlayer().getCenterY();
     }
-
-    /**
-     * Gets hit box area.
-     *
-     * @return the hit box area
-     */
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
     public Rectangle getHitBoxArea() {
         return new Rectangle(getRelX(panel.getPlayer()) + 8, getRelY(panel.getPlayer()), 32, 48);
     }
 
-    /**
-     * Gets x.
-     *
-     * @return the x
-     */
     public int getX() {
         return x;
     }
 
-    /**
-     * Gets y.
-     *
-     * @return the y
-     */
     public int getY() {
         return y;
     }
-
-    /**
-     * Gets speed.
-     *
-     * @return the speed
-     */
     public double getSpeed() {
         return speed;
     }
 
-    /**
-     * Gets direction.
-     *
-     * @return the direction
-     */
     public int getDirection() {
         return direction;
     }
 
-    /**
-     * Gets actual area.
-     *
-     * @return the actual area
-     */
     public Rectangle getActualArea() {
         return actualArea;
     }
 
-    /**
-     * Gets lives.
-     *
-     * @return the lives
-     */
     public int getLives() {
         return lives;
     }
 
-    /**
-     * Is can bite boolean.
-     *
-     * @return the boolean
-     */
     public boolean isCanBite() {
         return canBite;
     }
 
-    /**
-     * Sets can bite.
-     *
-     * @param canBite the can bite
-     */
     public void setCanBite(boolean canBite) {
         this.canBite = canBite;
     }

@@ -27,17 +27,11 @@ public class Player extends Entity {
     private int maxStamina;
     private int staminaCounter = 0;
     private int hitCounter = 0;
-    /**
-     * The Clock.
-     */
     Clock clock = new Clock();
-    /**
-     * The Inventory.
-     */
     Inventory inventory = new Inventory();
 
     /**
-     * Instantiates a new Player.
+     * Player constructor.
      *
      * @param userInput        the user input
      * @param applicationPanel the application panel
@@ -50,7 +44,7 @@ public class Player extends Entity {
 
         canMove = true;
         setBonuses();
-        currentImage = loadImage("idle");
+        currentImage = loadSprite("idle");
 
         this.x = 50 * applicationPanel.getSquareSide();
         this.y = 50 * applicationPanel.getSquareSide();
@@ -113,19 +107,22 @@ public class Player extends Entity {
             if (imageIndex == 4) {
                 imageIndex = 0;
             }
-            currentImage = loadImage(String.valueOf(imageIndex));
+            currentImage = loadSprite(String.valueOf(imageIndex));
         } else if (!userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
-            currentImage = loadImage("idle");
+            currentImage = loadSprite("idle");
         } else if (panel.getMouseInput().isMouseClicked() && panel.getGame().getSelectedWeapon() != Weapon.FIST) {
-            currentImage = loadImage("nohands");
+            currentImage = loadSprite("nohands");
         }
     }
 
     /**
-     * Weapon overlay buffered image.
+     * Overlays current idle sprite with hands holding a weapon.
+     * Explanation: If user shoots, it stops the player to simulate recoil.
+     * Then sprite with no hands is drawn. After that, image of hands holding a weapon will be overlaid over the sprite with no hands.
+     * An illusion of character holding a weapon will be created.
      *
-     * @return the buffered image
-     * @throws IOException the io exception
+     * @return the buffered image to draw
+     * @throws IOException if the program couldn't find the image on the specific address.
      */
     public BufferedImage weaponOverlay() throws IOException {
         String path = "";
@@ -139,6 +136,10 @@ public class Player extends Entity {
         return ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(path)));
     }
 
+    /**
+     * Moves the player.
+     */
+
     private void move() {
         switch (direction) {
             case 0 -> y -= speed;
@@ -148,6 +149,11 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Handles players health.
+     * If player is hit by different entity, this method will decease players lives.
+     * There is also a counter so the player doesn't die instantly when hit.
+     */
     private void handleHealth() {
         for (Entity entity : panel.getEntities()) {
             if (collisionManager.checkEntityCollision(entity, this)) {
@@ -163,6 +169,11 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Handles players stamina.
+     * When the player is running, stamina will decrease.
+     * When the player "rests" (= he's not running), stamina will increase.
+     */
     private void handleStamina() {
         if (userInput.isShiftPressed()) {
             staminaCounter++;
@@ -195,17 +206,7 @@ public class Player extends Entity {
     }
 
     /**
-     * Sets speed.
-     */
-    public void setSpeed() {
-        speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
-        if (clock.isRunning()) {
-            speed = (6 + (panel.getGame().getSpeedBonus() * 0.25));
-        }
-    }
-
-    /**
-     * Sets bonuses.
+     * Sets specific player bonuses.
      */
     public void setBonuses() {
         setSpeed();
@@ -217,7 +218,7 @@ public class Player extends Entity {
     }
 
     /**
-     * Increase lives.
+     * Increases players lives.
      */
     public void increaseLives() {
         if (lives + 1 <= maxLives) {
@@ -228,35 +229,29 @@ public class Player extends Entity {
     private int time = 30;
 
     /**
-     * Add stamina.
+     * Starts "energy drink" clock.
+     * (So the energy drink effects will be only temporarily)
      *
-     * @param durationInSeconds the duration in seconds
+     * @param durationInSeconds the duration of this effect in seconds
      */
-    public void addStamina(int durationInSeconds) {
+    public void startClock(int durationInSeconds) {
         clock = new Clock();
-        clock.start(durationInSeconds, panel, Mode.STAMINA_COUNTER);
+        clock.start(durationInSeconds, panel, Mode.SPEED_COUNTER);
     }
 
     /**
-     * Gets center x.
-     *
-     * @return the center x
+     *Sets players speed.
+     * If "energy drink" clock is running, the speed will be increased by 1
      */
-    public int getCenterX() {
-        return centerX;
+    public void setSpeed() {
+        speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
+        if (clock.isRunning()) {
+            speed = (6 + (panel.getGame().getSpeedBonus() * 0.25));
+        }
     }
 
     /**
-     * Gets center y.
-     *
-     * @return the center y
-     */
-    public int getCenterY() {
-        return centerY;
-    }
-
-    /**
-     * Gets default image.
+     * Gets default idle image.
      *
      * @return the default image
      */
@@ -267,39 +262,24 @@ public class Player extends Entity {
         } catch (IOException ignored) {}
         return image;
     }
+    public int getCenterX() {
+        return centerX;
+    }
 
-    /**
-     * Gets time.
-     *
-     * @return the time
-     */
+    public int getCenterY() {
+        return centerY;
+    }
     public int getTime() {
         return time;
     }
 
-    /**
-     * Sets time.
-     *
-     * @param time the time
-     */
     public void setTime(int time) {
         this.time = time;
     }
 
-    /**
-     * Gets clock.
-     *
-     * @return the clock
-     */
     public Clock getClock() {
         return clock;
     }
-
-    /**
-     * Gets inventory.
-     *
-     * @return the inventory
-     */
     public Inventory getInventory() {
         return inventory;
     }

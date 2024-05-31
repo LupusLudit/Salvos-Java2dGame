@@ -3,14 +3,11 @@ package items;
 import logic.Weapon;
 import logic.ApplicationPanel;
 
-/**
- * The type Revolver ammo.
- */
 public class RevolverAmmo extends Item{
 
 
     /**
-     * Instantiates a new Revolver ammo.
+     * Revolver ammo constructor.
      *
      * @param applicationPanel the application panel
      */
@@ -24,12 +21,12 @@ public class RevolverAmmo extends Item{
 
     @Override
     public void collect() {
-        String[] arr = applicationPanel.getGame().getAmmoMap().get(Weapon.REVOLVER).split(",");
+        String[] arr = panel.getGame().getAmmoMap().get(Weapon.REVOLVER).split(",");
 
         int ammo = Integer.parseInt(arr[1]);
         ammo += 18;
 
         String text = arr[0] + "," + ammo + "," + arr[2];
-        applicationPanel.getGame().getAmmoMap().put(Weapon.REVOLVER, text);
+        panel.getGame().getAmmoMap().put(Weapon.REVOLVER, text);
     }
 }

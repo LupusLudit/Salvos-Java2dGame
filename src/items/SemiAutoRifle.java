@@ -2,14 +2,10 @@ package items;
 
 import logic.Weapon;
 import logic.ApplicationPanel;
-
-/**
- * The type Semi auto rifle.
- */
 public class SemiAutoRifle extends Item{
 
     /**
-     * Instantiates a new Semi auto rifle.
+     * Semi auto rifle constructor.
      *
      * @param applicationPanel the application panel
      */
@@ -21,11 +17,11 @@ public class SemiAutoRifle extends Item{
 
     @Override
     public void use() {
-        applicationPanel.getGame().setSelectedWeapon(Weapon.SEMIAUTO);
+        panel.getGame().setSelectedWeapon(Weapon.SEMIAUTO);
     }
 
     @Override
     public void collect() {
-        applicationPanel.getPlayer().getInventory().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

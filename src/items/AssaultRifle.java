@@ -3,13 +3,10 @@ package items;
 import logic.Weapon;
 import logic.ApplicationPanel;
 
-/**
- * The type Assault rifle.
- */
 public class AssaultRifle extends Item{
 
     /**
-     * Instantiates a new Assault rifle.
+     * Assault rifle constructor.
      *
      * @param applicationPanel the application panel
      */
@@ -21,11 +18,11 @@ public class AssaultRifle extends Item{
 
     @Override
     public void use() {
-        applicationPanel.getGame().setSelectedWeapon(Weapon.ASSAULTRIFLE);
+        panel.getGame().setSelectedWeapon(Weapon.ASSAULTRIFLE);
     }
 
     @Override
     public void collect() {
-        applicationPanel.getPlayer().getInventory().addToInventory(this);
+        panel.getPlayer().getInventory().addToInventory(this);
     }
 }

@@ -109,7 +109,6 @@ public class CollectableManager {
                 case 5 -> addCollectables(new Collectable(panel, rifleAmmo, col,row));
                 case 6 -> addCollectables(new Collectable(panel, tommyGunAmmo, col,row));
             }
-            System.out.println("added collectable");
         }
         }
     }
