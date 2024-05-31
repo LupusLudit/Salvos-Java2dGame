@@ -109,5 +109,9 @@ public class EffectManager {
     public void addReloadingEffect(){
         effects.add(new ReloadingEffect(panel,100));
     }
+
+    public void addHintEffect(){
+        effects.add(new Hint(panel, 1200));
+    }
 }
 

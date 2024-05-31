@@ -28,6 +28,6 @@ public class ReloadingEffect extends Effect{
         else {
             text = "Reloading...";
         }
-        g.drawString(text, panel.getUi().centerX(g, text), panel.getSquareSide()*3);
+        g.drawString(text, panel.getUi().centerX(g, text), panel.getSquareSide()*5);
     }
 }
