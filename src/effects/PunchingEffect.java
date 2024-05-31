@@ -9,10 +9,17 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class PunchingEffect extends Effect{
-
     BufferedImage image;
     BufferedImage fistImage;
     private final int direction;
+
+    /**
+     * Punching effect constructor.
+     *
+     * @param panel     the application panel
+     * @param duration  the duration of the effect
+     * @param direction the direction of the player
+     */
     public PunchingEffect(ApplicationPanel panel, int duration, int direction) {
         super(panel, duration);
         this.direction = direction;
@@ -52,6 +59,13 @@ public class PunchingEffect extends Effect{
         y = panel.getHeight() - panel.getSquareSide()*4; //The effect will be displayed above the players bars
         g.drawImage(fistImage, x, y, panel.getSquareSide()*2, panel.getSquareSide()*2, null);
     }
+
+
+    /**
+     * Chooses which punching image should be drawn based on the current duration value.
+     *
+     * @throws IOException if the program couldn't find the image on the specific address.
+     */
 
     private void chooseImages() throws IOException {
         image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punching/punchBlow_" + direction + ".png")));

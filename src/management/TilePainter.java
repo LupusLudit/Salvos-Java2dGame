@@ -11,16 +11,33 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.awt.*;
 
+/**
+ * The type Tile painter.
+ */
 public class TilePainter {
 
+    /**
+     * The Map.
+     */
     HashMap<String, Integer> map = new HashMap<>();
+    /**
+     * The Tiles.
+     */
     HashMap<Integer, Tile> tiles = new HashMap<>();
 
+    /**
+     * The Panel.
+     */
     ApplicationPanel panel;
 
     private int mapHeight;
     private int mapWidth;
 
+    /**
+     * Instantiates a new Tile painter.
+     *
+     * @param applicationPanel the application panel
+     */
     public TilePainter(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
         setMap();
@@ -44,9 +61,15 @@ public class TilePainter {
             }
             mapWidth = j;
             mapHeight = i;
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
+    /**
+     * Draw.
+     *
+     * @param g the g
+     */
     public void draw(Graphics2D g) {
         for (int i = 0; i < mapHeight; i++) {
             for (int j = 0; j < mapWidth; j++) {
@@ -62,6 +85,13 @@ public class TilePainter {
         }
     }
 
+    /**
+     * Is in range boolean.
+     *
+     * @param i the
+     * @param j the j
+     * @return the boolean
+     */
     public boolean isInRange(int i, int j) {
         boolean drawX = false;
         boolean drawY = false;
@@ -77,46 +107,48 @@ public class TilePainter {
 
     }
 
-    private static BufferedImage convertToBufferedImage(Image img) {
-
-        if (img instanceof BufferedImage) {
-            return (BufferedImage) img;
-        }
-        BufferedImage bi = new BufferedImage(
-                img.getWidth(null), img.getHeight(null),
-                BufferedImage.TYPE_INT_ARGB);
-
-        Graphics2D graphics2D = bi.createGraphics();
-        graphics2D.drawImage(img, 0, 0, null);
-        graphics2D.dispose();
-
-        return bi;
-    }
-
     private void setTileImage(int index, boolean solid) {
         BufferedImage temp;
         try {
             temp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(("/background/tile_" + index + ".png"))));
-            temp = convertToBufferedImage(temp.getScaledInstance(48, 48, temp.getType()));
+
             tiles.put(index, new Tile(temp, solid, index));
-        } catch (IOException ignored) {}
+        } catch (IOException ignored) {
+        }
     }
 
     private void initializeTileImages() {
-        for (int i = 0; i < 24; i++){
+        for (int i = 0; i < 24; i++) {
             setTileImage(i, i < 18);
         }
     }
 
-    public Tile getTile(int col, int row){
+    /**
+     * Get tile tile.
+     *
+     * @param col the col
+     * @param row the row
+     * @return the tile
+     */
+    public Tile getTile(int col, int row) {
         int cell = map.get(col + "," + row);
         return tiles.get(cell);
     }
 
+    /**
+     * Gets map height.
+     *
+     * @return the map height
+     */
     public int getMapHeight() {
         return mapHeight;
     }
 
+    /**
+     * Gets map width.
+     *
+     * @return the map width
+     */
     public int getMapWidth() {
         return mapWidth;
     }

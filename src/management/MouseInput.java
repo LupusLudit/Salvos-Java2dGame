@@ -3,6 +3,9 @@ package management;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+/**
+ * The type Mouse input.
+ */
 public class MouseInput implements MouseListener {
 
     private boolean mouseClicked = false;
@@ -30,6 +33,11 @@ public class MouseInput implements MouseListener {
         mouseClicked = clicked;
     }
 
+    /**
+     * Is mouse clicked boolean.
+     *
+     * @return the boolean
+     */
     public synchronized boolean isMouseClicked() {
         return mouseClicked;
     }

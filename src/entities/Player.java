@@ -13,7 +13,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * The type Player.
+ */
 public class Player extends Entity {
+    /**
+     * The User input.
+     */
     UserInput userInput;
     private final int centerX;
     private final int centerY;
@@ -21,9 +27,21 @@ public class Player extends Entity {
     private int maxStamina;
     private int staminaCounter = 0;
     private int hitCounter = 0;
+    /**
+     * The Clock.
+     */
     Clock clock = new Clock();
+    /**
+     * The Inventory.
+     */
     Inventory inventory = new Inventory();
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param userInput        the user input
+     * @param applicationPanel the application panel
+     */
     public Player(UserInput userInput, ApplicationPanel applicationPanel) {
         super(applicationPanel);
         defaultImagePath = "entities/sprite_";
@@ -103,6 +121,12 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Weapon overlay buffered image.
+     *
+     * @return the buffered image
+     * @throws IOException the io exception
+     */
     public BufferedImage weaponOverlay() throws IOException {
         String path = "";
         switch (panel.getGame().getSelectedWeapon()) {
@@ -170,6 +194,9 @@ public class Player extends Entity {
         return false;
     }
 
+    /**
+     * Sets speed.
+     */
     public void setSpeed() {
         speed = (5 + (panel.getGame().getSpeedBonus() * 0.25));
         if (clock.isRunning()) {
@@ -177,6 +204,9 @@ public class Player extends Entity {
         }
     }
 
+    /**
+     * Sets bonuses.
+     */
     public void setBonuses() {
         setSpeed();
         maxLives = 30 + panel.getGame().getHealthBonus();
@@ -186,6 +216,9 @@ public class Player extends Entity {
         stamina = maxStamina;
     }
 
+    /**
+     * Increase lives.
+     */
     public void increaseLives() {
         if (lives + 1 <= maxLives) {
             lives++;
@@ -194,19 +227,39 @@ public class Player extends Entity {
 
     private int time = 30;
 
+    /**
+     * Add stamina.
+     *
+     * @param durationInSeconds the duration in seconds
+     */
     public void addStamina(int durationInSeconds) {
         clock = new Clock();
         clock.start(durationInSeconds, panel, Mode.STAMINA_COUNTER);
     }
 
+    /**
+     * Gets center x.
+     *
+     * @return the center x
+     */
     public int getCenterX() {
         return centerX;
     }
 
+    /**
+     * Gets center y.
+     *
+     * @return the center y
+     */
     public int getCenterY() {
         return centerY;
     }
 
+    /**
+     * Gets default image.
+     *
+     * @return the default image
+     */
     public Image getDefaultImage() {
         BufferedImage image = null;
         try {
@@ -215,18 +268,38 @@ public class Player extends Entity {
         return image;
     }
 
+    /**
+     * Gets time.
+     *
+     * @return the time
+     */
     public int getTime() {
         return time;
     }
 
+    /**
+     * Sets time.
+     *
+     * @param time the time
+     */
     public void setTime(int time) {
         this.time = time;
     }
 
+    /**
+     * Gets clock.
+     *
+     * @return the clock
+     */
     public Clock getClock() {
         return clock;
     }
 
+    /**
+     * Gets inventory.
+     *
+     * @return the inventory
+     */
     public Inventory getInventory() {
         return inventory;
     }

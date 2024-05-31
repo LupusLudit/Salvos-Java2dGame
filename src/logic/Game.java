@@ -7,17 +7,34 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Iterator;
 
+/**
+ * The type Game.
+ */
 public class Game {
+    /**
+     * The Panel.
+     */
     ApplicationPanel panel;
     private int bonusCounter = 0;
     private Weapon selectedWeapon;
+    /**
+     * The Ammo map.
+     */
     HashMap<Weapon, String> ammoMap = new HashMap<>();
+    /**
+     * The Bonus map.
+     */
     HashMap<Integer, Integer> bonusMap = new HashMap<>();
     private long lastShootTime = 0;
     private int reloadCounter = 0;
 
     private int score = 0;
 
+    /**
+     * Instantiates a new Game.
+     *
+     * @param applicationPanel the application panel
+     */
     public Game(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
         selectedWeapon = Weapon.FIST;
@@ -38,6 +55,11 @@ public class Game {
         bonusMap.put(2, 0);
     }
 
+    /**
+     * Sets entities.
+     *
+     * @param wave the wave
+     */
     public void setEntities(int wave) {
         int maxEntities = Math.min(wave * 3, 18);
         for (int i = 0; i < maxEntities; i++) {
@@ -45,6 +67,9 @@ public class Game {
         }
     }
 
+    /**
+     * Update entities.
+     */
     public void updateEntities() {
         String[] values = ammoMap.get(selectedWeapon).split(",");
         int mag = Integer.parseInt(values[0]);
@@ -65,7 +90,7 @@ public class Game {
             attackEntities(mag, ammo, maxCapacity);
         }
 
-        if ((mag == 0 || panel.getUserInput().isReloadTriggered()) && selectedWeapon != Weapon.FIST) {
+        if ((mag == 0 || panel.getUserInput().isReloadTriggered()) && selectedWeapon != Weapon.FIST && ammo!= 0) {
             reloadCounter++;
             if (reloadCounter == 1){
                 panel.getEffectManager().addReloadingEffect();
@@ -74,10 +99,16 @@ public class Game {
                 reload(mag, ammo, maxCapacity);
                 reloadCounter = 0;
             }
+            System.out.println(reloadCounter);
 
         }
     }
 
+    /**
+     * Draw entities.
+     *
+     * @param g the g
+     */
     public void drawEntities(Graphics2D g) {
         for (Entity entity : panel.getEntities()) {
             if (entity != null) {
@@ -86,6 +117,13 @@ public class Game {
         }
     }
 
+    /**
+     * Attack entities.
+     *
+     * @param mag         the mag
+     * @param ammo        the ammo
+     * @param maxCapacity the max capacity
+     */
     public void attackEntities(int mag, int ammo, int maxCapacity) {
         long currentTime = System.currentTimeMillis();
         Point mousePosition = panel.getMousePosition();
@@ -134,6 +172,9 @@ public class Game {
         return mousePosition != null && panel.contains(mousePosition);
     }
 
+    /**
+     * Change direction.
+     */
     public void changeDirection() {
         Point mousePosition = panel.getMousePosition();
         double xLeft = mousePosition.getX() * ((double) panel.getRow() / panel.getCol());
@@ -156,6 +197,11 @@ public class Game {
         }
     }
 
+    /**
+     * Shooting delay int.
+     *
+     * @return the int
+     */
     public int shootingDelay() {
         int delay = 0;
         switch (selectedWeapon) {
@@ -170,6 +216,13 @@ public class Game {
     }
 
 
+    /**
+     * Reload.
+     *
+     * @param mag         the mag
+     * @param ammo        the ammo
+     * @param maxCapacity the max capacity
+     */
     public void reload(int mag, int ammo, int maxCapacity) {
         if (ammo >= maxCapacity) {
             if (panel.getUserInput().isReloadTriggered()) {
@@ -187,6 +240,11 @@ public class Game {
     }
 
 
+    /**
+     * Add bonus.
+     *
+     * @param type the type
+     */
     public void addBonus(int type) {
         if (bonusCounter < 10) {
             int currentBonus = bonusMap.get(type);
@@ -197,6 +255,11 @@ public class Game {
         }
     }
 
+    /**
+     * Subtract bonus.
+     *
+     * @param type the type
+     */
     public void subtractBonus(int type) {
         int currentBonus = bonusMap.get(type);
         if (currentBonus > 0) {
@@ -205,43 +268,93 @@ public class Game {
         }
     }
 
+    /**
+     * Sets selected weapon.
+     *
+     * @param selectedWeapon the selected weapon
+     */
     public void setSelectedWeapon(Weapon selectedWeapon) {
         this.selectedWeapon = selectedWeapon;
     }
 
+    /**
+     * Sets score.
+     *
+     * @param score the score
+     */
     public void setScore(int score) {
         this.score = score;
     }
 
+    /**
+     * Gets health bonus.
+     *
+     * @return the health bonus
+     */
     public int getHealthBonus() {
         return bonusMap.get(0);
     }
 
 
+    /**
+     * Gets stamina bonus.
+     *
+     * @return the stamina bonus
+     */
     public int getStaminaBonus() {
         return bonusMap.get(1);
     }
 
+    /**
+     * Gets speed bonus.
+     *
+     * @return the speed bonus
+     */
     public int getSpeedBonus() {
         return bonusMap.get(2);
     }
 
+    /**
+     * Gets ammo.
+     *
+     * @return the ammo
+     */
     public String getAmmo() {
         return ammoMap.get(selectedWeapon).split(",")[1];
     }
 
+    /**
+     * Gets magazine.
+     *
+     * @return the magazine
+     */
     public String getMagazine() {
         return ammoMap.get(selectedWeapon).split(",")[0];
     }
 
+    /**
+     * Gets selected weapon.
+     *
+     * @return the selected weapon
+     */
     public Weapon getSelectedWeapon() {
         return selectedWeapon;
     }
 
+    /**
+     * Gets score.
+     *
+     * @return the score
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Gets ammo map.
+     *
+     * @return the ammo map
+     */
     public HashMap<Weapon, String> getAmmoMap() {
         return ammoMap;
     }

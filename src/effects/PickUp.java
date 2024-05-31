@@ -11,8 +11,15 @@ import java.util.Objects;
 public class PickUp extends Effect {
 
     private BufferedImage plusImage;
-    public PickUp(ApplicationPanel applicationPanel, int duration) {
-        super(applicationPanel, duration);
+
+    /**
+     * Pick up constructor.
+     *
+     * @param panel     the application panel.
+     * @param duration  the duration of the effect.
+     */
+    public PickUp(ApplicationPanel panel, int duration) {
+        super(panel, duration);
         try {
             setPlusImage();
         } catch (IOException e) {
@@ -33,6 +40,12 @@ public class PickUp extends Effect {
         g.drawImage(plusImage, panel.getPlayer().getCenterX(), panel.getPlayer().getCenterY() - panel.getSquareSide(), null);
     }
 
+
+    /**
+     * Sets the plus image.
+     *
+     * @throws IOException if the program couldn't find the image on the specific address.
+     */
     private void setPlusImage() throws IOException {
         plusImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/plus.png")));
     }

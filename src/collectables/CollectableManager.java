@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
 
+/**
+ * Manages specific collectables.
+ */
 public class CollectableManager {
     ArrayList<Collectable> collectables = new ArrayList<>();
     ApplicationPanel panel;
@@ -19,13 +22,19 @@ public class CollectableManager {
     AssaultRifleAmmo rifleAmmo;
     TommyGunAmmo tommyGunAmmo;
 
+    /**
+     * Collectable manager constructor.
+     *
+     * @param panel the application panel
+     */
     public CollectableManager(ApplicationPanel panel) {
         this.panel = panel;
         instantiate();
     }
 
     /**
-     * This method instantiate collectables. It is necessary to store the same items in memory, so the program works properly and is more memory safe.
+     * Instantiates collectables.
+     * It is necessary to store the same items in memory, so the program works properly and is more memory safe.
      */
     private void instantiate(){
         bandage = new Bandage(panel);
@@ -37,12 +46,21 @@ public class CollectableManager {
         tommyGunAmmo = new TommyGunAmmo(panel);
     }
 
+    /**
+     * Adds new collectable.
+     *
+     * @param collectable the collectable to be added
+     */
     public void addCollectables(Collectable collectable){
         if(collectable != null){
             collectables.add(collectable);
         }
     }
 
+    /**
+     * Checks whether any collectable has been collected.
+     * If so, the collectable will be removed from collectables ArrayList.
+     */
     public void checkCollectables() {
         Iterator<Collectable> iterator = collectables.iterator();
         while (iterator.hasNext()) {
@@ -55,6 +73,11 @@ public class CollectableManager {
         }
     }
 
+    /**
+     * Draws all collectables from collectables ArrayList to the screen.
+     *
+     * @param g Graphics2D (so the collectable can be drawn on screen)
+     */
     public void drawCollectables(Graphics2D g) {
         for (Collectable collectable : collectables) {
             if (collectable != null) {
@@ -63,6 +86,9 @@ public class CollectableManager {
         }
     }
 
+    /**
+     * Adds random collectables on a specific area.
+     */
     public void addRandomCollectables(){
         Random rn = new Random();
         int col;

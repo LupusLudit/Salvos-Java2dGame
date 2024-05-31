@@ -1,6 +1,10 @@
 import logic.ApplicationPanel;
 import javax.swing.*;
 
+/**
+ * The main class.
+ * Runs the whole code.
+ */
 public class Main {
     public static void main(String[] args) {
         JFrame window = new JFrame();

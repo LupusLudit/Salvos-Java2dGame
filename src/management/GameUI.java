@@ -12,14 +12,28 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
+/**
+ * The type Game ui.
+ */
 public class GameUI {
+    /**
+     * The Panel.
+     */
     ApplicationPanel panel;
     private Font large;
     private Font medium;
     private Font small;
     private Font verySmall;
+    /**
+     * The Inv by pos.
+     */
     Item[][] invByPos = new items.Item[5][2];
 
+    /**
+     * Instantiates a new Game ui.
+     *
+     * @param applicationPanel the application panel
+     */
     public GameUI(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
         initializeFonts();
@@ -41,6 +55,12 @@ public class GameUI {
         }
     }
 
+    /**
+     * Draw.
+     *
+     * @param g the g
+     * @throws IOException the io exception
+     */
     public void draw(Graphics2D g) throws IOException {
 
             switch (panel.getStatus()) {
@@ -304,28 +324,66 @@ public class GameUI {
         g.drawString(text, x+16, rectY - panel.getSquareSide() - 6);
     }
 
+    /**
+     * Text height int.
+     *
+     * @param g    the g
+     * @param text the text
+     * @return the int
+     */
     public int textHeight(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
     }
 
+    /**
+     * Text length int.
+     *
+     * @param g    the g
+     * @param text the text
+     * @return the int
+     */
     public int textLength(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
     }
 
+    /**
+     * Center x int.
+     *
+     * @param g    the g
+     * @param text the text
+     * @return the int
+     */
     public int centerX(Graphics2D g, String text) {
         int length = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
         return panel.getWidth() / 2 - length / 2;
     }
 
+    /**
+     * Center y int.
+     *
+     * @param g    the g
+     * @param text the text
+     * @return the int
+     */
     public int centerY(Graphics2D g, String text) {
         int height = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
         return panel.getHeight() / 2 + height / 2;
     }
 
+    /**
+     * Gets selected item.
+     *
+     * @return the selected item
+     */
     public Item getSelectedItem() {
         return invByPos[panel.getPlayer().getInventory().getSelectedCol()][panel.getPlayer().getInventory().getSelectedRow()];
     }
 
+    /**
+     * Gets medium.
+     *
+     * @return the medium
+     */
     public Font getMedium() {
         return medium;
     }

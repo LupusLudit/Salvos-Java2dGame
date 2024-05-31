@@ -6,14 +6,25 @@ import logic.Weapon;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * The type User input.
+ */
 public class UserInput implements KeyListener {
     private boolean pressed;
     private boolean shiftPressed;
 
     private boolean reloadTriggered;
 
+    /**
+     * The Panel.
+     */
     ApplicationPanel panel;
 
+    /**
+     * Instantiates a new User input.
+     *
+     * @param applicationPanel the application panel
+     */
     public UserInput(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
     }
@@ -181,17 +192,39 @@ public class UserInput implements KeyListener {
             case KeyEvent.VK_SHIFT -> shiftPressed = false;
         }
     }
+
+    /**
+     * Sets reload triggered.
+     *
+     * @param reloadTriggered the reload triggered
+     */
     public void setReloadTriggered(boolean reloadTriggered) {
         this.reloadTriggered = reloadTriggered;
     }
+
+    /**
+     * Is pressed boolean.
+     *
+     * @return the boolean
+     */
     public boolean isPressed() {
         return pressed;
     }
 
+    /**
+     * Is shift pressed boolean.
+     *
+     * @return the boolean
+     */
     public boolean isShiftPressed() {
         return shiftPressed;
     }
 
+    /**
+     * Is reload triggered boolean.
+     *
+     * @return the boolean
+     */
     public boolean isReloadTriggered() {
         return reloadTriggered;
     }

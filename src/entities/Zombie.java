@@ -5,8 +5,16 @@ import logic.ApplicationPanel;
 import java.awt.*;
 import java.util.Random;
 
+/**
+ * The type Zombie.
+ */
 public class Zombie extends Entity {
 
+    /**
+     * Instantiates a new Zombie.
+     *
+     * @param applicationPanel the application panel
+     */
     public Zombie(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         defaultImagePath = "entities/zombie_";
@@ -86,6 +94,9 @@ public class Zombie extends Entity {
         g.fillRoundRect(x, y, (int) value, height, 2, 2);
     }
 
+    /**
+     * Choose spawn point.
+     */
     public void chooseSpawnPoint() {
         Random rn = new Random();
         boolean canSpawn = false;

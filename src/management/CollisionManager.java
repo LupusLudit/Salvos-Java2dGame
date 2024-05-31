@@ -5,14 +5,31 @@ import logic.ApplicationPanel;
 
 import java.awt.*;
 
+/**
+ * The type Collision manager.
+ */
 public class CollisionManager {
 
+    /**
+     * The Panel.
+     */
     ApplicationPanel panel;
 
+    /**
+     * Instantiates a new Collision manager.
+     *
+     * @param panel the panel
+     */
     public CollisionManager(ApplicationPanel panel) {
         this.panel = panel;
     }
 
+    /**
+     * Check tile collision boolean.
+     *
+     * @param entity the entity
+     * @return the boolean
+     */
     public boolean checkTileCollision(Entity entity) {
 
         int leftCol = (entity.getActualArea().x) / panel.getSquareSide();
@@ -47,6 +64,13 @@ public class CollisionManager {
         return firstTile || secondTile;
     }
 
+    /**
+     * Check entity collision boolean.
+     *
+     * @param invader  the invader
+     * @param defender the defender
+     * @return the boolean
+     */
     public boolean checkEntityCollision(Entity invader, Entity defender) {
         Rectangle invaderArea = new Rectangle();
         int width = invader.getActualArea().width;
@@ -62,6 +86,13 @@ public class CollisionManager {
     }
 
 
+    /**
+     * Check adjutant tiles boolean.
+     *
+     * @param invader  the invader
+     * @param defender the defender
+     * @return the boolean
+     */
     public boolean checkAdjutantTiles(Entity invader, Entity defender){
         Rectangle invaderArea = invader.getActualArea();
         Rectangle defenderArea = new Rectangle();

@@ -3,11 +3,16 @@ package effects;
 import logic.ApplicationPanel;
 
 import java.awt.*;
-
 public class Hint extends Effect {
 
     private String[] lines;
 
+    /**
+     * Hint constructor.
+     *
+     * @param panel    the application panel
+     * @param duration the duration of the effect
+     */
     public Hint(ApplicationPanel panel, int duration) {
         super(panel, duration);
         setText();
@@ -28,6 +33,10 @@ public class Hint extends Effect {
             g.drawString(lines[i], x, y + i * g.getFontMetrics().getHeight());
         }
     }
+
+    /**
+     * Stores the lines of the text to an array, so they can be accessed later.
+     */
 
     private void setText() {
         lines = new String[]{

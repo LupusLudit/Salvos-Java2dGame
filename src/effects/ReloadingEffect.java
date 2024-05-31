@@ -4,7 +4,16 @@ import logic.ApplicationPanel;
 
 import java.awt.*;
 
+/**
+ * The type Reloading effect.
+ */
 public class ReloadingEffect extends Effect{
+    /**
+     * Reloading effect.
+     *
+     * @param panel    the application panel
+     * @param duration the duration of the effect
+     */
     public ReloadingEffect(ApplicationPanel panel, int duration) {
         super(panel, duration);
     }

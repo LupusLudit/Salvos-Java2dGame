@@ -4,14 +4,28 @@ import items.Item;
 
 import java.util.HashMap;
 
+/**
+ * The type Inventory.
+ */
 public class Inventory {
 
 
+    /**
+     * The Selected col.
+     */
     int selectedCol;
+    /**
+     * The Selected row.
+     */
     int selectedRow;
 
     private HashMap<Item, Integer> items = new HashMap<>();
 
+    /**
+     * Add to inventory.
+     *
+     * @param item the item
+     */
     public void addToInventory(Item item) {
         if (item != null) {
             if (items.get(item) == null) {
@@ -23,6 +37,11 @@ public class Inventory {
         }
     }
 
+    /**
+     * Remove item.
+     *
+     * @param item the item
+     */
     public void removeItem(Item item){
         int counter = items.get(item);
         if (counter - 1 == 0){
@@ -34,6 +53,9 @@ public class Inventory {
     }
 
 
+    /**
+     * Add row.
+     */
     public void addRow() {
         if (selectedRow < 1) {
             selectedRow++;
@@ -42,6 +64,9 @@ public class Inventory {
         }
     }
 
+    /**
+     * Subtract row.
+     */
     public void subtractRow() {
         if (selectedRow > 0) {
             selectedRow--;
@@ -50,6 +75,9 @@ public class Inventory {
         }
     }
 
+    /**
+     * Add col.
+     */
     public void addCol() {
         if (selectedCol < 4) {
             selectedCol++;
@@ -59,6 +87,9 @@ public class Inventory {
         }
     }
 
+    /**
+     * Subtract col.
+     */
     public void subtractCol() {
         if (selectedCol > 0) {
             selectedCol--;
@@ -68,13 +99,29 @@ public class Inventory {
         }
     }
 
+    /**
+     * Gets selected col.
+     *
+     * @return the selected col
+     */
     public int getSelectedCol() {
         return selectedCol;
     }
 
+    /**
+     * Gets selected row.
+     *
+     * @return the selected row
+     */
     public int getSelectedRow() {
         return selectedRow;
     }
+
+    /**
+     * Gets items.
+     *
+     * @return the items
+     */
     public HashMap<Item, Integer> getItems() {
         return items;
     }

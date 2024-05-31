@@ -5,17 +5,34 @@ import logic.ApplicationPanel;
 import java.util.ArrayList;
 import java.util.Stack;
 
+/**
+ * The type Search.
+ */
 public class Search {
 
+    /**
+     * The Panel.
+     */
     ApplicationPanel panel;
     private Node[][] nodes;
+    /**
+     * The Open list.
+     */
     ArrayList<Node> openList = new ArrayList<>();
+    /**
+     * The Path.
+     */
     Stack<Node> path = new Stack<>();
     private Node current, start, goal;
     private boolean finished;
     private int numOfAttempts = 750;
     private boolean pathPossible = false;
 
+    /**
+     * Instantiates a new Search.
+     *
+     * @param panel the panel
+     */
     public Search(ApplicationPanel panel) {
         this.panel = panel;
     }
@@ -32,6 +49,14 @@ public class Search {
         finished = false;
     }
 
+    /**
+     * Sets nodes.
+     *
+     * @param startCol the start col
+     * @param startRow the start row
+     * @param goalCol  the goal col
+     * @param goalRow  the goal row
+     */
     public void setNodes(int startCol, int startRow, int goalCol, int goalRow) {
         initialize();
         start = nodes[startCol][startRow];
@@ -50,6 +75,11 @@ public class Search {
     }
 
 
+    /**
+     * Set distance values.
+     *
+     * @param node the node
+     */
     public void setDistanceValues(Node node){
         node.setG(Math.abs(node.getCol() - start.getCol()) + Math.abs(node.getRow() - start.getRow()));
         node.setH(Math.abs(node.getCol() - goal.getCol()) + Math.abs(node.getRow() - goal.getRow()));
@@ -57,6 +87,9 @@ public class Search {
         node.setF(node.getG() + node.getH());
     }
 
+    /**
+     * Check nodes.
+     */
     public void checkNodes(){
         int col;
         int row;
@@ -116,6 +149,9 @@ public class Search {
         }
     }
 
+    /**
+     * Find path.
+     */
     public void findPath(){
         Node temp = current;
         while (temp != start){
@@ -125,10 +161,20 @@ public class Search {
         }
     }
 
+    /**
+     * Gets path.
+     *
+     * @return the path
+     */
     public Stack<Node> getPath() {
         return path;
     }
 
+    /**
+     * Is path possible boolean.
+     *
+     * @return the boolean
+     */
     public boolean isPathPossible() {
         return pathPossible;
     }
