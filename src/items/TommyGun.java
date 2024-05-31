@@ -1,7 +1,7 @@
 package items;
 
-import world.Weapon;
-import world.ApplicationPanel;
+import logic.Weapon;
+import logic.ApplicationPanel;
 
 public class TommyGun extends Item{
     public TommyGun(ApplicationPanel applicationPanel) {

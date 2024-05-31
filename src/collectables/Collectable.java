@@ -1,16 +1,16 @@
 package collectables;
 
 import items.Item;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
 
 public class Collectable {
-    private Item item;
-    private int x, y;
-    private int baseY;  // Base y position for animation
-    private Rectangle area;
-    private ApplicationPanel applicationPanel;
+    private final Item item;
+    private final int x, y;
+    private final int baseY;  // Base y position for animation
+    private final Rectangle area;
+    private final ApplicationPanel applicationPanel;
     private double animationOffset;
     private static final double animationSpeed = 0.05;  // Speed of animation
     private static final int maxHeight = 10;  // Amplitude of the up and down movement
@@ -20,7 +20,7 @@ public class Collectable {
         this.item = item;
         this.x = x * applicationPanel.getSquareSide();
         this.y = y * applicationPanel.getSquareSide();
-        this.baseY = this.y;  // Set base y position
+        this.baseY = this.y;
         this.area = new Rectangle(this.x, this.y, applicationPanel.getSquareSide(), applicationPanel.getSquareSide());
         this.animationOffset = 0;
     }

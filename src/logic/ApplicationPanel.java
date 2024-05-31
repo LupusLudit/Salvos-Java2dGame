@@ -1,4 +1,4 @@
-package world;
+package logic;
 
 import collectables.CollectableManager;
 import effects.EffectManager;
@@ -21,9 +21,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     private final int squareSide = 48;
     private final int col = 24;
     private final int row = 14;
-
-    private Graphics2D g2;
-    MouseInput mouseInput = new MouseInput();;
+    MouseInput mouseInput = new MouseInput();
     TilePainter tilePainter;
     UserInput userInput = new UserInput(this);
     GameUI ui = new GameUI(this);
@@ -32,7 +30,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
     Game game;
     Player player;
     CollectableManager collectableManager;
-    Shop shop = new Shop(this);;
+    Shop shop = new Shop(this);
     EffectManager effectManager;
     private Status status;
     private int chosenOption = 0;
@@ -88,30 +86,10 @@ public class ApplicationPanel extends JPanel implements Runnable{
             } else {
                 try {
                     Thread.sleep((desiredFrameTime - deltaTime) / 1_000_000); //sleep for the remaining time left
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                } catch (InterruptedException ignored) {}
             }
         }
     }
-
-    public void changeCursor() {
-        BufferedImage cursorImg = null;
-        try {
-            cursorImg = ImageIO.read(new File("resources/cursor/circle_cursor.png"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        assert cursorImg != null;
-        int centerX = cursorImg.getWidth()/4;
-        int centerY = cursorImg.getHeight()/4;
-        Point hotSpot = new Point(centerX, centerY);
-
-        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, hotSpot, "Custom Cursor");
-        this.setCursor(customCursor);
-    }
-
     public void update() {
         checkStatus();
         if (status == Status.CUSTOMIZATION) {
@@ -128,12 +106,30 @@ public class ApplicationPanel extends JPanel implements Runnable{
     }
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g2 = (Graphics2D) g;
+        Graphics2D g2 = (Graphics2D) g;
 
-        ui.draw(g2);
-        if (status == Status.PLAYING) {
-            effectManager.drawParticles(g2);
-        }
+        try {
+            ui.draw(g2);
+            if (status == Status.PLAYING) {
+                effectManager.drawParticles(g2);
+            }
+        }catch (IOException ignored){}
+
+    }
+
+    public void changeCursor() {
+        BufferedImage cursorImg = null;
+        try {
+            cursorImg = ImageIO.read(new File("resources/cursor/circle_cursor.png"));
+        } catch (IOException ignored) {}
+
+        assert cursorImg != null;
+        int centerX = cursorImg.getWidth()/4;
+        int centerY = cursorImg.getHeight()/4;
+        Point hotSpot = new Point(centerX, centerY);
+
+        Cursor customCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, hotSpot, "Custom Cursor");
+        this.setCursor(customCursor);
     }
 
     public void checkStatus() {
@@ -232,10 +228,6 @@ public class ApplicationPanel extends JPanel implements Runnable{
 
     public UserInput getUserInput() {
         return userInput;
-    }
-
-    public Graphics2D getG2() {
-        return g2;
     }
 
     public EffectManager getEffectManager() {

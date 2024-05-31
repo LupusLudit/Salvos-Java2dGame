@@ -1,7 +1,7 @@
 package collectables;
 
 import items.*;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,8 +9,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 public class CollectableManager {
-
-
     ArrayList<Collectable> collectables = new ArrayList<>();
     ApplicationPanel panel;
     Bandage bandage;

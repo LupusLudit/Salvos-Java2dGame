@@ -1,15 +1,12 @@
 package management;
 
-import world.ApplicationPanel;
-import world.Status;
-import world.Weapon;
+import logic.ApplicationPanel;
+import logic.Weapon;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class UserInput implements KeyListener {
-
-    private int direction = 0;
     private boolean pressed;
     private boolean shiftPressed;
 
@@ -86,19 +83,19 @@ public class UserInput implements KeyListener {
             case PLAYING -> {
                 switch (input) {
                     case KeyEvent.VK_W, KeyEvent.VK_UP -> {
-                        direction = 0;
+                        panel.getPlayer().setDirection(0);
                         pressed = true;
                     }
                     case KeyEvent.VK_S, KeyEvent.VK_DOWN -> {
-                        direction = 1;
+                        panel.getPlayer().setDirection(1);
                         pressed = true;
                     }
                     case KeyEvent.VK_A, KeyEvent.VK_LEFT -> {
-                        direction = 2;
+                        panel.getPlayer().setDirection(2);
                         pressed = true;
                     }
                     case KeyEvent.VK_D, KeyEvent.VK_RIGHT -> {
-                        direction = 3;
+                        panel.getPlayer().setDirection(3);
                         pressed = true;
                     }
                     case KeyEvent.VK_SHIFT -> shiftPressed = true;
@@ -180,20 +177,13 @@ public class UserInput implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int input = e.getKeyCode();
         switch (input) {
-            case KeyEvent.VK_W, KeyEvent.VK_UP, KeyEvent.VK_D, KeyEvent.VK_RIGHT, KeyEvent.VK_S, KeyEvent.VK_DOWN, KeyEvent.VK_A, KeyEvent.VK_LEFT ->
-                    pressed = false;
+            case KeyEvent.VK_W, KeyEvent.VK_UP, KeyEvent.VK_D, KeyEvent.VK_RIGHT, KeyEvent.VK_S, KeyEvent.VK_DOWN, KeyEvent.VK_A, KeyEvent.VK_LEFT -> pressed = false;
             case KeyEvent.VK_SHIFT -> shiftPressed = false;
         }
     }
-
     public void setReloadTriggered(boolean reloadTriggered) {
         this.reloadTriggered = reloadTriggered;
     }
-
-    public int getDirection() {
-        return direction;
-    }
-
     public boolean isPressed() {
         return pressed;
     }

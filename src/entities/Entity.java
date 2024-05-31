@@ -2,7 +2,7 @@ package entities;
 
 import management.CollisionManager;
 import pathFinding.Node;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -54,7 +54,7 @@ public abstract class Entity {
             BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + key)));
             imageCache.put(key, image);
             return image;
-        } catch (IOException e) {
+        } catch (IOException ignored) {
             return null;
         }
     }

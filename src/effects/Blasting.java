@@ -1,6 +1,6 @@
 package effects;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,8 +10,7 @@ import java.util.Objects;
 
 public class Blasting extends Effect{
 
-    private BufferedImage image;
-    private int direction;
+    private final int direction;
 
     public Blasting(ApplicationPanel panel, int duration, int direction) {
         super(panel, duration);
@@ -24,13 +23,10 @@ public class Blasting extends Effect{
     }
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g) throws IOException {
         int x = 0;
         int y = 0;
-        try {
-            image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_" + direction +".png")));
-        }
-        catch (IOException ignored){}
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/blasts/gunBlast_" + direction + ".png")));
         switch (direction) {
             case 0 -> {
                 x = panel.getPlayer().getCenterX();

@@ -1,16 +1,16 @@
 package pathFinding;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.util.ArrayList;
 import java.util.Stack;
 
 public class Search {
 
-    private ApplicationPanel panel;
+    ApplicationPanel panel;
     private Node[][] nodes;
-    private ArrayList<Node> openList = new ArrayList<>();
-    private Stack<Node> path = new Stack<>();
+    ArrayList<Node> openList = new ArrayList<>();
+    Stack<Node> path = new Stack<>();
     private Node current, start, goal;
     private boolean finished;
     private int numOfAttempts = 750;

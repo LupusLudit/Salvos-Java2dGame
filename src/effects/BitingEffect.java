@@ -1,7 +1,7 @@
 package effects;
 
 import entities.Entity;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class BitingEffect extends Effect{
-    private Entity entity;
+    private final Entity entity;
     BufferedImage image;
     public BitingEffect(ApplicationPanel panel, int duration, Entity entity) {
         super(panel, duration);
@@ -24,10 +24,8 @@ public class BitingEffect extends Effect{
     }
 
     @Override
-    public void draw(Graphics2D g) {
-        try {
-            pickImage();
-        } catch (IOException ignored) {}
+    public void draw(Graphics2D g) throws IOException {
+        pickImage();
         g.drawImage(image, entity.getRelX(panel.getPlayer()) - panel.getSquareSide()/2, entity.getRelY(panel.getPlayer()) - panel.getSquareSide()*3,panel.getSquareSide()*2, panel.getSquareSide()*2, null);
     }
 

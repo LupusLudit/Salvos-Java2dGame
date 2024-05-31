@@ -1,6 +1,6 @@
 package items;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

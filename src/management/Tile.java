@@ -1,4 +1,4 @@
-package world;
+package management;
 
 import java.awt.image.BufferedImage;
 
@@ -6,8 +6,8 @@ public class Tile {
 
     private BufferedImage image;
 
-    private boolean solid;
-    private int imageIndex;
+    private final boolean solid;
+    private final int imageIndex;
 
     public Tile(BufferedImage image, boolean solid, int imageIndex) {
         this.image = image;

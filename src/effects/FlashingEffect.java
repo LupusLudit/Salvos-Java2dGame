@@ -1,13 +1,13 @@
 package effects;
 
 import entities.Entity;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
 
 public class FlashingEffect extends Effect{
 
-    private Entity entity;
+    private final Entity entity;
     public FlashingEffect(ApplicationPanel panel,Entity entity, int duration) {
         super(panel,duration);
         this.entity = entity;

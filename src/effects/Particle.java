@@ -1,7 +1,7 @@
 package effects;
 
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
 
@@ -27,9 +27,5 @@ public class Particle extends Effect{
     public void draw(Graphics2D g){
         g.setColor(color);
         g.fillRect((int)x, (int)y, sideLength, sideLength);
-    }
-
-    public int getDuration() {
-        return duration;
     }
 }

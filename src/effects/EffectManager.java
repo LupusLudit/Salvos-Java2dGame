@@ -1,17 +1,18 @@
 package effects;
 
 import entities.Entity;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class EffectManager {
 
-    private List<Effect> effects = new ArrayList<>();
-    private ApplicationPanel panel;
+    private final List<Effect> effects = new ArrayList<>();
+    private final ApplicationPanel panel;
 
     public EffectManager(ApplicationPanel panel) {
         this.panel = panel;
@@ -31,7 +32,7 @@ public class EffectManager {
         }
     }
 
-    public void drawParticles(Graphics2D g) {
+    public void drawParticles(Graphics2D g) throws IOException {
         List<Effect> effectsCopy = new ArrayList<>(effects);
         for (Effect effect : effectsCopy) {
             if (effect != null) {

@@ -1,6 +1,6 @@
 package items;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 public class Bandage extends Item{
 

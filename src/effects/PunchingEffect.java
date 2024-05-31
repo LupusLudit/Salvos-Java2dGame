@@ -1,6 +1,6 @@
 package effects;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -12,7 +12,7 @@ public class PunchingEffect extends Effect{
 
     BufferedImage image;
     BufferedImage fistImage;
-    private int direction;
+    private final int direction;
     public PunchingEffect(ApplicationPanel panel, int duration, int direction) {
         super(panel, duration);
         this.direction = direction;
@@ -24,7 +24,7 @@ public class PunchingEffect extends Effect{
     }
 
     @Override
-    public void draw(Graphics2D g) {
+    public void draw(Graphics2D g) throws IOException {
         int x = 0;
         int y = 0;
         switch (direction) {
@@ -45,9 +45,7 @@ public class PunchingEffect extends Effect{
                 y = panel.getPlayer().getCenterY();
             }
         }
-        try {
-            chooseImages();
-        }catch (IOException ignored){}
+        chooseImages();
 
         g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
         x = panel.getPlayer().getCenterX() - panel.getSquareSide()/2;
@@ -55,7 +53,7 @@ public class PunchingEffect extends Effect{
         g.drawImage(fistImage, x, y, panel.getSquareSide()*2, panel.getSquareSide()*2, null);
     }
 
-    public void chooseImages() throws IOException {
+    private void chooseImages() throws IOException {
         image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punching/punchBlow_" + direction + ".png")));
         if (duration >= 20){
             fistImage = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/effects/punching/punching_0.png")));

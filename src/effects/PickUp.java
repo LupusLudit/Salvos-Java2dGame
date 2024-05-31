@@ -1,7 +1,6 @@
 package effects;
 
-import items.Item;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package effects;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
 

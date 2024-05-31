@@ -1,4 +1,4 @@
-package world;
+package logic;
 
 import entities.Entity;
 import entities.Zombie;
@@ -8,12 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class Game {
-
-
     ApplicationPanel panel;
-    private int staminaBonus = 0;
-    private int healthBonus = 0;
-    private int speedBonus = 0;
     private int bonusCounter = 0;
     private Weapon selectedWeapon;
     HashMap<Weapon, String> ammoMap = new HashMap<>();
@@ -107,7 +102,7 @@ public class Game {
             }
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
             for (Entity entity : panel.getEntities()) {
-                if (selectedWeapon == Weapon.FIST && panel.getCollisionManager().checkAdjutantTiles(panel.getPlayer(), entity)) {
+                if (selectedWeapon == Weapon.FIST && panel.getCollisionManager().checkAdjutantTiles(entity, panel.getPlayer())) {
                     entity.decreaseLives();
                     score += 5;
                 } else if (selectedWeapon != Weapon.FIST && entity.getHitBoxArea().contains(clickPoint)) {

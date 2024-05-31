@@ -1,4 +1,4 @@
-package world;
+package management;
 
 public enum Status {
     PLAYING,

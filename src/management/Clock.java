@@ -1,6 +1,6 @@
 package management;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -9,7 +9,7 @@ public class Clock {
     private int counter;
     private boolean running;
 
-    private Timer timer = new Timer();
+    Timer timer = new Timer();
 
     public void start(int durationInSeconds, ApplicationPanel applicationPanel, Mode mode) {
         counter = durationInSeconds;

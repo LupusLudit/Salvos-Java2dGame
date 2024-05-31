@@ -1,10 +1,8 @@
 package entities;
 
-import management.CollisionManager;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 public class Zombie extends Entity {

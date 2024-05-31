@@ -1,4 +1,6 @@
-package world;
+package management;
+
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -42,9 +44,7 @@ public class TilePainter {
             }
             mapWidth = j;
             mapHeight = i;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException ignored) {}
     }
 
     public void draw(Graphics2D g) {
@@ -99,23 +99,13 @@ public class TilePainter {
             temp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(("/background/tile_" + index + ".png"))));
             temp = convertToBufferedImage(temp.getScaledInstance(48, 48, temp.getType()));
             tiles.put(index, new Tile(temp, solid, index));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException ignored) {}
     }
 
     private void initializeTileImages() {
         for (int i = 0; i < 24; i++){
             setTileImage(i, i < 18);
         }
-    }
-
-    public HashMap<String, Integer> getMap() {
-        return map;
-    }
-
-    public HashMap<Integer, Tile> getTiles() {
-        return tiles;
     }
 
     public Tile getTile(int col, int row){

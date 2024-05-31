@@ -1,4 +1,4 @@
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 import javax.swing.*;
 
 public class Main {

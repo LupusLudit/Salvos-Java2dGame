@@ -1,8 +1,9 @@
 package effects;
 
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import java.awt.*;
+import java.io.IOException;
 
 public abstract class Effect {
 
@@ -24,7 +25,7 @@ public abstract class Effect {
 
     public abstract void update();
 
-    public abstract void draw(Graphics2D g);
+    public abstract void draw(Graphics2D g) throws IOException;
 
     public int getDuration() {
         return duration;

@@ -1,7 +1,7 @@
 package management;
 
 import items.Item;
-import world.ApplicationPanel;
+import logic.ApplicationPanel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -28,6 +28,7 @@ public class GameUI {
     private void initializeFonts() {
         try {
             InputStream inputStream = getClass().getResourceAsStream("/fonts/PIXELADE.TTF");
+            assert inputStream != null;
             Font baseFont = Font.createFont(Font.TRUETYPE_FONT, inputStream);
 
             large = baseFont.deriveFont(80f);
@@ -40,8 +41,8 @@ public class GameUI {
         }
     }
 
-    public void draw(Graphics2D g) {
-        try {
+    public void draw(Graphics2D g) throws IOException {
+
             switch (panel.getStatus()) {
                 case SETUP -> drawStartingScreen(g);
                 case CUSTOMIZATION -> drawCustomizationScreen(g);
@@ -56,13 +57,9 @@ public class GameUI {
                     drawInventoryWindow(g);
                 }
             }
-            if (panel.getPlayer().getClock().isRunning()) drawTimer(g);
-            if (panel.getEntities().isEmpty()) drawWaveMessage(g);
-        } catch (IOException ignored) {
-        }
     }
 
-    public void drawBackground(Graphics2D g) throws IOException {
+    private void drawBackground(Graphics2D g) throws IOException {
         panel.getTilePainter().draw(g);
         panel.getGame().drawEntities(g);
         panel.getPlayer().draw(g);
@@ -71,10 +68,16 @@ public class GameUI {
         drawAmmoIndicators(g);
         drawWeaponIndicators(g);
         drawScore(g);
+        if (panel.getPlayer().getClock().isRunning()) {
+            drawTimer(g);
+        }
+        if (panel.getEntities().isEmpty()){
+            drawWaveMessage(g);
+        }
     }
 
 
-    public void drawDeathScreen(Graphics2D g) {
+    private void drawDeathScreen(Graphics2D g) {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         g.setFont(large);
@@ -89,7 +92,7 @@ public class GameUI {
         drawSelectionLabel(g, "QUIT", centerX(g, "QUIT"), centerY(g, "QUIT") + panel.getSquareSide() * 3, 1, true);
     }
 
-    public void drawStartingScreen(Graphics2D g) throws IOException {
+    private void drawStartingScreen(Graphics2D g) throws IOException {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/backgroundScreens/startingScreen.png")));
@@ -106,7 +109,7 @@ public class GameUI {
         if (panel.getChosenOption() == chosen) drawArrows(g, text, x, y, multiple);
     }
 
-    public void drawAmmoIndicators(Graphics2D g) throws IOException {
+    private void drawAmmoIndicators(Graphics2D g) throws IOException {
         g.setFont(medium);
         g.setColor(Color.white);
         int x = panel.getSquareSide() / 2;
@@ -118,7 +121,7 @@ public class GameUI {
         g.drawString(text, x + panel.getSquareSide() * 2, panel.getHeight() - 36);
     }
 
-    public void drawWeaponIndicators(Graphics2D g) throws IOException {
+    private void drawWeaponIndicators(Graphics2D g) throws IOException {
         int x = panel.getSquareSide() / 2;
         int y = panel.getHeight() - 4 * panel.getSquareSide() - 10;
         BufferedImage image = null;
@@ -140,7 +143,7 @@ public class GameUI {
 
     }
 
-    public void drawCustomizationScreen(Graphics2D g) throws IOException {
+    private void drawCustomizationScreen(Graphics2D g) throws IOException {
 
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
@@ -190,7 +193,7 @@ public class GameUI {
         if (multiple) g.drawString("<", x + textLength(g, text) + panel.getSquareSide() - textLength(g, "<"), y);
     }
 
-    public void drawInventoryWindow(Graphics2D g) {
+    private void drawInventoryWindow(Graphics2D g) {
         int width = panel.getSquareSide() * 5 + 24;
         int height = panel.getSquareSide() * 3;
         int x = panel.getWidth() / 2 - width / 2;
@@ -227,7 +230,7 @@ public class GameUI {
         drawSelectionArrow(g, y, width, panel.getPlayer().getInventory().getSelectedCol());
     }
 
-    public void drawShopWindow(Graphics2D g) {
+    private void drawShopWindow(Graphics2D g) {
         int width = panel.getSquareSide() * 5 + 24;
         int height = panel.getSquareSide() * 3;
         int x = panel.getWidth() / 2 - width / 2;
@@ -251,21 +254,21 @@ public class GameUI {
         drawSelectionArrow(g, y, width, panel.getShop().getSelectedCol());
     }
 
-    public void drawTimer(Graphics2D g) {
+    private void drawTimer(Graphics2D g) {
         g.setFont(large);
         g.setColor(Color.WHITE);
         String text = "0:" + panel.getPlayer().getTime();
         g.drawString(text, panel.getWidth() - textLength(g, text) - 10, panel.getSquareSide());
     }
 
-    public void drawWaveMessage(Graphics2D g) {
+    private void drawWaveMessage(Graphics2D g) {
         g.setFont(large);
         g.setColor(Color.WHITE);
         String text = "NEXT WAVE IN: " + panel.getWaveTimer();
         g.drawString(text, panel.getWidth() / 2 - textLength(g, text) / 2, panel.getSquareSide() * 3);
     }
 
-    public void drawScore(Graphics2D g) throws IOException {
+    private void drawScore(Graphics2D g) throws IOException {
         g.setColor(Color.WHITE);
         g.setFont(medium);
         String text = String.valueOf(panel.getGame().getScore());
@@ -274,7 +277,7 @@ public class GameUI {
         g.drawString(text, panel.getSquareSide() + 15, textHeight(g, text) + 6);
     }
 
-    public void drawBackgroundRect(Graphics2D g, int x, int y, int width, int height) {
+    private void drawBackgroundRect(Graphics2D g, int x, int y, int width, int height) {
         Color color = new Color(0, 0, 0, 230);
         g.setColor(color);
         g.fillRoundRect(x, y, width, height, 25, 25);
@@ -285,14 +288,14 @@ public class GameUI {
         g.drawRoundRect(x, y, width, height, 25, 25);
     }
 
-    public void drawSelectionArrow(Graphics2D g, int y, int width, int col) {
+    private void drawSelectionArrow(Graphics2D g, int y, int width, int col) {
         g.setFont(small);
         String text = "^";
         int x = panel.getWidth() / 2 - width / 2 + col * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
         g.drawString(text, x, y);
     }
 
-    public void drawInformationWindow(Graphics2D g, String text, int rectY) {
+    private void drawInformationWindow(Graphics2D g, String text, int rectY) {
         g.setFont(medium);
         int x = panel.getWidth() / 2 - textLength(g, text) / 2 - 16;
         int y = rectY - panel.getSquareSide() - textHeight(g, text);
@@ -319,7 +322,7 @@ public class GameUI {
         return panel.getHeight() / 2 + height / 2;
     }
 
-    public items.Item getSelectedItem() {
+    public Item getSelectedItem() {
         return invByPos[panel.getPlayer().getInventory().getSelectedCol()][panel.getPlayer().getInventory().getSelectedRow()];
     }
 

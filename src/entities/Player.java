@@ -1,12 +1,11 @@
 package entities;
 
 import management.Clock;
-import management.CollisionManager;
 import management.Mode;
 import management.UserInput;
-import world.Weapon;
-import world.ApplicationPanel;
-import world.Inventory;
+import logic.Weapon;
+import logic.ApplicationPanel;
+import logic.Inventory;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -74,7 +73,6 @@ public class Player extends Entity {
     @Override
     public void update() {
         if (userInput.isPressed() && !panel.getMouseInput().isMouseClicked()) {
-            direction = userInput.getDirection();
             canMove = !collisionManager.checkTileCollision(this) && !allEntitiesCollision();
             if (canMove) {
                 move();
@@ -213,9 +211,7 @@ public class Player extends Entity {
         BufferedImage image = null;
         try {
             image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/" + defaultImagePath + "1_idle.png")));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        } catch (IOException ignored) {}
         return image;
     }
 
