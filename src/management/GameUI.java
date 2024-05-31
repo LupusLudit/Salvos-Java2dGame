@@ -92,7 +92,7 @@ public class GameUI {
     public void drawStartingScreen(Graphics2D g) throws IOException {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
-        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/startingScreen.png")));
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/backgroundScreens/startingScreen.png")));
         g.drawImage(image, 0, 0, panel.getWidth(), panel.getHeight(), null);
 
         g.setColor(Color.white);
@@ -140,14 +140,18 @@ public class GameUI {
 
     }
 
-    public void drawCustomizationScreen(Graphics2D g) {
+    public void drawCustomizationScreen(Graphics2D g) throws IOException {
 
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         g.setColor(Color.white);
 
         int x = panel.getWidth() / 2 - panel.getSquareSide() * 2;
-        int y = panel.getSquareSide();
+        int y = panel.getSquareSide()*3;
+
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/backgroundScreens/customizationScreen.png")));
+        g.drawImage(image, 0, 0, panel.getWidth(), panel.getHeight(), null);
+
         g.drawImage(panel.getPlayer().getDefaultImage(), x, y, panel.getSquareSide() * 4, panel.getSquareSide() * 4, null);
 
         g.setFont(medium);
