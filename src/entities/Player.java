@@ -248,6 +248,12 @@ public class Player extends Entity {
         } catch (IOException ignored) {}
         return image;
     }
+
+    //added for testing
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
+    }
+
     public int getCenterX() {
         return centerX;
     }

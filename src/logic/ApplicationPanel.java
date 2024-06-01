@@ -185,7 +185,6 @@ public class ApplicationPanel extends JPanel implements Runnable{
             collectableManager.addRandomCollectables();
         }
     }
-
     public void setStatus(Status status) {
         this.status = status;
     }
