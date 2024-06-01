@@ -6,13 +6,6 @@ import java.awt.*;
 public class Hint extends Effect {
 
     private String[] lines;
-
-    /**
-     * Hint constructor.
-     *
-     * @param panel    the application panel
-     * @param duration the duration of the effect
-     */
     public Hint(ApplicationPanel panel, int duration) {
         super(panel, duration);
         setText();

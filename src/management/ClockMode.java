@@ -1,6 +1,6 @@
 package management;
 
-public enum Mode {
+public enum ClockMode {
     SPEED_COUNTER,
     WAVE_COUNTER
 }

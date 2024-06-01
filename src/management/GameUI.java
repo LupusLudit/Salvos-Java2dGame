@@ -11,29 +11,13 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-
-/**
- * The type Game ui.
- */
 public class GameUI {
-    /**
-     * The Panel.
-     */
     ApplicationPanel panel;
     private Font large;
     private Font medium;
     private Font small;
     private Font verySmall;
-    /**
-     * The Inv by pos.
-     */
     Item[][] invByPos = new items.Item[5][2];
-
-    /**
-     * Instantiates a new Game ui.
-     *
-     * @param applicationPanel the application panel
-     */
     public GameUI(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
         initializeFonts();
@@ -56,28 +40,34 @@ public class GameUI {
     }
 
     /**
-     * Draw.
+     * Draws the appropriate screen based on the current status of the panel.
+     * The method switches between different statuses to render the corresponding screen elements.
      *
-     * @param g the g
-     * @throws IOException the io exception
+     * @param g the Graphics2D context on which to draw the elements
+     * @throws IOException if the program couldn't find the image on the specific address
      */
     public void draw(Graphics2D g) throws IOException {
-
             switch (panel.getStatus()) {
                 case SETUP -> drawStartingScreen(g);
                 case CUSTOMIZATION -> drawCustomizationScreen(g);
                 case PLAYING -> drawBackground(g);
                 case GAMEOVER -> drawDeathScreen(g);
-                case SHOP -> { //will be edited later
+                case SHOP -> {
                     drawBackground(g);
                     drawShopWindow(g);
                 }
-                case INVENTORY -> { //will be edited later
+                case INVENTORY -> {
                     drawBackground(g);
                     drawInventoryWindow(g);
                 }
             }
     }
+    /**
+     * Draws the background and various game elements on the screen.
+     *
+     * @param g the Graphics2D context on which to draw the elements
+     * @throws IOException if the program couldn't find the image on the specific address
+     */
 
     private void drawBackground(Graphics2D g) throws IOException {
         panel.getTilePainter().draw(g);
@@ -89,20 +79,26 @@ public class GameUI {
         drawWeaponIndicators(g);
         drawScore(g);
         if (panel.getPlayer().getClock().isRunning()) {
-            drawTimer(g);
+            drawEnergyDrinkTimer(g);
         }
         if (panel.getEntities().isEmpty()){
             drawWaveMessage(g);
         }
     }
 
-
+    /**
+     * Draws the death screen after the player has died.
+     * Also features selection labels (so the player can quit or restart the game).
+     *
+     * @param g the Graphics2D context on which to draw the elements
+     */
     private void drawDeathScreen(Graphics2D g) {
         g.setColor(new Color(0, 0, 0));
         g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         g.setFont(large);
         g.setColor(new Color(133, 25, 25));
         g.drawString("YOU DIED", centerX(g, "YOU DIED"), centerY(g, "YOU DIED") - panel.getSquareSide() * 2);
+
         g.setColor(Color.white);
         g.setFont(medium);
         if (panel.getChosenOption() > 1) {
@@ -112,9 +108,13 @@ public class GameUI {
         drawSelectionLabel(g, "QUIT", centerX(g, "QUIT"), centerY(g, "QUIT") + panel.getSquareSide() * 3, 1, true);
     }
 
+    /**
+     * Draws the starting screen background image and options to start or quit the game.
+     *
+     * @param g the Graphics2D context on which to draw the elements
+     * @throws IOException if the program couldn't find the image on the specific address
+     */
     private void drawStartingScreen(Graphics2D g) throws IOException {
-        g.setColor(new Color(0, 0, 0));
-        g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/backgroundScreens/startingScreen.png")));
         g.drawImage(image, 0, 0, panel.getWidth(), panel.getHeight(), null);
 
@@ -123,52 +123,15 @@ public class GameUI {
         drawSelectionLabel(g, "START", centerX(g, "START"), centerY(g, "START") - panel.getSquareSide(), 0, true);
         drawSelectionLabel(g, "QUIT", centerX(g, "QUIT"), centerY(g, "QUIT") + panel.getSquareSide(), 1, true);
     }
-
-    private void drawSelectionLabel(Graphics2D g, String text, int x, int y, int chosen, boolean multiple) {
-        g.drawString(text, x, y);
-        if (panel.getChosenOption() == chosen) drawArrows(g, text, x, y, multiple);
-    }
-
-    private void drawAmmoIndicators(Graphics2D g) throws IOException {
-        g.setFont(medium);
-        g.setColor(Color.white);
-        int x = panel.getSquareSide() / 2;
-        int y = panel.getHeight() - panel.getSquareSide() - 30;
-        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/ammo.png")));
-
-        g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
-        String text = panel.getGame().getMagazine() + "/" + panel.getGame().getAmmo();
-        g.drawString(text, x + panel.getSquareSide() * 2, panel.getHeight() - 36);
-    }
-
-    private void drawWeaponIndicators(Graphics2D g) throws IOException {
-        int x = panel.getSquareSide() / 2;
-        int y = panel.getHeight() - 4 * panel.getSquareSide() - 10;
-        BufferedImage image = null;
-        switch (panel.getGame().getSelectedWeapon()) {
-            case REVOLVER ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/revolver.png")));
-            case PISTOL ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/pistol.png")));
-            case SEMIAUTO ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/semi-auto.png")));
-            case ASSAULTRIFLE ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/assault-rifle.png")));
-            case SUBMACHINE_GUN ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/tommyGun.png")));
-            case FIST ->
-                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/fist.png")));
-        }
-        g.drawImage(image, x, y, panel.getSquareSide() * 3, panel.getSquareSide() * 3, null);
-
-    }
-
+    /**
+     * Draws the customization screen where players can adjust various bonuses.
+     * The screen includes a background image, player's character image and selection labels.
+     *
+     * @param g the Graphics2D context on which to draw the elements
+     * @throws IOException if the program couldn't find the image on the specific address
+     */
     private void drawCustomizationScreen(Graphics2D g) throws IOException {
-
-        g.setColor(new Color(0, 0, 0));
-        g.fillRect(0, 0, panel.getWidth(), panel.getHeight());
         g.setColor(Color.white);
-
         int x = panel.getWidth() / 2 - panel.getSquareSide() * 2;
         int y = panel.getSquareSide()*3;
 
@@ -197,7 +160,76 @@ public class GameUI {
         y += panel.getSquareSide();
         drawSelectionLabel(g, "CONFIRM", panel.getWidth() - textLength(g, "CONFIRM") - panel.getSquareSide(), y, 3, false);
     }
+    /**
+     * Draws a selectable label at the specified location.
+     * If the label is currently selected, arrows are drawn around it to indicate the selection.
+     * Context: Java JButton or JLabel were not used because they will not be universal for this specific project.
+     *
+     * @param g the Graphics2D context on which to draw the label
+     * @param text the text of the label to be drawn
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param chosen the index of the currently chosen option
+     * @param multiple a boolean indicating if there are should be arrows on both sides of the label or not
+     */
+    private void drawSelectionLabel(Graphics2D g, String text, int x, int y, int chosen, boolean multiple) {
+        g.drawString(text, x, y);
+        if (panel.getChosenOption() == chosen) drawArrows(g, text, x, y, multiple);
+    }
+    /**
+     * Draws the ammunition indicators on the screen.
+     *
+     * @param g the Graphics2D context on which to draw the elements
+     * @throws IOException if the program couldn't find the image on the specific address
+     */
+    private void drawAmmoIndicators(Graphics2D g) throws IOException {
+        g.setFont(medium);
+        g.setColor(Color.white);
+        int x = panel.getSquareSide() / 2;
+        int y = panel.getHeight() - panel.getSquareSide() - 30;
+        BufferedImage image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/ammo.png")));
 
+        g.drawImage(image, x, y, panel.getSquareSide(), panel.getSquareSide(), null);
+        String text = panel.getGame().getMagazine() + "/" + panel.getGame().getAmmo();
+        g.drawString(text, x + panel.getSquareSide() * 2, panel.getHeight() - 36);
+    }
+    /**
+     * Draws currently selected weapon on bottom left corner of the screen.
+     *
+     * @param g the Graphics2D context on which to draw the elements.
+     * @throws IOException if the program couldn't find the image on the specific address
+     */
+    private void drawWeaponIndicators(Graphics2D g) throws IOException {
+        int x = panel.getSquareSide() / 2;
+        int y = panel.getHeight() - 4 * panel.getSquareSide() - 10;
+        BufferedImage image = null;
+        switch (panel.getGame().getSelectedWeapon()) {
+            case REVOLVER ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/revolver.png")));
+            case PISTOL ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/pistol.png")));
+            case SEMIAUTO ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/semi-auto.png")));
+            case ASSAULTRIFLE ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/assault-rifle.png")));
+            case SUBMACHINE_GUN ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/tommyGun.png")));
+            case FIST ->
+                    image = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/items/fist.png")));
+        }
+        g.drawImage(image, x, y, panel.getSquareSide() * 3, panel.getSquareSide() * 3, null);
+    }
+
+    /**
+     * Draws indicators representing the value of specific bonus on the screen.
+     * Context: Indicators are either filled (▮) or empty (▯).
+     * Filled blocks represent added bonus while empty blocks represent not yet added bonus
+     *
+     * @param g the Graphics2D context on which to draw the indicators
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param counter the number of filled indicators to be drawn.
+     */
     private void drawIndicators(Graphics2D g, int x, int y, int counter) {
         g.setColor(Color.white);
         g.setFont(new Font("font", Font.BOLD, 36));
@@ -207,12 +239,27 @@ public class GameUI {
             g.drawString(symbol, x, y);
         }
     }
-
+    /**
+     * Draws arrow indicators around a text label to indicate selection.
+     *
+     * @param g the Graphics2D context on which to draw the arrows
+     * @param text the text label around which the arrows are drawn.
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param multiple if true -> arrows will be drawn on both sides, if false -> arrows will be drawn only on the left side of the text
+     */
     private void drawArrows(Graphics2D g, String text, int x, int y, boolean multiple) {
         g.drawString(">", x - panel.getSquareSide(), y);
-        if (multiple) g.drawString("<", x + textLength(g, text) + panel.getSquareSide() - textLength(g, "<"), y);
+        if (multiple){
+            g.drawString("<", x + textLength(g, text) + panel.getSquareSide() - textLength(g, "<"), y);
+        }
     }
-
+    /**
+     * Displays the player's inventory items on the screen.
+     * Explanation:
+     *
+     * @param g the Graphics2D context on which to draw the inventory window
+     */
     private void drawInventoryWindow(Graphics2D g) {
         int width = panel.getSquareSide() * 5 + 24;
         int height = panel.getSquareSide() * 3;
@@ -250,6 +297,12 @@ public class GameUI {
         drawSelectionArrow(g, y, width, panel.getPlayer().getInventory().getSelectedCol());
     }
 
+    /**
+     * Draws the shop window on the screen, showing items available for purchase.
+     * Also displays the price of each item.
+     *
+     * @param g the Graphics2D context on which to draw the shop window
+     */
     private void drawShopWindow(Graphics2D g) {
         int width = panel.getSquareSide() * 5 + 24;
         int height = panel.getSquareSide() * 3;
@@ -273,14 +326,39 @@ public class GameUI {
         y = panel.getHeight() / 2 - height / 2 + (panel.getShop().getSelectedRow() + 1) * (panel.getSquareSide() + 16);
         drawSelectionArrow(g, y, width, panel.getShop().getSelectedCol());
     }
+    /**
+     * Draws a selection arrow indicating the current selected item in inventory/shop.
+     *
+     * @param g the Graphics2D context on which to draw the selection arrow
+     * @param y the y coordinate (no need for x coordinate since we can calculate it in the method)
+     * @param width the width of the window.
+     * @param col the column index of the selected item.
+     */
+    private void drawSelectionArrow(Graphics2D g, int y, int width, int col) {
+        g.setFont(small);
+        String text = "^";
+        int x = panel.getWidth() / 2 - width / 2 + col * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
+        g.drawString(text, x, y);
+    }
 
-    private void drawTimer(Graphics2D g) {
+    /**
+     * Draws the energy drink timer on the screen.
+     * It informs the player for how much longer will the energy drink effect last.
+     *
+     * @param g the Graphics2D context on which to draw the timer
+     */
+    private void drawEnergyDrinkTimer(Graphics2D g) {
         g.setFont(large);
         g.setColor(Color.WHITE);
         String text = "0:" + panel.getPlayer().getTime();
         g.drawString(text, panel.getWidth() - textLength(g, text) - 10, panel.getSquareSide());
     }
-
+    /**
+     * Draws the wave message timer on the screen.
+     * It informs the player when the next wave of hostile entities will arrive.
+     *
+     * @param g the Graphics2D context on which to draw the timer
+     */
     private void drawWaveMessage(Graphics2D g) {
         g.setFont(large);
         g.setColor(Color.WHITE);
@@ -288,6 +366,12 @@ public class GameUI {
         g.drawString(text, panel.getWidth() / 2 - textLength(g, text) / 2, panel.getSquareSide() * 3);
     }
 
+    /**
+     * Draws star icon and the player's score on the screen.
+     *
+     * @param g the Graphics2D context on which to draw the score
+     * @throws IOException if the program couldn't find the image on the specific address
+     */
     private void drawScore(Graphics2D g) throws IOException {
         g.setColor(Color.WHITE);
         g.setFont(medium);
@@ -296,25 +380,32 @@ public class GameUI {
         g.drawImage(image, 5, 5, panel.getSquareSide(), panel.getSquareSide(), null);
         g.drawString(text, panel.getSquareSide() + 15, textHeight(g, text) + 6);
     }
-
+    /**
+     * Draws a rounded rectangle as the background of a window for inventory/shop.
+     *
+     * @param g the Graphics2D context on which to draw the background rectangle
+     * @param x the x coordinate
+     * @param y the y coordinate
+     * @param width the width of the rectangle
+     * @param height the height of the rectangle
+     */
     private void drawBackgroundRect(Graphics2D g, int x, int y, int width, int height) {
-        Color color = new Color(0, 0, 0, 230);
+        Color color = new Color(0, 0, 0);
         g.setColor(color);
         g.fillRoundRect(x, y, width, height, 25, 25);
 
-        color = new Color(255, 255, 255);
+        color = new Color(255, 215, 0);
         g.setColor(color);
         g.setStroke(new BasicStroke(3));
         g.drawRoundRect(x, y, width, height, 25, 25);
     }
-
-    private void drawSelectionArrow(Graphics2D g, int y, int width, int col) {
-        g.setFont(small);
-        String text = "^";
-        int x = panel.getWidth() / 2 - width / 2 + col * panel.getSquareSide() + 12 + panel.getSquareSide() / 2 - textLength(g, text);
-        g.drawString(text, x, y);
-    }
-
+    /**
+     * Draws an information window with a specified text at the top of a rectangular area.
+     *
+     * @param g the Graphics2D context on which to draw the information window
+     * @param text the text to be displayed
+     * @param rectY the y coordinate (x coordinate is always the center of the screen)
+     */
     private void drawInformationWindow(Graphics2D g, String text, int rectY) {
         g.setFont(medium);
         int x = panel.getWidth() / 2 - textLength(g, text) / 2 - 16;
@@ -323,35 +414,32 @@ public class GameUI {
         drawBackgroundRect(g, x, y, textLength(g, text) + 32, textHeight(g, text) + 12);
         g.drawString(text, x+16, rectY - panel.getSquareSide() - 6);
     }
-
     /**
-     * Text height int.
+     * Calculates the height of the specified text.
      *
-     * @param g    the g
-     * @param text the text
-     * @return the int
+     * @param g the Graphics2D context used for rendering the text
+     * @param text the text for which the height is to be calculated
+     * @return the height of the rendered text
      */
     public int textHeight(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
     }
-
     /**
-     * Text length int.
+     * Calculates the length of the specified text.
      *
-     * @param g    the g
-     * @param text the text
-     * @return the int
+     * @param g the Graphics2D context used for rendering the text
+     * @param text the text for which the length is to be calculated
+     * @return the length of the rendered text
      */
     public int textLength(Graphics2D g, String text) {
         return (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
     }
-
     /**
-     * Center x int.
+     * Calculates the x coordinate for centering the specified text.
      *
-     * @param g    the g
-     * @param text the text
-     * @return the int
+     * @param g the Graphics2D context used for rendering the text
+     * @param text the text to be centered
+     * @return integer value for centered x
      */
     public int centerX(Graphics2D g, String text) {
         int length = (int) g.getFontMetrics().getStringBounds(text, g).getWidth();
@@ -359,31 +447,20 @@ public class GameUI {
     }
 
     /**
-     * Center y int.
+     * Calculates the y coordinate for centering the specified text.
      *
-     * @param g    the g
-     * @param text the text
-     * @return the int
+     * @param g the Graphics2D context used for rendering the text
+     * @param text the text to be centered
+     * @return integer value for centered y
      */
     public int centerY(Graphics2D g, String text) {
         int height = (int) g.getFontMetrics().getStringBounds(text, g).getHeight();
         return panel.getHeight() / 2 + height / 2;
     }
 
-    /**
-     * Gets selected item.
-     *
-     * @return the selected item
-     */
     public Item getSelectedItem() {
         return invByPos[panel.getPlayer().getInventory().getSelectedCol()][panel.getPlayer().getInventory().getSelectedRow()];
     }
-
-    /**
-     * Gets medium.
-     *
-     * @return the medium
-     */
     public Font getMedium() {
         return medium;
     }

@@ -11,12 +11,6 @@ public abstract class Item {
 
     protected ApplicationPanel panel;
     private int price;
-
-    /**
-     * Item constructor.
-     *
-     * @param panel the application panel
-     */
     public Item(ApplicationPanel panel) {
         this.panel = panel;
     }

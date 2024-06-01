@@ -29,16 +29,8 @@ public abstract class Entity {
     protected BufferedImage currentImage;
     protected boolean canBite = true;
     protected CollisionManager collisionManager;
-
-    // Cache for loaded images
-    private final Map<String, BufferedImage> imageCache = new HashMap<>();
+    private final Map<String, BufferedImage> imageCache = new HashMap<>(); // Cache for loaded images
     protected int pathUpdateCounter = 0;
-
-    /**
-     * Entity constructor.
-     *
-     * @param panel the application panel
-     */
     public Entity(ApplicationPanel panel) {
         this.panel = panel;
     }
@@ -47,7 +39,7 @@ public abstract class Entity {
      * Draws an entity.
      * (Also applies to all Overrides)
      *
-     * @param g Graphics2D (so the collectable can be drawn on screen)
+     * @param g the Graphics2D context on which to draw the entities.
      */
     public abstract void draw(Graphics2D g);
 
@@ -88,7 +80,7 @@ public abstract class Entity {
      * Draws a bar.
      * (Also applies to all Overrides)
      *
-     * @param g       Graphics2D (so the collectable can be drawn on screen)
+     * @param g       the Graphics2D context on which to draw the bar.
      * @param max     the maximum bar "length"
      * @param current the current bar "length"
      * @param y       the y coordinate (There is no need for x coordinate because we calculate it in the method)
@@ -130,6 +122,7 @@ public abstract class Entity {
     /**
      * First searches for the path to the goal tile.
      * Then updates the direction.
+     * Source of inspiration for this method: https://www.youtube.com/watch?v=Hd0D68guFKg&list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq&index=44
      *
      * @param goalCol the goal column of the tile
      * @param goalRow the goal row of the tile
@@ -158,13 +151,14 @@ public abstract class Entity {
      * Changes the direction of the entity after the search has been done.
      * It checks if it is about to hit a solid tile.
      * If so, it updates the direction so the entity will go "around" the solid tile.
+     * Source of inspiration for this method: https://www.youtube.com/watch?v=Hd0D68guFKg&list=PL_QPQmz5C6WUF-pOQDsbsKbaBZqXj4qSq&index=44
      *
-     * @param leftX
-     * @param rightX
-     * @param topY
-     * @param bottomY
-     * @param pathTileX
-     * @param pathTileY
+     * @param leftX the x coordinate of the left edge of the entity
+     * @param rightX the x coordinate of the right edge of the entity
+     * @param topY the y coordinate of the top edge of the entity
+     * @param bottomY the y coordinate of the bottom edge of the entity
+     * @param pathTileX the x coordinate of the tile the entity is about to collide with
+     * @param pathTileY the y coordinate of the tile the entity is about to collide with
      */
 
     private void changeDirection(int leftX, int rightX, int topY, int bottomY, int pathTileX, int pathTileY) {

@@ -16,12 +16,6 @@ public class EffectManager {
 
     private final List<Effect> effects = new ArrayList<>();
     private final ApplicationPanel panel;
-
-    /**
-     * Effect manager constructor.
-     *
-     * @param panel the application panel
-     */
     public EffectManager(ApplicationPanel panel) {
         this.panel = panel;
     }
@@ -47,7 +41,7 @@ public class EffectManager {
     /**
      * Draws all effects from effects ArrayList.
      *
-     * @param g Graphics2D (so the collectable can be drawn on screen)
+     * @param g the Graphics2D context on which to draw the effects.
      * @throws IOException if the program couldn't find the image on the specific address.
      */
     public void drawEffects(Graphics2D g) throws IOException {

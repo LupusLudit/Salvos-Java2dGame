@@ -3,12 +3,6 @@ package items;
 import logic.Weapon;
 import logic.ApplicationPanel;
 public class TommyGunAmmo extends Item{
-
-    /**
-     * Tommy gun ammo constructor.
-     *
-     * @param applicationPanel the application panel
-     */
     public TommyGunAmmo(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/tommyGunAmmo.png");

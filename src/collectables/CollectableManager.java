@@ -21,12 +21,6 @@ public class CollectableManager {
     SemiAutoAmmo semiAutoAmmo;
     AssaultRifleAmmo rifleAmmo;
     TommyGunAmmo tommyGunAmmo;
-
-    /**
-     * Collectable manager constructor.
-     *
-     * @param panel the application panel
-     */
     public CollectableManager(ApplicationPanel panel) {
         this.panel = panel;
         instantiate();
@@ -76,7 +70,7 @@ public class CollectableManager {
     /**
      * Draws all collectables from collectables ArrayList to the screen.
      *
-     * @param g Graphics2D (so the collectable can be drawn on screen)
+     * @param g the Graphics2D context on which to draw the collectables.
      */
     public void drawCollectables(Graphics2D g) {
         for (Collectable collectable : collectables) {

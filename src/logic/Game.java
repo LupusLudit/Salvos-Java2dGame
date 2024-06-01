@@ -7,40 +7,24 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Iterator;
 
-/**
- * The type Game.
- */
 public class Game {
-    /**
-     * The Panel.
-     */
     ApplicationPanel panel;
     private int bonusCounter = 0;
     private Weapon selectedWeapon;
-    /**
-     * The Ammo map.
-     */
     HashMap<Weapon, String> ammoMap = new HashMap<>();
-    /**
-     * The Bonus map.
-     */
     HashMap<Integer, Integer> bonusMap = new HashMap<>();
     private long lastShootTime = 0;
     private int reloadCounter = 0;
-
     private int score = 0;
-
-    /**
-     * Instantiates a new Game.
-     *
-     * @param applicationPanel the application panel
-     */
-    public Game(ApplicationPanel applicationPanel) {
-        this.panel = applicationPanel;
+    public Game(ApplicationPanel panel) {
+        this.panel = panel;
         selectedWeapon = Weapon.FIST;
         initializeMaps();
     }
 
+    /**
+     * Initializes HashMaps containing information about players weapons and bonuses.
+     */
 
     private void initializeMaps() {
         ammoMap.put(Weapon.FIST, "1,0,0");
@@ -56,9 +40,13 @@ public class Game {
     }
 
     /**
-     * Sets entities.
+     * (Re)sets the entities ArrayList
+     * Explanation: When player kills all hostile entities, new wave will start.
+     * Each wave, +3 entities will be spawned unless wave * 3 > 18.
+     * If, indeed, wave * 3 > 18, the program will add only 18 entities to the entities ArrayList.
+     * This way it is ensured that won't preform too badly
      *
-     * @param wave the wave
+     * @param wave current wave
      */
     public void setEntities(int wave) {
         int maxEntities = Math.min(wave * 3, 18);
@@ -68,14 +56,12 @@ public class Game {
     }
 
     /**
-     * Update entities.
+     * Updates the game.
+     * Updates all entities.
+     * Simulates players attack (if the player has clicked with his mouse).
+     * Simulates reloading of players selected weapon (if specific conditions are met).
      */
-    public void updateEntities() {
-        String[] values = ammoMap.get(selectedWeapon).split(",");
-        int mag = Integer.parseInt(values[0]);
-        int ammo = Integer.parseInt(values[1]);
-        int maxCapacity = Integer.parseInt(values[2]);
-
+    public void updatedGame() {
         Iterator<Entity> iterator = panel.getEntities().iterator();
         while (iterator.hasNext()) {
             Entity entity = iterator.next();
@@ -86,28 +72,31 @@ public class Game {
             }
         }
 
+        String[] values = ammoMap.get(selectedWeapon).split(",");
+        int mag = Integer.parseInt(values[0]);
+        int ammo = Integer.parseInt(values[1]);
+        int maxCapacity = Integer.parseInt(values[2]);
+
         if (cursorOnScreen(panel.getMousePosition()) && panel.getMouseInput().isMouseClicked() && reloadCounter == 0) {
             attackEntities(mag, ammo, maxCapacity);
         }
 
-        if ((mag == 0 || panel.getUserInput().isReloadTriggered()) && selectedWeapon != Weapon.FIST && ammo!= 0) {
+        if ((mag == 0 || panel.getUserInput().isReloadTriggered()) && selectedWeapon != Weapon.FIST && ammo != 0) {
             reloadCounter++;
-            if (reloadCounter == 1){
+            if (reloadCounter == 1) {
                 panel.getEffectManager().addReloadingEffect();
             }
             if (reloadCounter == 100) {
                 reload(mag, ammo, maxCapacity);
                 reloadCounter = 0;
             }
-            System.out.println(reloadCounter);
-
         }
     }
 
     /**
-     * Draw entities.
+     * Draws all entities on the screen.
      *
-     * @param g the g
+     * @param g Graphics2D (so the entity can be drawn on screen)
      */
     public void drawEntities(Graphics2D g) {
         for (Entity entity : panel.getEntities()) {
@@ -118,11 +107,13 @@ public class Game {
     }
 
     /**
-     * Attack entities.
+     * Simulates players attack on one (or more) of the hostile entities.
+     * Explanation: If there is any ammo left in the magazine and a specific time has passed (delay), program allows the player to shoot/punch.
+     * If player "hit" an entity, the program will automatically decrease the lives of this entity.
      *
-     * @param mag         the mag
-     * @param ammo        the ammo
-     * @param maxCapacity the max capacity
+     * @param mag         the current number of bullets in magazine of players selected weapon
+     * @param ammo        the amount of ammo left
+     * @param maxCapacity the maximal capacity of bullets in one magazine (of this specific selected weapon)
      */
     public void attackEntities(int mag, int ammo, int maxCapacity) {
         long currentTime = System.currentTimeMillis();
@@ -135,12 +126,14 @@ public class Game {
                 panel.getEffectManager().addBlastingEffect(panel.getPlayer().getDirection());
                 addParticles(mousePosition.x, mousePosition.y);
                 mag--;
-            }if (selectedWeapon == Weapon.FIST ){
+            }
+            if (selectedWeapon == Weapon.FIST) {
                 panel.getEffectManager().addPunchingEffect(panel.getPlayer().getDirection());
             }
+
             Point clickPoint = new Point(mousePosition.x, mousePosition.y);
             for (Entity entity : panel.getEntities()) {
-                if (selectedWeapon == Weapon.FIST && panel.getCollisionManager().checkAdjutantTiles(entity, panel.getPlayer())) {
+                if (selectedWeapon == Weapon.FIST && panel.getCollisionManager().entityInRange(entity, panel.getPlayer())) {
                     entity.decreaseLives();
                     score += 5;
                 } else if (selectedWeapon != Weapon.FIST && entity.getHitBoxArea().contains(clickPoint)) {
@@ -154,6 +147,14 @@ public class Game {
             ammoMap.put(selectedWeapon, text);
         }
     }
+
+    /**
+     * Adds specific particles based on which tile has been hit.
+     *
+     * @param x cursors x coordinate on the screen
+     * @param y cursors y coordinate on the screen
+     */
+
     private void addParticles(int x, int y) {
         int col = (x + panel.getPlayer().getX() - panel.getPlayer().getCenterX()) / panel.getSquareSide();
         int row = (y + panel.getPlayer().getY() - panel.getPlayer().getCenterY()) / panel.getSquareSide();
@@ -173,7 +174,10 @@ public class Game {
     }
 
     /**
-     * Change direction.
+     * Changes the direction of player when aiming.
+     * Explanation: The program will notionally divide the screen into 4 segments.
+     * This division can be imagined as dividing a rectangle (screen) with its diagonals.
+     * The direction of the player will change depending on the sector in which the cursor is located.
      */
     public void changeDirection() {
         Point mousePosition = panel.getMousePosition();
@@ -198,9 +202,10 @@ public class Game {
     }
 
     /**
-     * Shooting delay int.
+     * Initializes delay based on selected weapon.
+     * It returns the number of loops the player will have to "wait" till he can fire his weapon again.
      *
-     * @return the int
+     * @return the specific delay
      */
     public int shootingDelay() {
         int delay = 0;
@@ -217,11 +222,11 @@ public class Game {
 
 
     /**
-     * Reload.
+     * Simulates reloading of a weapon.
      *
-     * @param mag         the mag
-     * @param ammo        the ammo
-     * @param maxCapacity the max capacity
+     * @param mag         the current number of bullets in weapons magazine
+     * @param ammo        the ammo left
+     * @param maxCapacity the max capacity of one magazine
      */
     public void reload(int mag, int ammo, int maxCapacity) {
         if (ammo >= maxCapacity) {
@@ -241,9 +246,9 @@ public class Game {
 
 
     /**
-     * Add bonus.
+     * Increases the value of the selected bonus.
      *
-     * @param type the type
+     * @param type specific bonus to be increased.
      */
     public void addBonus(int type) {
         if (bonusCounter < 10) {
@@ -256,9 +261,9 @@ public class Game {
     }
 
     /**
-     * Subtract bonus.
+     * Decreases the value of the selected bonus.
      *
-     * @param type the type
+     * @param type specific bonus to be decreased
      */
     public void subtractBonus(int type) {
         int currentBonus = bonusMap.get(type);
@@ -267,94 +272,33 @@ public class Game {
             bonusCounter--;
         }
     }
-
-    /**
-     * Sets selected weapon.
-     *
-     * @param selectedWeapon the selected weapon
-     */
     public void setSelectedWeapon(Weapon selectedWeapon) {
         this.selectedWeapon = selectedWeapon;
     }
-
-    /**
-     * Sets score.
-     *
-     * @param score the score
-     */
     public void setScore(int score) {
         this.score = score;
     }
-
-    /**
-     * Gets health bonus.
-     *
-     * @return the health bonus
-     */
     public int getHealthBonus() {
         return bonusMap.get(0);
     }
-
-
-    /**
-     * Gets stamina bonus.
-     *
-     * @return the stamina bonus
-     */
     public int getStaminaBonus() {
         return bonusMap.get(1);
     }
-
-    /**
-     * Gets speed bonus.
-     *
-     * @return the speed bonus
-     */
     public int getSpeedBonus() {
         return bonusMap.get(2);
     }
-
-    /**
-     * Gets ammo.
-     *
-     * @return the ammo
-     */
     public String getAmmo() {
         return ammoMap.get(selectedWeapon).split(",")[1];
     }
-
-    /**
-     * Gets magazine.
-     *
-     * @return the magazine
-     */
     public String getMagazine() {
         return ammoMap.get(selectedWeapon).split(",")[0];
     }
-
-    /**
-     * Gets selected weapon.
-     *
-     * @return the selected weapon
-     */
     public Weapon getSelectedWeapon() {
         return selectedWeapon;
     }
-
-    /**
-     * Gets score.
-     *
-     * @return the score
-     */
     public int getScore() {
         return score;
     }
-
-    /**
-     * Gets ammo map.
-     *
-     * @return the ammo map
-     */
     public HashMap<Weapon, String> getAmmoMap() {
         return ammoMap;
     }

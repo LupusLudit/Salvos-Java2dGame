@@ -3,12 +3,6 @@ package items;
 import logic.Weapon;
 import logic.ApplicationPanel;
 public class Revolver extends Item {
-
-    /**
-     * Revolver constructor.
-     *
-     * @param applicationPanel the application panel
-     */
     public Revolver(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/revolver.png");

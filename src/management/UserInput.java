@@ -5,26 +5,12 @@ import logic.Weapon;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-/**
- * The type User input.
- */
 public class UserInput implements KeyListener {
     private boolean pressed;
     private boolean shiftPressed;
-
     private boolean reloadTriggered;
-
-    /**
-     * The Panel.
-     */
     ApplicationPanel panel;
 
-    /**
-     * Instantiates a new User input.
-     *
-     * @param applicationPanel the application panel
-     */
     public UserInput(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
     }
@@ -33,6 +19,12 @@ public class UserInput implements KeyListener {
     public void keyTyped(KeyEvent e) {
     }
 
+    /**
+     * Override of the default keyPressed method.
+     * Assigns what should the program do when specific key is pressed.
+     *
+     * @param e the event to be processed
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         int input = e.getKeyCode();
@@ -184,6 +176,12 @@ public class UserInput implements KeyListener {
         }
     }
 
+    /**
+     * Override of the default keyPressed method.
+     * Assigns what should the program do when specific key is released.
+     *
+     * @param e the event to be processed
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         int input = e.getKeyCode();
@@ -193,38 +191,15 @@ public class UserInput implements KeyListener {
         }
     }
 
-    /**
-     * Sets reload triggered.
-     *
-     * @param reloadTriggered the reload triggered
-     */
     public void setReloadTriggered(boolean reloadTriggered) {
         this.reloadTriggered = reloadTriggered;
     }
-
-    /**
-     * Is pressed boolean.
-     *
-     * @return the boolean
-     */
     public boolean isPressed() {
         return pressed;
     }
-
-    /**
-     * Is shift pressed boolean.
-     *
-     * @return the boolean
-     */
     public boolean isShiftPressed() {
         return shiftPressed;
     }
-
-    /**
-     * Is reload triggered boolean.
-     *
-     * @return the boolean
-     */
     public boolean isReloadTriggered() {
         return reloadTriggered;
     }

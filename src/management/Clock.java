@@ -4,27 +4,20 @@ import logic.ApplicationPanel;
 
 import java.util.Timer;
 import java.util.TimerTask;
-
-/**
- * The type Clock.
- */
 public class Clock {
     private int counter;
     private boolean running;
-
-    /**
-     * The Timer.
-     */
     Timer timer = new Timer();
 
     /**
-     * Start.
+     * Starts the clock.
+     * Timer ensures that the clock will update every 1000 milliseconds (= 1 second)
      *
-     * @param durationInSeconds the duration in seconds
+     * @param durationInSeconds the duration of selected effect in seconds
      * @param applicationPanel  the application panel
-     * @param mode              the mode
+     * @param mode              the mode of the clock
      */
-    public void start(int durationInSeconds, ApplicationPanel applicationPanel, Mode mode) {
+    public void start(int durationInSeconds, ApplicationPanel applicationPanel, ClockMode mode) {
         counter = durationInSeconds;
         TimerTask task = new TimerTask() {
             @Override
@@ -47,12 +40,6 @@ public class Clock {
         };
         timer.schedule(stopTask, durationInSeconds * 1000 );
     }
-
-    /**
-     * Is running boolean.
-     *
-     * @return the boolean
-     */
     public boolean isRunning() {
         return running;
     }

@@ -5,30 +5,19 @@ import logic.ApplicationPanel;
 
 import java.awt.*;
 
-/**
- * The type Collision manager.
- */
 public class CollisionManager {
-
-    /**
-     * The Panel.
-     */
     ApplicationPanel panel;
-
-    /**
-     * Instantiates a new Collision manager.
-     *
-     * @param panel the panel
-     */
     public CollisionManager(ApplicationPanel panel) {
         this.panel = panel;
     }
 
     /**
-     * Check tile collision boolean.
+     * Checks whether the @param entity is about to collide with a solid tile or not.
+     * Explanation: With each move entity can run into 2 tiles.
+     * This method checks those tiles the entity can encounter if it stays on its current path.
      *
      * @param entity the entity
-     * @return the boolean
+     * @return true if entity is about to collide with a solid tile
      */
     public boolean checkTileCollision(Entity entity) {
 
@@ -65,11 +54,11 @@ public class CollisionManager {
     }
 
     /**
-     * Check entity collision boolean.
+     * Check if entity invader is about to collide with entity defender
      *
-     * @param invader  the invader
-     * @param defender the defender
-     * @return the boolean
+     * @param invader  entity invader
+     * @param defender entity defender
+     * @return true if invader is about to collide with defender
      */
     public boolean checkEntityCollision(Entity invader, Entity defender) {
         Rectangle invaderArea = new Rectangle();
@@ -87,13 +76,16 @@ public class CollisionManager {
 
 
     /**
-     * Check adjutant tiles boolean.
+     * Check if entity invader is in defenders range.
+     * Explanation: This method will create an imaginary rectangle based on the direction of the defender entity.
+     * If invader intersects this imaginary rectangle, it means that invader is in range.
+     * Therefore, defender can "punch" the invader.
      *
-     * @param invader  the invader
-     * @param defender the defender
-     * @return the boolean
+     * @param invader  entity invader
+     * @param defender entity defender
+     * @return true if invader is in range
      */
-    public boolean checkAdjutantTiles(Entity invader, Entity defender){
+    public boolean entityInRange(Entity invader, Entity defender){
         Rectangle invaderArea = invader.getActualArea();
         Rectangle defenderArea = new Rectangle();
         switch (defender.getDirection()){

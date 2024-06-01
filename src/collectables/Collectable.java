@@ -13,15 +13,6 @@ public class Collectable {
     private double animationOffset;
     private static final double animationSpeed = 0.05;  // Speed of animation
     private static final int maxHeight = 10;  // Amplitude of the up and down movement
-
-    /**
-     * Constructor for new Collectable.
-     *
-     * @param panel the application panel
-     * @param item             an item to be collected
-     * @param x                the x coordinate
-     * @param y                the y coordinate
-     */
     public Collectable(ApplicationPanel panel, Item item, int x, int y) {
         this.panel = panel;
         this.item = item;
@@ -35,7 +26,7 @@ public class Collectable {
     /**
      * Draws collectable on the screen.
      *
-     * @param g Graphics2D (so the collectable can be drawn on screen)
+     * @param g the Graphics2D context on which to draw the collectable.
      */
     public void draw(Graphics2D g) {
         int relX = x - panel.getPlayer().getX() + panel.getPlayer().getCenterX();

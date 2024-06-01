@@ -1,7 +1,7 @@
 package entities;
 
 import management.Clock;
-import management.Mode;
+import management.ClockMode;
 import management.UserInput;
 import logic.Weapon;
 import logic.ApplicationPanel;
@@ -12,14 +12,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
-
-/**
- * The type Player.
- */
 public class Player extends Entity {
-    /**
-     * The User input.
-     */
     UserInput userInput;
     private final int centerX;
     private final int centerY;
@@ -29,13 +22,6 @@ public class Player extends Entity {
     private int hitCounter = 0;
     Clock clock = new Clock();
     Inventory inventory = new Inventory();
-
-    /**
-     * Player constructor.
-     *
-     * @param userInput        the user input
-     * @param applicationPanel the application panel
-     */
     public Player(UserInput userInput, ApplicationPanel applicationPanel) {
         super(applicationPanel);
         defaultImagePath = "entities/sprite_";
@@ -236,7 +222,7 @@ public class Player extends Entity {
      */
     public void startClock(int durationInSeconds) {
         clock = new Clock();
-        clock.start(durationInSeconds, panel, Mode.SPEED_COUNTER);
+        clock.start(durationInSeconds, panel, ClockMode.SPEED_COUNTER);
     }
 
     /**

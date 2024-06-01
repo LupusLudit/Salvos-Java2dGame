@@ -4,12 +4,6 @@ import logic.Weapon;
 import logic.ApplicationPanel;
 
 public class AssaultRifle extends Item{
-
-    /**
-     * Assault rifle constructor.
-     *
-     * @param applicationPanel the application panel
-     */
     public AssaultRifle(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/assault-rifle.png");

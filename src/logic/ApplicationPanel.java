@@ -118,7 +118,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
                 newWave();
             }
             player.update();
-            game.updateEntities();
+            game.updatedGame();
             collectableManager.checkCollectables();
             effectManager.update();
         }
@@ -181,7 +181,7 @@ public class ApplicationPanel extends JPanel implements Runnable{
         }
         else {
             clock = new Clock();
-            clock.start(10, this, Mode.WAVE_COUNTER);
+            clock.start(10, this, ClockMode.WAVE_COUNTER);
             collectableManager.addRandomCollectables();
         }
     }

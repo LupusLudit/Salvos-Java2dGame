@@ -4,17 +4,7 @@ import logic.ApplicationPanel;
 
 import java.awt.*;
 import java.util.Random;
-
-/**
- * The type Zombie.
- */
 public class Zombie extends Entity {
-
-    /**
-     * Instantiates a new Zombie.
-     *
-     * @param applicationPanel the application panel
-     */
     public Zombie(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         defaultImagePath = "entities/zombie_";

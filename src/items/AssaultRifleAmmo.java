@@ -3,12 +3,6 @@ package items;
 import logic.Weapon;
 import logic.ApplicationPanel;
 public class AssaultRifleAmmo extends Item{
-
-    /**
-     * Assault constructor
-     *
-     * @param applicationPanel the application panel
-     */
     public AssaultRifleAmmo(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/akAmmo.png");

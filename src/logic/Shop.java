@@ -2,30 +2,14 @@ package logic;
 
 import items.*;
 
-/**
- * The type Shop.
- */
 public class Shop {
-
-    /**
-     * The Selected col.
-     */
     int selectedCol;
-    /**
-     * The Selected row.
-     */
     int selectedRow;
-    /**
-     * The Items.
-     */
     Item[][] items = new Item[5][2];
-    /**
-     * The Application panel.
-     */
     ApplicationPanel applicationPanel;
 
-
     /**
+     * Shop constructor.
      * Instantiates a new Shop.
      *
      * @param applicationPanel the application panel
@@ -47,7 +31,7 @@ public class Shop {
     }
 
     /**
-     * Add row.
+     * Adds row in an imaginary graphical shop.
      */
     public void addRow() {
         if (selectedRow < 1) {
@@ -58,7 +42,7 @@ public class Shop {
     }
 
     /**
-     * Subtract row.
+     * Subtracts row in an imaginary graphical shop.
      */
     public void subtractRow() {
         if (selectedRow > 0) {
@@ -69,7 +53,7 @@ public class Shop {
     }
 
     /**
-     * Add col.
+     * Adds column in an imaginary graphical shop.
      */
     public void addCol() {
         if (selectedCol < 4) {
@@ -81,7 +65,7 @@ public class Shop {
     }
 
     /**
-     * Subtract col.
+     * Subtracts column in an imaginary graphical shop.
      */
     public void subtractCol() {
         if (selectedCol > 0) {
@@ -91,41 +75,16 @@ public class Shop {
             subtractRow();
         }
     }
-
-    /**
-     * Gets selected item.
-     *
-     * @return the selected item
-     */
     public items.Item getSelectedItem() {
         return items[selectedCol][selectedRow];
     }
-
-    /**
-     * Gets selected col.
-     *
-     * @return the selected col
-     */
     public int getSelectedCol() {
         return selectedCol;
     }
 
-    /**
-     * Gets selected row.
-     *
-     * @return the selected row
-     */
     public int getSelectedRow() {
         return selectedRow;
     }
-
-    /**
-     * Get item item.
-     *
-     * @param col the col
-     * @param row the row
-     * @return the item
-     */
     public Item getItem(int col, int row){
         return items[col][row];
     }

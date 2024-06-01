@@ -38,7 +38,7 @@ public abstract class Effect {
      * Draws the effect on the screen.
      * (Also applies to all Overrides)
      *
-     * @param g Graphics2D (so the collectable can be drawn on screen)
+     * @param g the Graphics2D context on which to draw the effect.
      * @throws IOException if the program couldn't find the image on the specific address.
      */
     public abstract void draw(Graphics2D g) throws IOException;

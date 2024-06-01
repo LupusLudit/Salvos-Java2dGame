@@ -11,14 +11,6 @@ import java.util.Objects;
 public class BitingEffect extends Effect{
     private final Entity entity;
     BufferedImage image;
-
-    /**
-     * Biting effect constructor.
-     *
-     * @param panel    the application panel
-     * @param duration the duration of the effect
-     * @param entity   the entity above which will the effect be drawn
-     */
     public BitingEffect(ApplicationPanel panel, int duration, Entity entity) {
         super(panel, duration);
         this.entity = entity;

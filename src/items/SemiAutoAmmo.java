@@ -3,12 +3,6 @@ package items;
 import logic.Weapon;
 import logic.ApplicationPanel;
 public class SemiAutoAmmo extends Item{
-
-    /**
-     * Semi auto ammo constructor.
-     *
-     * @param applicationPanel the application panel
-     */
     public SemiAutoAmmo(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/grant_ammo.png");

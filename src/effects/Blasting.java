@@ -11,14 +11,6 @@ import java.util.Objects;
 public class Blasting extends Effect{
 
     private final int direction;
-
-    /**
-     * Blasting effect constructor.
-     *
-     * @param panel     the panel
-     * @param duration  the duration
-     * @param direction the direction
-     */
     public Blasting(ApplicationPanel panel, int duration, int direction) {
         super(panel, duration);
         this.direction = direction;

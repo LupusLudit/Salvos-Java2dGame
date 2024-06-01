@@ -10,40 +10,23 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 import java.awt.*;
-
-/**
- * The type Tile painter.
- */
 public class TilePainter {
-
-    /**
-     * The Map.
-     */
     HashMap<String, Integer> map = new HashMap<>();
-    /**
-     * The Tiles.
-     */
     HashMap<Integer, Tile> tiles = new HashMap<>();
-
-    /**
-     * The Panel.
-     */
     ApplicationPanel panel;
 
     private int mapHeight;
     private int mapWidth;
-
-    /**
-     * Instantiates a new Tile painter.
-     *
-     * @param applicationPanel the application panel
-     */
     public TilePainter(ApplicationPanel applicationPanel) {
         this.panel = applicationPanel;
         setMap();
         initializeTileImages();
     }
 
+    /**
+     * Loads the map from pre-prepared file.
+     * Sets the mapWidth and mapHeight integers.
+     */
     private void setMap() {
         try (BufferedReader br = new BufferedReader(new FileReader("gameMap.csv"))) {
             String line;
@@ -66,9 +49,9 @@ public class TilePainter {
     }
 
     /**
-     * Draw.
+     * Draws the tiles.
      *
-     * @param g the g
+     * @param g the Graphics2D context on which to draw the tiles.
      */
     public void draw(Graphics2D g) {
         for (int i = 0; i < mapHeight; i++) {
@@ -78,7 +61,7 @@ public class TilePainter {
                 int x = (j * panel.getSquareSide()) - panel.getPlayer().getX() + panel.getPlayer().getCenterX();
                 int y = (i * panel.getSquareSide()) - panel.getPlayer().getY() + panel.getPlayer().getCenterY();
 
-                if (isInRange(i, j)) {
+                if (tileInRange(i, j)) {
                     g.drawImage(tiles.get(cell).getImage(), x, y, null);
                 }
             }
@@ -86,13 +69,14 @@ public class TilePainter {
     }
 
     /**
-     * Is in range boolean.
+     * Checks if the tile at selected coordinates is on the screen.
+     * Ensures that computers processing power won't be wasted on tiles which cannot be even seen.
      *
-     * @param i the
-     * @param j the j
-     * @return the boolean
+     * @param i the selected row
+     * @param j the selected column
+     * @return true if the tile is indeed on the screen
      */
-    public boolean isInRange(int i, int j) {
+    public boolean tileInRange(int i, int j) {
         boolean drawX = false;
         boolean drawY = false;
 
@@ -107,11 +91,16 @@ public class TilePainter {
 
     }
 
+    /**
+     * Sets the tile image and puts it into tiles HashMap.
+     *
+     * @param index index of the tile
+     * @param solid boolean (true if the tile is solid)
+     */
     private void setTileImage(int index, boolean solid) {
         BufferedImage temp;
         try {
             temp = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream(("/background/tile_" + index + ".png"))));
-
             tiles.put(index, new Tile(temp, solid, index));
         } catch (IOException ignored) {
         }
@@ -124,31 +113,19 @@ public class TilePainter {
     }
 
     /**
-     * Get tile tile.
+     * Returns the tile on selected column and row.
      *
-     * @param col the col
+     * @param col the column
      * @param row the row
-     * @return the tile
+     * @return the tile to be returned.
      */
     public Tile getTile(int col, int row) {
         int cell = map.get(col + "," + row);
         return tiles.get(cell);
     }
-
-    /**
-     * Gets map height.
-     *
-     * @return the map height
-     */
     public int getMapHeight() {
         return mapHeight;
     }
-
-    /**
-     * Gets map width.
-     *
-     * @return the map width
-     */
     public int getMapWidth() {
         return mapWidth;
     }

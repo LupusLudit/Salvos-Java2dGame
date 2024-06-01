@@ -3,12 +3,6 @@ package items;
 import logic.ApplicationPanel;
 
 public class EnergyDrink extends Item{
-
-    /**
-     * Energy drink constructor.
-     *
-     * @param applicationPanel the application panel
-     */
     public EnergyDrink(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/energyDrink.png");

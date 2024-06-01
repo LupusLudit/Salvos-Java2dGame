@@ -8,14 +8,6 @@ import java.awt.*;
 public class FlashingEffect extends Effect{
 
     private final Entity entity;
-
-    /**
-     * Flashing effect constructor.
-     *
-     * @param panel    the application panel
-     * @param entity   the entity on which will the effect be drawn
-     * @param duration the duration of the effect
-     */
     public FlashingEffect(ApplicationPanel panel,Entity entity, int duration) {
         super(panel,duration);
         this.entity = entity;

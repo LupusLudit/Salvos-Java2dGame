@@ -3,12 +3,6 @@ package items;
 import logic.ApplicationPanel;
 
 public class Bandage extends Item{
-
-    /**
-     * Bandage constructor.
-     *
-     * @param applicationPanel the application panel
-     */
     public Bandage(ApplicationPanel applicationPanel) {
         super(applicationPanel);
         setImage("/items/bandage.png");

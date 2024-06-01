@@ -11,13 +11,6 @@ import java.util.Objects;
 public class PickUp extends Effect {
 
     private BufferedImage plusImage;
-
-    /**
-     * Pick up constructor.
-     *
-     * @param panel     the application panel.
-     * @param duration  the duration of the effect.
-     */
     public PickUp(ApplicationPanel panel, int duration) {
         super(panel, duration);
         try {
